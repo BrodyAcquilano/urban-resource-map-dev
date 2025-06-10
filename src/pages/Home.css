@@ -1,0 +1,47 @@
+.info-side-toggle {
+  position: absolute;
+  top: 5%;
+  transform: translateY(-50%);
+  transform: translateX(-75%);
+  font-size: 1.5rem;
+  background: rgba(0, 0, 0, 0.3);
+  border: none;
+  color: white;
+  padding: 8px 12px;
+  border-radius: 10px;
+  cursor: pointer;
+  backdrop-filter: blur(6px);
+  z-index: 1001;
+  transition: left 0.4s ease, right 0.4s ease;
+}
+
+.info-toggle {
+  right: calc(22vw + 10px);
+}
+
+.info-toggle.collapsed-toggle {
+  right: 10px;
+}
+
+/* Panel layout wrapper */
+.info-overlay-panel {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 22vw;
+  background-color: rgba(255, 255, 255, 0.0);
+  padding:20px;
+  overflow-x: hidden;
+  overflow-y:auto;
+  z-index: 1000;
+  transition: transform 0.3s ease;
+}
+
+.info-panel-wrapper {
+  right: 0;
+   border-radius: 20px;
+}
+
+.info-panel-wrapper.collapsed {
+  transform: translateX(100%);
+}

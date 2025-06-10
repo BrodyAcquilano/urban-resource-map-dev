@@ -1,0 +1,36 @@
+.map-panel {
+  height: 100%;
+  width: 100%;
+  position: relative;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.map-background {
+  flex:1;
+  min-height: calc(100vh - 60px);
+  width: 100%;
+  position: relative;
+  z-index: 0; 
+}
+
+/* Center zoom control at the bottom */
+.leaflet-bottom.leaflet-left .leaflet-control-zoom {
+  left: 50vw !important;
+  bottom: 20px !important;
+  transform: translateX(-50%);
+  flex-direction: row;
+  display: flex !important;
+  gap: 6px;
+  z-index: 1002;
+}
+
+/* Optional styling for individual buttons */
+.leaflet-control-zoom-in,
+.leaflet-control-zoom-out {
+  padding: 6px 10px;
+  border-radius: 6px;
+  font-size: 1.2rem;
+}
+

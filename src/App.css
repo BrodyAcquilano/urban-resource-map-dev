@@ -1,0 +1,80 @@
+body {
+  margin: 0;
+  padding: 0;
+}
+
+.app-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  padding: 0;
+  margin: 0;
+  
+}
+
+.main-layer {
+ flex: 1;
+  display: flex;
+  flex-direction:column;
+  position: relative;
+  height: calc(100vh - 60px);
+  overflow: hidden;
+}
+
+/* Side toggle button (☰) */
+.filter-side-toggle {
+  position: absolute;
+  top: 5%;
+  transform: translateY(-50%);
+   transform: translateX(75%);
+  font-size: 1.5rem;
+  background: rgba(0, 0, 0, 0.3);
+  border: none;
+  color: white;
+  padding: 8px 12px;
+  border-radius: 10px;
+  cursor: pointer;
+  backdrop-filter: blur(6px);
+  z-index: 1001;
+  transition: left 0.4s ease, right 0.4s ease;
+}
+
+/* Position when panel is expanded */
+.filter-toggle {
+  left: calc(22vw + 10px);
+}
+
+/* Position when panel is collapsed */
+.filter-toggle.collapsed-toggle {
+  left: 10px;
+}
+
+/* Panel layout wrapper */
+.filter-overlay-panel {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 22vw;
+  background-color: rgba(255, 255, 255, 0.0);
+  padding:20px;
+  overflow-x: hidden;
+  overflow-y:auto;
+  z-index: 1000;
+  transition: transform 0.3s ease;
+  direction: rtl;
+}
+
+.filter-overlay-panel * {
+  direction: ltr; 
+}
+
+/* Position of filter panel */
+.filter-panel-wrapper {
+  left: 0;
+  border-radius: 20px;
+}
+
+/* Collapsed state */
+.collapsed {
+  transform: translateX(-100%);
+}
