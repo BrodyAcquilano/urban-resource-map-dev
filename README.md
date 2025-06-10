@@ -72,8 +72,6 @@ Create a `.env` file at the root of the project with this line:
 
 MONGO_URI=your-mongodb-connection-string-here
 
-You can optionally include a `.env.example` file in your repo for reference.
-
 ---
 
 ## 🧱 Tech Stack
