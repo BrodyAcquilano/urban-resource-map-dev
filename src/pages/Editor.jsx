@@ -5,7 +5,7 @@ import EditLocation from "../components/EditLocation.jsx";
 import AddLocationModal from "../components/AddLocationModal.jsx";
 import "./Editor.css";
 
-function Editor({setMarkers }) {
+function Editor({setMarkers, selectedLocation,setSelectedLocation }) {
   const [isAddModalOpen, setAddModalOpen] = useState(false);
   const [showEditLocation, setShowEditLocation] = useState(true);
 
@@ -25,7 +25,7 @@ function Editor({setMarkers }) {
           showEditLocation ? "" : "collapsed"
         }`}
       >
-        <EditLocation />
+        <EditLocation setMarkers={setMarkers} selectedLocation={selectedLocation} setSelectedLocation={setSelectedLocation}/>
       </div>
 
       {/* Centered Add Button */}

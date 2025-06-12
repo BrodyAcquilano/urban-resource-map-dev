@@ -1,5 +1,11 @@
 import React from "react";
-import { MapContainer, TileLayer, Marker, Popup, ZoomControl } from "react-leaflet";
+import {
+  MapContainer,
+  TileLayer,
+  Marker,
+  Popup,
+  ZoomControl,
+} from "react-leaflet";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import "./MapPanel.css";
@@ -14,7 +20,7 @@ const customIcon = new L.Icon({
   shadowSize: [41, 41],
 });
 
-function MapPanel({ tileUrl, markers = [] }) {
+function MapPanel({ tileUrl, markers, setSelectedLocation }) {
   return (
     <div className="map-panel">
       <MapContainer
@@ -23,16 +29,36 @@ function MapPanel({ tileUrl, markers = [] }) {
         scrollWheelZoom={true}
         className="map-background"
         zoomControl={false}
+        worldCopyJump={false}
+        maxBoundsViscosity={1.0}
+        minZoom={3}
+        maxZoom={18}
+        maxBounds={[
+          [-85, -180],
+          [85, 180],
+        ]}
       >
         <ZoomControl position="bottomleft" />
-        <TileLayer attribution='&copy; OpenStreetMap contributors' url={tileUrl} />
+        <TileLayer
+          attribution="&copy; OpenStreetMap contributors"
+          url={tileUrl}
+          noWrap={true}
+        />
 
         {/* Map Markers */}
         {markers.map((marker) => (
           <Marker
             key={marker._id}
-            position={[parseFloat(marker.latitude), parseFloat(marker.longtitude)]}
+            position={[
+              parseFloat(marker.latitude),
+              parseFloat(marker.longtitude),
+            ]}
             icon={customIcon}
+            eventHandlers={{
+              click: () => {
+                setSelectedLocation(marker);
+              },
+            }}
           >
             <Popup>
               <strong>{marker.name}</strong>
@@ -47,4 +73,3 @@ function MapPanel({ tileUrl, markers = [] }) {
 }
 
 export default MapPanel;
-

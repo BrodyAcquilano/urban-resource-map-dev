@@ -28,26 +28,28 @@ function App() {
 
   const [tileStyle, setTileStyle] = useState("Standard");
 
-const [markers, setMarkers] = useState([]);
+  const [markers, setMarkers] = useState([]);
 
-useEffect(() => {
-  const fetchMarkers = async () => {
-    try {
-      const res = await axios.get("/api/locations");
-      setMarkers(res.data);
-    } catch (err) {
-      console.error("Failed to fetch markers:", err);
-    }
-  };
+  const [selectedLocation, setSelectedLocation] = useState(null);
 
-  fetchMarkers();
-}, []);
+  useEffect(() => {
+    const fetchMarkers = async () => {
+      try {
+        const res = await axios.get("/api/locations");
+        setMarkers(res.data);
+      } catch (err) {
+        console.error("Failed to fetch markers:", err);
+      }
+    };
+
+    fetchMarkers();
+  }, []);
 
   return (
     <div className="app-container">
       <Header />
       <div className="main-layer">
-       <MapPanel tileUrl={TILE_STYLES[tileStyle]} markers={markers} />
+        <MapPanel tileUrl={TILE_STYLES[tileStyle]} markers={markers} setSelectedLocation={setSelectedLocation} />
         {/* Filter Panel Toggle + Panel */}
         <button
           className={`filter-side-toggle filter-toggle ${
@@ -66,11 +68,8 @@ useEffect(() => {
         </div>
 
         <Routes>
-          <Route path="/" element={<Home />} />
-          <Route
-            path="/editor"
-            element={<Editor setMarkers={setMarkers} />}
-          />
+          <Route path="/" element={<Home selectedLocation={selectedLocation}/>} />
+          <Route path="/editor" element={<Editor setMarkers={setMarkers} selectedLocation={selectedLocation} setSelectedLocation={setSelectedLocation}/>} />
           <Route path="/export" element={<Export />} />
         </Routes>
       </div>

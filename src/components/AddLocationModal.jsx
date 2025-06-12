@@ -47,51 +47,54 @@ function AddLocationModal({ isOpen, onClose, setMarkers }) {
   );
   //Resource States
   const [resources, setResources] = useState({
-    Warming: false,
-    Cooling: false,
-    "Clean Air": false,
+    "Warming Centre": false,
+    "Cooling Centre": false,
+    "Clean Air Space": false,
     "Drinking Water": false,
-    Meals: false,
-    "Homeless Shelter": false,
-    Washrooms: false,
+    "Meals": false,
+    "Shelter Space": false,
+    "Washrooms": false,
     "Hygiene Products": false,
-    "Female Hygiene Products": false,
-    Showers: false,
+    "Tampons or Pads": false,
+    "Showers": false,
     "Community Centre": false,
     "Food Bank": false,
-    Clothing: false,
+    "Clothing": false,
+    "Storage": false,
   });
   //Service States:
   const [services, setServices] = useState({
-    healthCareServices: false,
-    mentalHealthServices: false,
-    addictionServices: false,
-    harmReductionServices: false,
-    housingServices: false,
-    legalAidServices: false,
-    employmentServices: false,
-    financialAssistanceServices: false,
-    identificationServices: false,
-    interpretationServices: false,
-    communityOutreach: false,
-    accessibilityServices: false,
-    transportationServices: false,
+    "Health Services": false,
+    "Mental Health Services": false,
+    "Addiction Services": false,
+    "Harm Reduction Services": false,
+    "Housing Services": false,
+    "Legal Aid Services": false,
+    "Employment Services": false,
+    "Financial Assistance Services": false,
+    "Identification Services": false,
+    "Interpretation Services": false,
+    "Community Outreach": false,
+    "Accessibility Services": false,
+    "Transportation Services": false,
   });
   //Comfort States
   const [comforts, setComforts] = useState({
-    wifi: false,
-    chargingStations: false,
-    indoorSeating: false,
-    outdoorSeating: false,
-    petFriendly: false,
-    quietSpace: false,
-    publicComputerAccess: false,
-    libraryAccess: false,
-    artOrMusicPrograms: false,
-    exerciseSpace: false,
-    socialSpace: false,
-    privateSpace: false,
-    lowIntervention: false,
+    "Wi-Fi": false,
+    "Charging Stations": false,
+    "Indoor Seating": false,
+    "Outdoor Seating": false,
+    "Pet Friendly": false,
+    "Quiet Space": false,
+    "Public Computer Access": false,
+    "Library Access": false,
+    "Art or Music Programs": false,
+    "Exercise Space": false,
+    "Social Space": false,
+    "Private Space": false,
+    "Low-Intervention Environment": false,
+    "Nap or Sleep": false,
+    "No Purchases Required": false,
   });
 
   const handleSubmit = async () => {
@@ -117,12 +120,20 @@ function AddLocationModal({ isOpen, onClose, setMarkers }) {
       onClose();
     } catch (err) {
       console.error("Submit failed:", err);
+      if (!name || !latitude || !longitude) {
+        window.alert("Missing Required Entries");
+        return;
+      }
     }
   };
 
   if (!isOpen) return null;
 
+  
+
   return (
+
+
     <div className="modal-overlay">
       <div className="add-location-modal">
         <button className="close-button" onClick={onClose}>
@@ -139,6 +150,7 @@ function AddLocationModal({ isOpen, onClose, setMarkers }) {
                 type="text"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
+                placeholder="Required..."
                 required
               />
             </label>
@@ -148,6 +160,7 @@ function AddLocationModal({ isOpen, onClose, setMarkers }) {
                 type="number"
                 value={latitude}
                 onChange={(e) => setLatitude(e.target.value)}
+                placeholder="Required..."
                 required
               />
             </label>
@@ -157,6 +170,7 @@ function AddLocationModal({ isOpen, onClose, setMarkers }) {
                 type="number"
                 value={longtitude}
                 onChange={(e) => setLongtitude(e.target.value)}
+                placeholder="Required..."
                 required
               />
             </label>
@@ -310,80 +324,37 @@ function AddLocationModal({ isOpen, onClose, setMarkers }) {
             <h3>Services</h3>
             <div className="services-section">
               {[
-                {
-                  key: "healthCareServices",
-                  label: "Health Services",
-                  note: "General medical care",
-                },
-                {
-                  key: "mentalHealthServices",
-                  label: "Mental Health Services",
-                  note: "Counseling or crisis support",
-                },
-                {
-                  key: "addictionServices",
-                  label: "Addiction Services",
-                  note: "Substance use support",
-                },
-                {
-                  key: "harmReductionServices",
-                  label: "Harm Reduction Services",
-                  note: "Supplies or education",
-                },
-                {
-                  key: "housingServices",
-                  label: "Housing Services",
-                  note: "Transitional or emergency housing support",
-                },
-                {
-                  key: "legalAidServices",
-                  label: "Legal Aid Services",
-                  note: "Access to legal help",
-                },
-                {
-                  key: "employmentServices",
-                  label: "Employment Services",
-                  note: "Job training or search assistance",
-                },
-                {
-                  key: "financialAssistanceServices",
-                  label: "Financial Assistance Services",
-                  note: "Direct aid or financial advice",
-                },
-                {
-                  key: "identificationServices",
-                  label: "Identification Services",
-                  note: "Help obtaining IDs or documents",
-                },
-                {
-                  key: "interpretationServices",
-                  label: "Interpretation Services",
-                  note: "Language support",
-                },
-                {
-                  key: "communityOutreach",
-                  label: "Community Outreach",
-                  note: "Street outreach and mobile help",
-                },
-                {
-                  key: "accessibilityServices",
-                  label: "Accessibility Services",
-                  note: "Help navigating barriers or providing accessible equipment",
-                },
-                {
-                  key: "transportationServices",
-                  label: "Transportation Services",
-                  note: "Bus tokens, rides, or shuttles",
-                },
-              ].map(({ key, label, note }) => (
-                <div key={key} className="inline-checkbox-row">
+                ["Health Services", "General medical care"],
+                ["Mental Health Services", "Counseling or crisis support"],
+                ["Addiction Services", "Substance use support"],
+                ["Harm Reduction Services", "Supplies or education"],
+                [
+                  "Housing Services",
+                  "Transitional or emergency housing support",
+                ],
+                ["Legal Aid Services", "Access to legal help"],
+                ["Employment Services", "Job training or search assistance"],
+                [
+                  "Financial Assistance Services",
+                  "Direct aid or financial advice",
+                ],
+                ["Identification Services", "Help obtaining IDs or documents"],
+                ["Interpretation Services", "Language support"],
+                ["Community Outreach", "Street outreach and mobile help"],
+                [
+                  "Accessibility Services",
+                  "Help navigating barriers or providing accessible equipment",
+                ],
+                ["Transportation Services", "Bus tokens, rides, or shuttles"],
+              ].map(([label, note]) => (
+                <div key={label} className="inline-checkbox-row">
                   <label className="label-container">{label}</label>
                   <div className="checkbox-container">
                     <input
                       type="checkbox"
-                      checked={services[key]}
+                      checked={services[label]}
                       onChange={(e) =>
-                        setServices({ ...services, [key]: e.target.checked })
+                        setServices({ ...services, [label]: e.target.checked })
                       }
                     />
                   </div>
@@ -399,80 +370,50 @@ function AddLocationModal({ isOpen, onClose, setMarkers }) {
             <h3>Comforts</h3>
             <div className="comforts-section">
               {[
-                {
-                  key: "wifi",
-                  label: "Free Wi-Fi",
-                  note: "Public wireless internet access",
-                },
-                {
-                  key: "chargingStations",
-                  label: "Charging Stations",
-                  note: "Places to charge phones or devices",
-                },
-                {
-                  key: "indoorSeating",
-                  label: "Indoor Seating",
-                  note: "Safe indoor places to sit and rest",
-                },
-                {
-                  key: "outdoorSeating",
-                  label: "Outdoor Seating",
-                  note: "Benches or sheltered outdoor areas",
-                },
-                {
-                  key: "petFriendly",
-                  label: "Pet-Friendly",
-                  note: "Allows animals or has accommodations for pets",
-                },
-                {
-                  key: "quietSpace",
-                  label: "Quiet Space",
-                  note: "Noise-free or calm areas for rest or focus",
-                },
-                {
-                  key: "publicComputerAccess",
-                  label: "Public Computer Access",
-                  note: "Workstations with internet or tools",
-                },
-                {
-                  key: "libraryAccess",
-                  label: "Library Access",
-                  note: "Books, reading space, or educational resources",
-                },
-                {
-                  key: "artOrMusicPrograms",
-                  label: "Art or Music Programs",
-                  note: "Creative drop-ins or workshops",
-                },
-                {
-                  key: "exerciseSpace",
-                  label: "Exercise-Friendly",
-                  note: "Room to walk, stretch, or do light fitness",
-                },
-                {
-                  key: "socialSpace",
-                  label: "Social Gathering Space",
-                  note: "Supports informal interaction or community",
-                },
-                {
-                  key: "privateSpace",
-                  label: "Offers Some Privacy",
-                  note: "Places to be alone or not watched closely",
-                },
-                {
-                  key: "lowIntervention",
-                  label: "Low Staff Interruption",
-                  note: "You’re unlikely to be asked to leave",
-                },
-              ].map(({ key, label, note }) => (
-                <div key={key} className="inline-checkbox-row">
+                ["Wi-Fi", "Public wireless internet access"],
+                ["Charging Stations", "Places to charge phones or devices"],
+                ["Indoor Seating", "Safe indoor places to sit and rest"],
+                ["Outdoor Seating", "Benches or sheltered outdoor areas"],
+                [
+                  "Pet Friendly",
+                  "Allows animals or has accommodations for pets",
+                ],
+                ["Quiet Space", "Noise-free or calm areas for rest or focus"],
+                [
+                  "Public Computer Access",
+                  "Workstations with internet or tools",
+                ],
+                [
+                  "Library Access",
+                  "Books, reading space, or educational resources",
+                ],
+                ["Art or Music Programs", "Creative drop-ins or workshops"],
+                [
+                  "Exercise Space",
+                  "Room to walk, stretch, or do light fitness",
+                ],
+                ["Social Space", "Supports informal interaction or community"],
+                ["Private Space", "Places to be alone or not watched closely"],
+                [
+                  "Low-Intervention Environment",
+                  "You’re unlikely to be asked to leave",
+                ], [
+                  "Nap or Sleep",
+                  "Comfortable seating or space to lay down",
+                ], [
+                  "No Purchases Required",
+                  "You can access this space without buying something",
+                ],
+
+              ].map(([label, note]) => (
+                <div key={label} className="inline-checkbox-row">
                   <label className="label-container">{label}</label>
                   <div className="checkbox-container">
                     <input
                       type="checkbox"
-                      checked={comforts[key]}
+                      checked={comforts[label]}
                       onChange={(e) =>
-                        setComforts({ ...comforts, [key]: e.target.checked })
+                        setComforts({ ...comforts, [label]: e.target.checked })
                       }
                     />
                   </div>

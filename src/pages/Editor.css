@@ -2,7 +2,7 @@
   position: absolute;
   top: 5%;
   transform: translateY(-50%);
-  transform: translateX(-75%);
+  transform: translateX(-200%);
   font-size: 1.5rem;
   background: rgba(0, 0, 0, 0.3);
   border: none;
@@ -28,12 +28,14 @@
   position: absolute;
   top: 0;
   bottom: 0;
-  width: 22vw;
+  min-width: 22vw;
   background-color: rgba(255, 255, 255, 0.0);
   padding:20px;
   overflow-x: hidden;
   overflow-y:auto;
   z-index: 1000;
+  display: flex;
+  align-items: flex-start;
   transition: transform 0.3s ease;
 }
 
