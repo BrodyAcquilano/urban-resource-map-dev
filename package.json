@@ -4,7 +4,7 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-     "dev": "concurrently \"nodemon server.js\" \"vite\"",
+    "dev": "concurrently \"nodemon server.js\" \"vite\"",
     "start-server": "nodemon server.js",
     "start-client": "vite",
     "build": "vite build",
@@ -12,6 +12,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "axios": "^1.9.0",
     "dotenv": "^16.5.0",
     "express": "^5.1.0",
     "leaflet": "^1.9.4",

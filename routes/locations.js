@@ -6,18 +6,39 @@ const router = express.Router();
 
 router.post("/", async (req, res) => {
   const db = req.app.locals.db;
-  const { name, latitude, longitude, category } = req.body;
+  const {
+    name,
+    latitude,
+    longtitude,
+    address,
+    website,
+    phone,
+    wheelchairAccessible,
+    isLocationOpen,
+    openHours,
+    resources,
+    services,
+    comforts,
+  } = req.body;
 
-  if (!name || !latitude || !longitude) {
+  if (!name || !latitude || !longtitude) {
     return res.status(400).json({ error: "Missing required fields" });
   }
 
   try {
     const result = await db.collection("locations").insertOne({
       name,
-      latitude,
-      longitude,
-      category: category || "Uncategorized",
+      latitude: parseFloat(latitude),
+      longtitude: parseFloat(longtitude),
+      address: address || "",
+      website: website || "",
+      phone: phone || "",
+      wheelchairAccessible: !!wheelchairAccessible,
+      isLocationOpen: isLocationOpen || {},
+      openHours: openHours || {},
+      resources: resources || {},
+      services: services || {},
+      comforts: comforts ||{},
       createdAt: new Date(),
     });
 
@@ -48,9 +69,11 @@ router.delete("/:id", async (req, res) => {
     const result = await db
       .collection("locations")
       .deleteOne({ _id: new ObjectId(id) });
+
     if (result.deletedCount === 0) {
       return res.status(404).json({ error: "Location not found" });
     }
+
     res.json({ message: "Location deleted" });
   } catch (err) {
     console.error("Delete failed:", err);

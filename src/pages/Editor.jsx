@@ -5,14 +5,13 @@ import EditLocation from "../components/EditLocation.jsx";
 import AddLocationModal from "../components/AddLocationModal.jsx";
 import "./Editor.css";
 
-function Editor() {
+function Editor({setMarkers }) {
   const [isAddModalOpen, setAddModalOpen] = useState(false);
   const [showEditLocation, setShowEditLocation] = useState(true);
 
   return (
-
- <>
-     {/* Editor Panel Toggle + Panel */}
+    <>
+      {/* Editor Panel Toggle + Panel */}
       <button
         className={`editor-side-toggle editor-toggle ${
           showEditLocation ? "" : "collapsed-toggle"
@@ -26,10 +25,10 @@ function Editor() {
           showEditLocation ? "" : "collapsed"
         }`}
       >
-        <EditLocation/>
+        <EditLocation />
       </div>
 
-       {/* Centered Add Button */}
+      {/* Centered Add Button */}
       <button
         className="add-location-button"
         onClick={() => setAddModalOpen(true)}
@@ -41,6 +40,7 @@ function Editor() {
       <AddLocationModal
         isOpen={isAddModalOpen}
         onClose={() => setAddModalOpen(false)}
+        setMarkers={setMarkers}
       />
     </>
   );

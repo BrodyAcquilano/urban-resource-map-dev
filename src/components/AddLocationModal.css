@@ -1,36 +1,191 @@
 /* src/components/AddLocationModal.css */
 
-.modal-overlay {
+
+body .modal-overlay {
   position: fixed;
-  top: 0;
+  top: 3vh;
+  bottom: 3vh;
   left: 0;
-  width: 100vw;
-  height: 100vh;
-  background: rgba(0,0,0,0.4);
-  backdrop-filter: blur(4px);
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  right: 0;
+  width: 52vw;             
+  max-width: 90vw; 
+  margin: auto;
+  padding: 2vh 2vw;          
+  background-color: rgba(0,0,0,0.5);
+  overflow-y: auto;
+  overflow-x: hidden;
   z-index: 2000;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  direction: rtl;   
+  backdrop-filter: blur(70px);          
 }
 
-.add-location-modal {
-  background: white;
-  padding: 30px;
-  border-radius: 16px;
-  width: 400px;
-  max-width: 90%;
-  box-shadow: 0 0 20px rgba(0,0,0,0.3);
+.modal-overlay * {
+  direction: ltr;
+}
+
+ .add-location-modal {
+  width: 50vw;
+  max-width: 100%;
+  font-family: sans-serif;
+  background-color: rgba(54, 164, 109, 0.4);
+  margin: 2vh 2vw;
+  padding: 2vh 2vw;
+  border: 2px solid rgb(25, 80, 59);
+  backdrop-filter: blur(10px);
+  color: white;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 1);
+  box-sizing: border-box;
+  border-radius: 20px;
   position: relative;
+  display: flex;
+  flex-direction: column;
 }
 
-.close-button {
+
+/* Close Button */
+.add-location-modal .close-button {
   position: absolute;
   top: 10px;
   right: 14px;
-  background: none;
   border: none;
   font-size: 1.5rem;
-  color: #555;
+  color: #ff4d4d;
+  text-shadow: 0 0 3px rgba(0, 0, 0, 0.7);
   cursor: pointer;
 }
+
+/* Labels + Inputs */
+.add-location-modal label {
+  display: block;
+  margin-bottom: 6px;
+  color: white;
+  font-weight: 500;
+  font-size: 0.9rem;
+}
+
+.add-location-modal input {
+  width: 100%;
+  padding: 3px;
+  margin-bottom: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 5px;
+  background-color: rgba(93, 129, 117, 1);
+  color: white;
+  font-size: 0.7rem;
+}
+
+.add-location-modal select {
+  width: 100%;
+  padding: 3px;
+  margin-bottom: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 5px;
+  background-color: rgba(93, 129, 117, 1);
+  color: white;
+  font-size: 0.7rem;
+   max-height: 200px;
+  overflow-y: auto;
+}
+
+ 
+
+.add-location-modal input::placeholder {
+  color: rgba(255, 255, 255, 0.5);             
+}
+
+
+.add-location-modal table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 0px;
+  color: white;
+  font-size: 0.7rem;
+}
+
+.add-location-modal th:nth-child(1) {
+  padding: 6px 6px;
+  text-align: left;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+  font-size: 0.7rem;
+}
+
+.add-location-modal th:not(:nth-child(1)) {
+  padding: 6px 6px;
+  text-align: center;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+  font-size: 0.7rem;
+}
+
+.add-location-modal td:nth-child(1){
+  padding: 3px 6px;
+  text-align: left;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+}
+.add-location-modal td:not(:nth-child(1)){
+  padding: 3px 6px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+   text-align: center;
+}
+
+.closed-cell {
+  text-align: center;
+  font-style: italic;
+  padding: 6px 0;
+}
+
+.add-location-modal .inline-checkbox-row {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  gap: 20px;
+}
+
+.add-location-modal .label-container {
+  display:flex;
+  min-width: 200px;
+  font-size: 0.9rem;
+  color: white;
+  align-items: center;
+}
+
+.add-location-modal .checkbox-container {
+  display: flex;
+  align-items: center;
+   transform: translateY(1px);
+}
+.add-location-modal input[type="checkbox"] {
+  transform: translateY(2px); 
+}
+.add-location-modal .notes-cell {
+  flex-grow: 1;
+  font-size: 0.8rem;
+  color: #ccc;
+  font-style: italic;
+}
+
+
+
+.navigation-buttons {
+  display: flex;
+  justify-content: center;
+  margin-top: 16px;
+}
+
+.navigation-buttons button {
+  padding: 6px 16px;
+  font-size: 0.9rem;
+  background-color: #36a46d;
+  color: white;
+  border: 1px solid #1b5c3f;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.navigation-buttons button:hover {
+  background-color: #2b8258;
+}
+

@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Routes, Route } from "react-router-dom";
+import axios from "axios";
 
 import Header from "./components/Header.jsx";
 import FilterPanel from "./components/FilterPanel.jsx";
@@ -10,28 +11,43 @@ import Editor from "./pages/Editor.jsx";
 import Export from "./pages/Export.jsx";
 
 const TILE_STYLES = {
-  Standard: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",                     // OSM default
-  Light: "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png",           // Carto Light
-  Dark: "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png",             // Carto Dark
-  Terrain: "https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png",                       // OpenTopoMap (terrain-style)
-  Toner: "https://stamen-tiles.a.ssl.fastly.net/toner/{z}/{x}/{y}.png",              // Stamen Toner (high contrast)
-  TonerLite: "https://stamen-tiles.a.ssl.fastly.net/toner-lite/{z}/{x}/{y}.png",     // Stamen Toner Lite
-  Watercolor: "https://stamen-tiles.a.ssl.fastly.net/watercolor/{z}/{x}/{y}.jpg",   // Stamen Watercolor
-  TerrainClassic: "https://stamen-tiles.a.ssl.fastly.net/terrain/{z}/{x}/{y}.jpg"   // Stamen Terrain (older terrain source)
+  Standard: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", // OSM default
+  Light: "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png", // Carto Light
+  Dark: "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png", // Carto Dark
+  Terrain: "https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png", // OpenTopoMap (terrain-style)
+  Toner: "https://stamen-tiles.a.ssl.fastly.net/toner/{z}/{x}/{y}.png", // Stamen Toner (high contrast)
+  TonerLite: "https://stamen-tiles.a.ssl.fastly.net/toner-lite/{z}/{x}/{y}.png", // Stamen Toner Lite
+  Watercolor:
+    "https://stamen-tiles.a.ssl.fastly.net/watercolor/{z}/{x}/{y}.jpg", // Stamen Watercolor
+  TerrainClassic:
+    "https://stamen-tiles.a.ssl.fastly.net/terrain/{z}/{x}/{y}.jpg", // Stamen Terrain (older terrain source)
 };
-
 
 function App() {
   const [showFilter, setShowFilter] = useState(true);
 
   const [tileStyle, setTileStyle] = useState("Standard");
 
+const [markers, setMarkers] = useState([]);
+
+useEffect(() => {
+  const fetchMarkers = async () => {
+    try {
+      const res = await axios.get("/api/locations");
+      setMarkers(res.data);
+    } catch (err) {
+      console.error("Failed to fetch markers:", err);
+    }
+  };
+
+  fetchMarkers();
+}, []);
+
   return (
     <div className="app-container">
       <Header />
       <div className="main-layer">
-        <MapPanel tileUrl={TILE_STYLES[tileStyle]}/>
-
+       <MapPanel tileUrl={TILE_STYLES[tileStyle]} markers={markers} />
         {/* Filter Panel Toggle + Panel */}
         <button
           className={`filter-side-toggle filter-toggle ${
@@ -51,7 +67,10 @@ function App() {
 
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/editor" element={<Editor />} />
+          <Route
+            path="/editor"
+            element={<Editor setMarkers={setMarkers} />}
+          />
           <Route path="/export" element={<Export />} />
         </Routes>
       </div>
