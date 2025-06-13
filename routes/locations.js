@@ -9,7 +9,7 @@ router.post("/", async (req, res) => {
   const {
     name,
     latitude,
-    longtitude,
+    longitude,
     address,
     website,
     phone,
@@ -21,7 +21,7 @@ router.post("/", async (req, res) => {
     comforts,
   } = req.body;
 
-  if (!name || !latitude || !longtitude) {
+  if (!name || !latitude || !longitude) {
     return res.status(400).json({ error: "Missing required fields" });
   }
 
@@ -29,7 +29,7 @@ router.post("/", async (req, res) => {
     const result = await db.collection("locations").insertOne({
       name,
       latitude: parseFloat(latitude),
-      longtitude: parseFloat(longtitude),
+      longitude: parseFloat(longitude),
       address: address || "",
       website: website || "",
       phone: phone || "",
@@ -38,7 +38,7 @@ router.post("/", async (req, res) => {
       openHours: openHours || {},
       resources: resources || {},
       services: services || {},
-      comforts: comforts ||{},
+      comforts: comforts || {},
       createdAt: new Date(),
     });
 
@@ -67,17 +67,15 @@ router.put("/:id", async (req, res) => {
   const { id } = req.params;
 
   try {
-    const updateResult = await db.collection("locations").updateOne(
-      { _id: new ObjectId(id) },
-      { $set: req.body }
-    );
+    const updateResult = await db
+      .collection("locations")
+      .updateOne({ _id: new ObjectId(id) }, { $set: req.body });
     res.status(200).json({ message: "Location updated" });
   } catch (err) {
     console.error("Update failed:", err);
     res.status(500).json({ error: "Failed to update location" });
   }
 });
-
 
 router.delete("/:id", async (req, res) => {
   const db = req.app.locals.db;

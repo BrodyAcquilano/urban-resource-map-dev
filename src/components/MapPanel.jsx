@@ -1,4 +1,6 @@
+// src/components/MapPanel.jsx
 import React from "react";
+
 import {
   MapContainer,
   TileLayer,
@@ -10,7 +12,6 @@ import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import "./MapPanel.css";
 
-// Optional: custom icon
 const customIcon = new L.Icon({
   iconUrl: "https://unpkg.com/leaflet@1.9.3/dist/images/marker-icon.png",
   iconSize: [25, 41],
@@ -24,7 +25,7 @@ function MapPanel({ tileUrl, filteredMarkers, setSelectedLocation }) {
   return (
     <div className="map-panel">
       <MapContainer
-        center={[43.4516, -80.4925]} // Center on Kitchener-Waterloo
+        center={[43.4516, -80.4925]}
         zoom={13}
         scrollWheelZoom={true}
         className="map-background"
@@ -44,20 +45,16 @@ function MapPanel({ tileUrl, filteredMarkers, setSelectedLocation }) {
           url={tileUrl}
           noWrap={true}
         />
-
-        {/* Map Markers */}
         {filteredMarkers.map((marker) => (
           <Marker
             key={marker._id}
             position={[
               parseFloat(marker.latitude),
-              parseFloat(marker.longtitude),
+              parseFloat(marker.longitude),
             ]}
             icon={customIcon}
             eventHandlers={{
-              click: () => {
-                setSelectedLocation(marker);
-              },
+              click: () => setSelectedLocation(marker),
             }}
           >
             <Popup>

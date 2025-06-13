@@ -3,89 +3,47 @@
 import React, { useState, useEffect } from "react";
 import "./EditLocation.css";
 import axios from "axios";
-
-const timeOptions = Array.from({ length: 48 }, (_, i) => {
-  const hour = Math.floor(i / 2);
-  const minutes = i % 2 === 0 ? "00" : "30";
-  const suffix = hour < 12 ? "a.m." : "p.m.";
-  const formattedHour = hour % 12 === 0 ? 12 : hour % 12;
-  return `${formattedHour}:${minutes} ${suffix}`;
-});
-
-const daysOfWeek = [
-  "Monday",
-  "Tuesday",
-  "Wednesday",
-  "Thursday",
-  "Friday",
-  "Saturday",
-  "Sunday",
-];
+import {
+  daysOfWeek,
+  resources,
+  services,
+  comforts,
+  timeOptionsAMPM,
+  validateRequiredFields,
+  getSafeLocationData,
+} from "../data/dataModel.jsx";
 
 function EditLocation({ setMarkers, selectedLocation, setSelectedLocation }) {
-  const [name, setName] = useState("");
-  const [latitude, setLatitude] = useState("");
-  const [longtitude, setLongtitude] = useState("");
-  const [address, setAddress] = useState("");
-  const [website, setWebsite] = useState("");
-  const [phone, setPhone] = useState("");
-  const [wheelchairAccessible, setWheelchairAccessible] = useState(false);
-  const [openHours, setOpenHours] = useState({});
-  const [isLocationOpen, setIsLocationOpen] = useState({});
-  const [resources, setResources] = useState({});
-  const [services, setServices] = useState({});
-  const [comforts, setComforts] = useState({});
+  const [formData, setFormData] = useState(getSafeLocationData());
 
-  // Load selectedLocation into local state once on open
   useEffect(() => {
     if (selectedLocation) {
-      setName(selectedLocation.name || "");
-      setLatitude(selectedLocation.latitude || "");
-      setLongtitude(selectedLocation.longtitude || "");
-      setAddress(selectedLocation.address || "");
-      setWebsite(selectedLocation.website || "");
-      setPhone(selectedLocation.phone || "");
-      setWheelchairAccessible(!!selectedLocation.wheelchairAccessible);
-      setOpenHours(selectedLocation.openHours || {});
-      setIsLocationOpen(selectedLocation.isLocationOpen || {});
-      setResources(selectedLocation.resources || {});
-      setServices(selectedLocation.services || {});
-      setComforts(selectedLocation.comforts || {});
+      setFormData(getSafeLocationData(selectedLocation));
     }
   }, [selectedLocation]);
 
   const handleEditSubmit = async () => {
-    if (!name || !latitude || !longtitude) {
-      window.alert("Missing required entries");
+    if (!validateRequiredFields(formData)) {
+      window.alert(
+        "Missing required entries, no open days selected, or invalid hours (closing must be after opening)."
+      );
       return;
     }
 
     try {
-      await axios.put(`/api/locations/${selectedLocation._id}`, {
-        name,
-        latitude,
-        longtitude,
-        address,
-        phone,
-        website,
-        wheelchairAccessible,
-        isLocationOpen,
-        openHours,
-        resources,
-        services,
-        comforts,
-      });
+      await axios.put(`/api/locations/${selectedLocation._id}`, formData);
       const response = await axios.get("/api/locations");
       setMarkers(response.data);
-
+      const updated = response.data.find(
+        (loc) => loc._id === selectedLocation._id
+      );
+      if (updated) {
+        setSelectedLocation(updated);
+      }
       alert("Location updated!");
     } catch (error) {
       console.error("Update failed:", error);
-      onsole.error("Submit failed:", err);
-      if (!name || !latitude || !longitude) {
-        window.alert("Missing Required Entries");
-        return;
-      }
+      alert("Failed to update location");
     }
   };
 
@@ -99,8 +57,8 @@ function EditLocation({ setMarkers, selectedLocation, setSelectedLocation }) {
       await axios.delete(`/api/locations/${selectedLocation._id}`);
       const response = await axios.get("/api/locations");
       setMarkers(response.data);
+      setSelectedLocation(null);
       alert("Location deleted.");
-      setSelectedLocation(null); // Clear selection
     } catch (error) {
       console.error("Delete failed:", error);
       alert("Failed to delete location");
@@ -122,46 +80,48 @@ function EditLocation({ setMarkers, selectedLocation, setSelectedLocation }) {
 
       <label>Name:</label>
       <input
-        value={name}
-        onChange={(e) => setName(e.target.value)}
+        value={formData.name}
+        onChange={(e) => setFormData({ ...formData, name: e.target.value })}
         placeholder="Required..."
         required
       />
 
       <label>Latitude:</label>
       <input
-        value={latitude}
-        onChange={(e) => setLatitude(e.target.value)}
+        value={formData.latitude}
+        onChange={(e) => setFormData({ ...formData, latitude: e.target.value })}
         placeholder="Required..."
         required
       />
 
       <label>Longitude:</label>
       <input
-        value={longtitude}
-        onChange={(e) => setLongtitude(e.target.value)}
+        value={formData.longitude}
+        onChange={(e) =>
+          setFormData({ ...formData, longitude: e.target.value })
+        }
         placeholder="Required..."
         required
       />
 
       <label>Address:</label>
       <input
-        value={address}
-        onChange={(e) => setAddress(e.target.value)}
+        value={formData.address}
+        onChange={(e) => setFormData({ ...formData, address: e.target.value })}
         placeholder="Optional..."
       />
 
       <label>Website:</label>
       <input
-        value={website}
-        onChange={(e) => setWebsite(e.target.value)}
+        value={formData.website}
+        onChange={(e) => setFormData({ ...formData, website: e.target.value })}
         placeholder="Optional..."
       />
 
       <label>Phone:</label>
       <input
-        value={phone}
-        onChange={(e) => setPhone(e.target.value)}
+        value={formData.phone}
+        onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
         placeholder="Optional..."
       />
 
@@ -170,8 +130,13 @@ function EditLocation({ setMarkers, selectedLocation, setSelectedLocation }) {
         <div className="checkbox-container">
           <input
             type="checkbox"
-            checked={wheelchairAccessible}
-            onChange={(e) => setWheelchairAccessible(e.target.checked)}
+            checked={formData.wheelchairAccessible}
+            onChange={(e) =>
+              setFormData({
+                ...formData,
+                wheelchairAccessible: e.target.checked,
+              })
+            }
           />
         </div>
       </div>
@@ -193,31 +158,37 @@ function EditLocation({ setMarkers, selectedLocation, setSelectedLocation }) {
               <td>
                 <input
                   type="checkbox"
-                  checked={isLocationOpen[day]}
+                  checked={formData.isLocationOpen[day]}
                   onChange={(e) =>
-                    setIsLocationOpen({
-                      ...isLocationOpen,
-                      [day]: e.target.checked,
+                    setFormData({
+                      ...formData,
+                      isLocationOpen: {
+                        ...formData.isLocationOpen,
+                        [day]: e.target.checked,
+                      },
                     })
                   }
                 />
               </td>
-              {isLocationOpen[day] ? (
+              {formData.isLocationOpen[day] ? (
                 <>
                   <td>
                     <select
-                      value={openHours[day]?.open || ""}
+                      value={formData.openHours[day]?.open || ""}
                       onChange={(e) =>
-                        setOpenHours({
-                          ...openHours,
-                          [day]: {
-                            ...openHours[day],
-                            open: e.target.value,
+                        setFormData({
+                          ...formData,
+                          openHours: {
+                            ...formData.openHours,
+                            [day]: {
+                              ...formData.openHours[day],
+                              open: e.target.value,
+                            },
                           },
                         })
                       }
                     >
-                      {timeOptions.map((time) => (
+                      {timeOptionsAMPM.map((time) => (
                         <option key={time} value={time}>
                           {time}
                         </option>
@@ -226,18 +197,21 @@ function EditLocation({ setMarkers, selectedLocation, setSelectedLocation }) {
                   </td>
                   <td>
                     <select
-                      value={openHours[day]?.close || ""}
+                      value={formData.openHours[day]?.close || ""}
                       onChange={(e) =>
-                        setOpenHours({
-                          ...openHours,
-                          [day]: {
-                            ...openHours[day],
-                            close: e.target.value,
+                        setFormData({
+                          ...formData,
+                          openHours: {
+                            ...formData.openHours,
+                            [day]: {
+                              ...formData.openHours[day],
+                              close: e.target.value,
+                            },
                           },
                         })
                       }
                     >
-                      {timeOptions.map((time) => (
+                      {timeOptionsAMPM.map((time) => (
                         <option key={time} value={time}>
                           {time}
                         </option>
@@ -257,15 +231,21 @@ function EditLocation({ setMarkers, selectedLocation, setSelectedLocation }) {
 
       <h3>Resources</h3>
       <div className="resources-list">
-        {Object.keys(resources).map((key) => (
+        {resources.map((key) => (
           <div key={key} className="inline-checkbox-row">
             <label className="label-container">{key}</label>
             <div className="checkbox-container">
               <input
                 type="checkbox"
-                checked={resources[key]}
+                checked={formData.resources[key]}
                 onChange={(e) =>
-                  setResources({ ...resources, [key]: e.target.checked })
+                  setFormData({
+                    ...formData,
+                    resources: {
+                      ...formData.resources,
+                      [key]: e.target.checked,
+                    },
+                  })
                 }
               />
             </div>
@@ -275,15 +255,21 @@ function EditLocation({ setMarkers, selectedLocation, setSelectedLocation }) {
 
       <h3>Services</h3>
       <div className="services-section">
-        {Object.keys(services).map((key) => (
+        {services.map((key) => (
           <div key={key} className="inline-checkbox-row">
             <label className="label-container">{key}</label>
             <div className="checkbox-container">
               <input
                 type="checkbox"
-                checked={services[key]}
+                checked={formData.services[key]}
                 onChange={(e) =>
-                  setServices({ ...services, [key]: e.target.checked })
+                  setFormData({
+                    ...formData,
+                    services: {
+                      ...formData.services,
+                      [key]: e.target.checked,
+                    },
+                  })
                 }
               />
             </div>
@@ -293,15 +279,21 @@ function EditLocation({ setMarkers, selectedLocation, setSelectedLocation }) {
 
       <h3>Comforts</h3>
       <div className="comforts-section">
-        {Object.keys(comforts).map((key) => (
+        {comforts.map((key) => (
           <div key={key} className="inline-checkbox-row">
             <label className="label-container">{key}</label>
             <div className="checkbox-container">
               <input
                 type="checkbox"
-                checked={comforts[key]}
+                checked={formData.comforts[key]}
                 onChange={(e) =>
-                  setComforts({ ...comforts, [key]: e.target.checked })
+                  setFormData({
+                    ...formData,
+                    comforts: {
+                      ...formData.comforts,
+                      [key]: e.target.checked,
+                    },
+                  })
                 }
               />
             </div>
