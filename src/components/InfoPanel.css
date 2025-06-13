@@ -1,10 +1,10 @@
 .info-panel {
-    font-family: sans-serif;
+     font-family: sans-serif;
   background-color: rgba(54, 164, 109, 0.2);
 
   padding: 15px;
   overflow:hidden;
-  width: 20vw;
+  width: 25vw;
   border: 2px solid rgb(25, 80, 59);
   border-radius: 12px;
   backdrop-filter: blur(10px);

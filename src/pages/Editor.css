@@ -2,7 +2,7 @@
   position: absolute;
   top: 5%;
   transform: translateY(-50%);
-  transform: translateX(-200%);
+  transform: translateX(-75%);
   font-size: 1.5rem;
   background: rgba(0, 0, 0, 0.3);
   border: none;
@@ -16,7 +16,7 @@
 }
 
 .editor-toggle {
-  right: calc(22vw + 10px);
+  right: calc(25vw + 10px);
 }
 
 .editor-toggle.collapsed-toggle {

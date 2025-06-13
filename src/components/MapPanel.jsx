@@ -20,7 +20,7 @@ const customIcon = new L.Icon({
   shadowSize: [41, 41],
 });
 
-function MapPanel({ tileUrl, markers, setSelectedLocation }) {
+function MapPanel({ tileUrl, filteredMarkers, setSelectedLocation }) {
   return (
     <div className="map-panel">
       <MapContainer
@@ -46,7 +46,7 @@ function MapPanel({ tileUrl, markers, setSelectedLocation }) {
         />
 
         {/* Map Markers */}
-        {markers.map((marker) => (
+        {filteredMarkers.map((marker) => (
           <Marker
             key={marker._id}
             position={[

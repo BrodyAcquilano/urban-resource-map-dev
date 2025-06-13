@@ -41,7 +41,7 @@ body {
 
 /* Position when panel is expanded */
 .filter-toggle {
-  left: calc(22vw + 10px);
+  left: calc(25vw + 10px);
 }
 
 /* Position when panel is collapsed */
@@ -54,7 +54,7 @@ body {
   position: absolute;
   top: 0;
   bottom: 0;
-  width: 22vw;
+  min-width: 22vw;
   background-color: rgba(255, 255, 255, 0.0);
   padding:20px;
   overflow-x: hidden;
