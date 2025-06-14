@@ -318,12 +318,13 @@ This simplifies UX and **dramatically increases speed** of data collection or su
 
 ### 🧩 Data Model (Minimalist Version)
 
-```
+---
+
 {
-  id: "uuid-123",
-  type: "Water Fountain",
-  latitude: 43.12345,
-  longitude: -80.12345
+id: "uuid-123",
+type: "Water Fountain",
+latitude: 43.12345,
+longitude: -80.12345
 }
 
 ### 🔎 Filter/Display Logic
@@ -336,16 +337,16 @@ This simplifies UX and **dramatically increases speed** of data collection or su
 
 ### 🧰 Use Cases
 
-| Context                   | Example Application                                     |
-|---------------------------|---------------------------------------------------------|
-| 🔌 Infrastructure Survey  | Map all visible electrical boxes or manhole covers      |
-| 💧 Public Services        | Rapidly log every water fountain or hydrant             |
-| 🚮 Urban Cleanups         | Drop pins for overflowing trash bins or graffiti spots  |
-| 🌳 Forestry / Parks       | Log tree types, stumps, or damage during fieldwork      |
-| 📡 Signal Mapping         | Mark weak Wi-Fi zones or dead mobile signal spots       |
-| 🛠️ Field Repair Logs      | Workers drop markers for potholes, leaks, etc.          |
-| 🧭 Trail Management       | Pin benches, signs, campsites, hazards                  |
-| 🚶‍♂️ Accessibility Audit  | Drop pins for curb cuts, stairs, elevators, etc.        |
+| Context                  | Example Application                                    |
+| ------------------------ | ------------------------------------------------------ |
+| 🔌 Infrastructure Survey | Map all visible electrical boxes or manhole covers     |
+| 💧 Public Services       | Rapidly log every water fountain or hydrant            |
+| 🚮 Urban Cleanups        | Drop pins for overflowing trash bins or graffiti spots |
+| 🌳 Forestry / Parks      | Log tree types, stumps, or damage during fieldwork     |
+| 📡 Signal Mapping        | Mark weak Wi-Fi zones or dead mobile signal spots      |
+| 🛠️ Field Repair Logs     | Workers drop markers for potholes, leaks, etc.         |
+| 🧭 Trail Management      | Pin benches, signs, campsites, hazards                 |
+| 🚶‍♂️ Accessibility Audit   | Drop pins for curb cuts, stairs, elevators, etc.       |
 
 ---
 
@@ -373,4 +374,3 @@ It’s also a great demo of how the same platform can serve:
 - Internal asset tracking
 
 All without writing a line of new backend code — just by adjusting your frontend workflow and using your existing map + marker infrastructure.
-```
