@@ -32,7 +32,7 @@ function EditLocation({ setMarkers, selectedLocation, setSelectedLocation }) {
     }
 
     try {
-      await axios.put(`/api/locations/${selectedLocation._id}`, formData);
+      await axios.put(`${BASE_URL}/api/locations/${selectedLocation._id}`, formData);
       const response = await axios.get(`${BASE_URL}/api/locations`);
       setMarkers(response.data);
       const updated = response.data.find(
@@ -56,7 +56,7 @@ function EditLocation({ setMarkers, selectedLocation, setSelectedLocation }) {
 
     try {
       await axios.delete(`${BASE_URL}/api/locations/${selectedLocation._id}`);
-      const response = await axios.get("/api/locations");
+      const response = await axios.get(`${BASE_URL}/api/locations`);
       setMarkers(response.data);
       setSelectedLocation(null);
       alert("Location deleted.");
