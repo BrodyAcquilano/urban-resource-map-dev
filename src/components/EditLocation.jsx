@@ -22,6 +22,7 @@ function EditLocation({ setMarkers, selectedLocation, setSelectedLocation }) {
     }
   }, [selectedLocation]);
 
+  const BASE_URL = import.meta.env.VITE_API_URL;
   const handleEditSubmit = async () => {
     if (!validateRequiredFields(formData)) {
       window.alert(
@@ -32,7 +33,7 @@ function EditLocation({ setMarkers, selectedLocation, setSelectedLocation }) {
 
     try {
       await axios.put(`/api/locations/${selectedLocation._id}`, formData);
-      const response = await axios.get("/api/locations");
+      const response = await axios.get(`${BASE_URL}/api/locations`);
       setMarkers(response.data);
       const updated = response.data.find(
         (loc) => loc._id === selectedLocation._id
@@ -54,7 +55,7 @@ function EditLocation({ setMarkers, selectedLocation, setSelectedLocation }) {
     if (!confirmDelete) return;
 
     try {
-      await axios.delete(`/api/locations/${selectedLocation._id}`);
+      await axios.delete(`${BASE_URL}/api/locations/${selectedLocation._id}`);
       const response = await axios.get("/api/locations");
       setMarkers(response.data);
       setSelectedLocation(null);

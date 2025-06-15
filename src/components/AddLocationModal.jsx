@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import "./AddLocationModal.css";
 import axios from "axios";
 
+const BASE_URL = import.meta.env.VITE_API_URL;
+
 import {
   daysOfWeek,
   resources,
@@ -21,7 +23,8 @@ function AddLocationModal({ isOpen, onClose, setMarkers }) {
   const resetForm = () => {
     setFormData(initialLocationData);
   };
-
+  
+  const BASE_URL = import.meta.env.VITE_API_URL;
   const handleSubmit = async () => {
     const locationData = {
       ...formData,
@@ -37,7 +40,7 @@ function AddLocationModal({ isOpen, onClose, setMarkers }) {
     }
 
     try {
-      const res = await axios.post("/api/locations", locationData);
+      const res = await axios.post(`${BASE_URL}/api/locations`, locationData);
       const newMarker = { _id: res.data.id, ...locationData };
       setMarkers((prev) => [...prev, newMarker]);
 
@@ -139,7 +142,9 @@ function AddLocationModal({ isOpen, onClose, setMarkers }) {
               />
             </label>
             <div className="inline-checkbox-row">
-              <label className="label-container">♿ Wheelchair Accessible</label>
+              <label className="label-container">
+                ♿ Wheelchair Accessible
+              </label>
               <div className="checkbox-container">
                 <input
                   type="checkbox"
@@ -282,58 +287,58 @@ function AddLocationModal({ isOpen, onClose, setMarkers }) {
         {page === 3 && (
           <>
             <h3>Services</h3>
-<div className="services-section">
-  {services.map((label) => (
-    <div key={label} className="inline-checkbox-row">
-      <label className="label-container">{label}</label>
-      <div className="checkbox-container">
-        <input
-          type="checkbox"
-          checked={formData.services[label]}
-          onChange={(e) =>
-            setFormData((prev) => ({
-              ...prev,
-              services: {
-                ...prev.services,
-                [label]: e.target.checked,
-              },
-            }))
-          }
-        />
-      </div>
-      <div className="notes-cell">{serviceNotes[label] || ""}</div>
-    </div>
-  ))}
-</div>
+            <div className="services-section">
+              {services.map((label) => (
+                <div key={label} className="inline-checkbox-row">
+                  <label className="label-container">{label}</label>
+                  <div className="checkbox-container">
+                    <input
+                      type="checkbox"
+                      checked={formData.services[label]}
+                      onChange={(e) =>
+                        setFormData((prev) => ({
+                          ...prev,
+                          services: {
+                            ...prev.services,
+                            [label]: e.target.checked,
+                          },
+                        }))
+                      }
+                    />
+                  </div>
+                  <div className="notes-cell">{serviceNotes[label] || ""}</div>
+                </div>
+              ))}
+            </div>
           </>
         )}
 
         {page === 4 && (
           <>
             <h3>Amenities</h3>
-<div className="amenities-section">
-  {amenities.map((label) => (
-    <div key={label} className="inline-checkbox-row">
-      <label className="label-container">{label}</label>
-      <div className="checkbox-container">
-        <input
-          type="checkbox"
-          checked={formData.amenities[label]}
-          onChange={(e) =>
-            setFormData((prev) => ({
-              ...prev,
-              amenities: {
-                ...prev.amenities,
-                [label]: e.target.checked,
-              },
-            }))
-          }
-        />
-      </div>
-      <div className="notes-cell">{amenityNotes[label] || ""}</div>
-    </div>
-  ))}
-</div>
+            <div className="amenities-section">
+              {amenities.map((label) => (
+                <div key={label} className="inline-checkbox-row">
+                  <label className="label-container">{label}</label>
+                  <div className="checkbox-container">
+                    <input
+                      type="checkbox"
+                      checked={formData.amenities[label]}
+                      onChange={(e) =>
+                        setFormData((prev) => ({
+                          ...prev,
+                          amenities: {
+                            ...prev.amenities,
+                            [label]: e.target.checked,
+                          },
+                        }))
+                      }
+                    />
+                  </div>
+                  <div className="notes-cell">{amenityNotes[label] || ""}</div>
+                </div>
+              ))}
+            </div>
           </>
         )}
 

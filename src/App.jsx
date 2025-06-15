@@ -34,20 +34,22 @@ function App() {
   // 📊 Global State for Map + UI
   // ─────────────────────────────────────────────
 
-  const [selectedFilters, setSelectedFilters] = useState([]);//List of currently applied filters for exporting
+  const [selectedFilters, setSelectedFilters] = useState([]); //List of currently applied filters for exporting
   const [markers, setMarkers] = useState([]); // All location data from the database
   const [filteredMarkers, setFilteredMarkers] = useState([]); // Filtered set of markers to display on the map
   const [showFilter, setShowFilter] = useState(true); // Toggle for Filter Panel
   const [selectedLocation, setSelectedLocation] = useState(null); // Selected location for Info or Edit or Export
   const [tileStyle, setTileStyle] = useState("Standard"); // Current tile map style
   const [mapCenter, setMapCenter] = useState([43.4516, -80.4925]);
-const [mapZoom, setMapZoom] = useState(13);
+  const [mapZoom, setMapZoom] = useState(13);
+
+  const BASE_URL = import.meta.env.VITE_API_URL;
 
   // 📡 Fetch all markers once on app load
   useEffect(() => {
     const fetchMarkers = async () => {
       try {
-        const res = await axios.get("/api/locations");
+        const res = await axios.get(`${BASE_URL}/api/locations`);
         setMarkers(res.data);
       } catch (err) {
         console.error("Failed to fetch markers:", err);
@@ -74,9 +76,13 @@ const [mapZoom, setMapZoom] = useState(13);
     <div className="app-container">
       {/* Top Navigation Header */}
       <Header />
-{/* Invisible map used for export snapshot */}
-<OffscreenMap tileUrl={TILE_STYLES[tileStyle]} filteredMarkers={filteredMarkers}  center={mapCenter}
-  zoom={mapZoom} />
+      {/* Invisible map used for export snapshot */}
+      <OffscreenMap
+        tileUrl={TILE_STYLES[tileStyle]}
+        filteredMarkers={filteredMarkers}
+        center={mapCenter}
+        zoom={mapZoom}
+      />
 
       {/* Main UI Layer */}
       <div className="main-layer">
@@ -111,7 +117,7 @@ const [mapZoom, setMapZoom] = useState(13);
           filteredMarkers={filteredMarkers}
           setSelectedLocation={setSelectedLocation}
           setMapCenter={setMapCenter}
-  setMapZoom={setMapZoom}
+          setMapZoom={setMapZoom}
         />
 
         {/* Page Routing */}
