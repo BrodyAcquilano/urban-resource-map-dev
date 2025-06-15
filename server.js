@@ -2,10 +2,12 @@ import express from "express";
 import dotenv from "dotenv";
 import connectToMongo from "./db.js";
 import locationRoutes from "./routes/locations.js";
+import cors from "cors";
 
 dotenv.config();
 
 const app = express();
+app.use(cors());
 const PORT = process.env.PORT || 3000;
 
 app.use(express.json());
