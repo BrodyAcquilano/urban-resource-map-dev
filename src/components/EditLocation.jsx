@@ -7,7 +7,7 @@ import {
   daysOfWeek,
   resources,
   services,
-  comforts,
+  amenities,
   timeOptionsAMPM,
   validateRequiredFields,
   getSafeLocationData,
@@ -25,7 +25,7 @@ function EditLocation({ setMarkers, selectedLocation, setSelectedLocation }) {
   const handleEditSubmit = async () => {
     if (!validateRequiredFields(formData)) {
       window.alert(
-        "Missing required entries, no open days selected, or invalid hours (closing must be after opening)."
+        "Missing required entries, ivalid latitude or longitude, no open days selected, or invalid hours (closing must be after opening)."
       );
       return;
     }
@@ -69,7 +69,7 @@ function EditLocation({ setMarkers, selectedLocation, setSelectedLocation }) {
     return (
       <div className="edit-location-panel">
         <h2>Edit Location</h2>
-        <p>Select a marker to view details</p>
+        <p>Select a marker to view details.</p>
       </div>
     );
   }
@@ -159,15 +159,22 @@ function EditLocation({ setMarkers, selectedLocation, setSelectedLocation }) {
                 <input
                   type="checkbox"
                   checked={formData.isLocationOpen[day]}
-                  onChange={(e) =>
-                    setFormData({
-                      ...formData,
+                  onChange={(e) => {
+                    const checked = e.target.checked;
+                    setFormData((prev) => ({
+                      ...prev,
                       isLocationOpen: {
-                        ...formData.isLocationOpen,
-                        [day]: e.target.checked,
+                        ...prev.isLocationOpen,
+                        [day]: checked,
                       },
-                    })
-                  }
+                      openHours: {
+                        ...prev.openHours,
+                        [day]: checked
+                          ? { open: "9:00 a.m.", close: "5:00 p.m." }
+                          : { open: "", close: "" },
+                      },
+                    }));
+                  }}
                 />
               </td>
               {formData.isLocationOpen[day] ? (
@@ -176,16 +183,16 @@ function EditLocation({ setMarkers, selectedLocation, setSelectedLocation }) {
                     <select
                       value={formData.openHours[day]?.open || ""}
                       onChange={(e) =>
-                        setFormData({
-                          ...formData,
+                        setFormData((prev) => ({
+                          ...prev,
                           openHours: {
-                            ...formData.openHours,
+                            ...prev.openHours,
                             [day]: {
-                              ...formData.openHours[day],
+                              ...prev.openHours[day],
                               open: e.target.value,
                             },
                           },
-                        })
+                        }))
                       }
                     >
                       {timeOptionsAMPM.map((time) => (
@@ -199,16 +206,16 @@ function EditLocation({ setMarkers, selectedLocation, setSelectedLocation }) {
                     <select
                       value={formData.openHours[day]?.close || ""}
                       onChange={(e) =>
-                        setFormData({
-                          ...formData,
+                        setFormData((prev) => ({
+                          ...prev,
                           openHours: {
-                            ...formData.openHours,
+                            ...prev.openHours,
                             [day]: {
-                              ...formData.openHours[day],
+                              ...prev.openHours[day],
                               close: e.target.value,
                             },
                           },
-                        })
+                        }))
                       }
                     >
                       {timeOptionsAMPM.map((time) => (
@@ -277,20 +284,20 @@ function EditLocation({ setMarkers, selectedLocation, setSelectedLocation }) {
         ))}
       </div>
 
-      <h3>Comforts</h3>
-      <div className="comforts-section">
-        {comforts.map((key) => (
+      <h3>Amenities</h3>
+      <div className="amenities-section">
+        {amenities.map((key) => (
           <div key={key} className="inline-checkbox-row">
             <label className="label-container">{key}</label>
             <div className="checkbox-container">
               <input
                 type="checkbox"
-                checked={formData.comforts[key]}
+                checked={formData.amenities[key]}
                 onChange={(e) =>
                   setFormData({
                     ...formData,
-                    comforts: {
-                      ...formData.comforts,
+                    amenities: {
+                      ...formData.amenities,
                       [key]: e.target.checked,
                     },
                   })

@@ -61,7 +61,7 @@ export const services = [
 ];
 
 // Used in: FilterPanel.jsx, AddLocationModal.jsx, EditLocation.jsx, InfoPanel.jsx
-export const comforts = [
+export const amenities = [
   "Wi-Fi",
   "Charging Stations",
   "Indoor Seating",
@@ -69,7 +69,7 @@ export const comforts = [
   "Pet Friendly",
   "Quiet Space",
   "Public Computer Access",
-  "Library Access",
+  "Library",
   "Art or Music Programs",
   "Exercise Space",
   "Social Space",
@@ -77,6 +77,9 @@ export const comforts = [
   "Low-Intervention Environment",
   "Nap or Sleep",
   "No Purchases Required",
+  "Coffee Shop",
+  "Shopping Centre"
+
 ];
 
 // Used in: AddLocationModal.jsx
@@ -98,7 +101,7 @@ export const serviceNotes = {
 };
 
 // Used in: AddLocationModal.jsx
-export const comfortNotes = {
+export const amenityNotes = {
   "Wi-Fi": "Public wireless internet access",
   "Charging Stations": "Places to charge phones or devices",
   "Indoor Seating": "Safe indoor places to sit and rest",
@@ -106,7 +109,7 @@ export const comfortNotes = {
   "Pet Friendly": "Allows animals or has accommodations for pets",
   "Quiet Space": "Noise-free or calm areas for rest or focus",
   "Public Computer Access": "Workstations with internet or tools",
-  "Library Access": "Books, reading space, or educational resources",
+  "Library": "Books, reading space, or educational resources",
   "Art or Music Programs": "Creative drop-ins or workshops",
   "Exercise Space": "Room to walk, stretch, or do light fitness",
   "Social Space": "Supports informal interaction or community",
@@ -114,6 +117,8 @@ export const comfortNotes = {
   "Low-Intervention Environment": "You’re unlikely to be asked to leave",
   "Nap or Sleep": "Comfortable seating or space to lay down",
   "No Purchases Required": "You can access this space without buying something",
+   "Coffee Shop": "Offers amenities like seating or Wi-Fi, but usually requires a purchase",
+  "Shopping Centre": "Malls or plazas you can walk around or hang out",
 };
 
 // ────────────────
@@ -133,7 +138,7 @@ export const initialLocationData = {
   openHours: { ...defaultOpenHours },
   resources: Object.fromEntries(resources.map((label) => [label, false])),
   services: Object.fromEntries(services.map((label) => [label, false])),
-  comforts: Object.fromEntries(comforts.map((label) => [label, false])),
+  amenities: Object.fromEntries(amenities.map((label) => [label, false])),
 };
 
 // Used in: EditLocation.jsx for initializing states to the values from the selected Location.
@@ -150,7 +155,7 @@ export function getSafeLocationData(raw = {}) {
     openHours: raw.openHours || { ...defaultOpenHours },
     resources: { ...Object.fromEntries(resources.map((r) => [r, false])), ...(raw.resources || {}) },
     services: { ...Object.fromEntries(services.map((s) => [s, false])), ...(raw.services || {}) },
-    comforts: { ...Object.fromEntries(comforts.map((c) => [c, false])), ...(raw.comforts || {}) },
+    amenities: { ...Object.fromEntries(amenities.map((c) => [c, false])), ...(raw.amenities || {}) },
   };
 }
 

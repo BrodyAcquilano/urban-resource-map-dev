@@ -1,5 +1,5 @@
 .info-side-toggle {
-   position: absolute;
+  position: absolute;
   top: 5%;
   transform: translateY(-50%);
   transform: translateX(-75%);
@@ -28,18 +28,18 @@
   position: absolute;
   top: 0;
   bottom: 0;
-  min-width: 22vw;
-  background-color: rgba(255, 255, 255, 0.0);
-  padding:20px;
+  min-width: 25vw;
+  background-color: rgba(255, 255, 255, 0);
+  padding: 20px;
   overflow-x: hidden;
-  overflow-y:auto;
+  overflow-y: auto;
   z-index: 1000;
   transition: transform 0.3s ease;
 }
 
 .info-panel-wrapper {
   right: 0;
-   border-radius: 20px;
+  border-radius: 20px;
 }
 
 .info-panel-wrapper.collapsed {

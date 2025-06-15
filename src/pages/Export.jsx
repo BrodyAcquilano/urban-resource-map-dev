@@ -4,15 +4,21 @@ import React, { useState } from "react";
 import ExportOptions from "../components/ExportOptions.jsx";
 import ExportPreviewModal from "../components/ExportPreviewModal.jsx";
 import "./Export.css";
+import { captureOffscreenMap } from "../utils/captureOffscreenMap.js";
 
-function Export() {
+function Export({ filteredMarkers, selectedLocation, selectedFilters }) {
   const [isExportModalOpen, setExportModalOpen] = useState(false);
   const [showExportOptions, setShowExportOptions] = useState(true);
-
+  const [title, setTitle] = useState("");
+  const [includeFilters, setIncludeFilters] = useState(false);
+  const [includeAllLocations, setIncludeAllLocations] = useState(false);
+  const [includeSelected, setIncludeSelected] = useState(false);
+  const [orientation, setOrientation] = useState("portrait");
+  const [notes, setNotes] = useState("");
+const [mapImage, setMapImage] = useState(null);
   return (
-
- <>
-     {/* Editor Panel Toggle + Panel */}
+    <>
+      {/* Editor Panel Toggle + Panel */}
       <button
         className={`export-side-toggle editor-toggle ${
           showExportOptions ? "" : "collapsed-toggle"
@@ -26,21 +32,43 @@ function Export() {
           showExportOptions ? "" : "collapsed"
         }`}
       >
-        <ExportOptions/>
+        <ExportOptions
+          setTitle={setTitle}
+          setIncludeFilters={setIncludeFilters}
+          setIncludeAllLocations={setIncludeAllLocations}
+          setIncludeSelected={setIncludeSelected}
+          orientation={orientation}
+          setOrientation={setOrientation}
+          setNotes={setNotes}
+        />
       </div>
 
-       {/* Centered Export Button */}
-      <button
-        className="export-preview-button"
-        onClick={() => setExportModalOpen(true)}
-      >
-        ⬇️
-      </button>
+      {/* Centered Export Button */}
+     <button
+  className="export-preview-button"
+  onClick={async () => {
+    const snapshot = await captureOffscreenMap();
+    setMapImage(snapshot);
+    setExportModalOpen(true);
+  }}
+>
+  ⬇️
+</button>
 
       {/* Modal */}
       <ExportPreviewModal
         isOpen={isExportModalOpen}
         onClose={() => setExportModalOpen(false)}
+        title={title}
+        includeFilters={includeFilters}
+        includeAllLocations={includeAllLocations}
+        includeSelected={includeSelected}
+        orientation={orientation}
+        notes={notes}
+        filteredMarkers={filteredMarkers}
+        selectedLocation={selectedLocation}
+        selectedFilters={selectedFilters}
+         mapImage={mapImage}
       />
     </>
   );

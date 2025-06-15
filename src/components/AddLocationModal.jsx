@@ -1,5 +1,3 @@
-// src/components/AddLocationModal.jsx
-
 import React, { useState } from "react";
 import "./AddLocationModal.css";
 import axios from "axios";
@@ -8,7 +6,9 @@ import {
   daysOfWeek,
   resources,
   services,
-  comforts,
+  amenities,
+  serviceNotes,
+  amenityNotes,
   timeOptionsAMPM,
   validateRequiredFields,
   initialLocationData,
@@ -17,6 +17,10 @@ import {
 function AddLocationModal({ isOpen, onClose, setMarkers }) {
   const [page, setPage] = useState(1);
   const [formData, setFormData] = useState(initialLocationData);
+
+  const resetForm = () => {
+    setFormData(initialLocationData);
+  };
 
   const handleSubmit = async () => {
     const locationData = {
@@ -36,6 +40,9 @@ function AddLocationModal({ isOpen, onClose, setMarkers }) {
       const res = await axios.post("/api/locations", locationData);
       const newMarker = { _id: res.data.id, ...locationData };
       setMarkers((prev) => [...prev, newMarker]);
+
+      resetForm();
+      setPage(1);
       onClose();
     } catch (err) {
       console.error("Submit failed:", err);
@@ -46,7 +53,7 @@ function AddLocationModal({ isOpen, onClose, setMarkers }) {
   if (!isOpen) return null;
 
   return (
-    <div className="modal-overlay">
+    <div className="add-modal-overlay">
       <div className="add-location-modal">
         <button className="close-button" onClick={onClose}>
           ×
@@ -132,9 +139,7 @@ function AddLocationModal({ isOpen, onClose, setMarkers }) {
               />
             </label>
             <div className="inline-checkbox-row">
-              <label className="label-container">
-                ♿ Wheelchair Accessible
-              </label>
+              <label className="label-container">♿ Wheelchair Accessible</label>
               <div className="checkbox-container">
                 <input
                   type="checkbox"
@@ -167,15 +172,22 @@ function AddLocationModal({ isOpen, onClose, setMarkers }) {
                       <input
                         type="checkbox"
                         checked={formData.isLocationOpen[day]}
-                        onChange={(e) =>
+                        onChange={(e) => {
+                          const checked = e.target.checked;
                           setFormData((prev) => ({
                             ...prev,
                             isLocationOpen: {
                               ...prev.isLocationOpen,
-                              [day]: e.target.checked,
+                              [day]: checked,
                             },
-                          }))
-                        }
+                            openHours: {
+                              ...prev.openHours,
+                              [day]: checked
+                                ? { open: "9:00 a.m.", close: "5:00 p.m." }
+                                : { open: "", close: "" },
+                            },
+                          }));
+                        }}
                       />
                     </td>
                     {formData.isLocationOpen[day] ? (
@@ -270,56 +282,58 @@ function AddLocationModal({ isOpen, onClose, setMarkers }) {
         {page === 3 && (
           <>
             <h3>Services</h3>
-            <div className="services-section">
-              {services.map((label) => (
-                <div key={label} className="inline-checkbox-row">
-                  <label className="label-container">{label}</label>
-                  <div className="checkbox-container">
-                    <input
-                      type="checkbox"
-                      checked={formData.services[label]}
-                      onChange={(e) =>
-                        setFormData((prev) => ({
-                          ...prev,
-                          services: {
-                            ...prev.services,
-                            [label]: e.target.checked,
-                          },
-                        }))
-                      }
-                    />
-                  </div>
-                </div>
-              ))}
-            </div>
+<div className="services-section">
+  {services.map((label) => (
+    <div key={label} className="inline-checkbox-row">
+      <label className="label-container">{label}</label>
+      <div className="checkbox-container">
+        <input
+          type="checkbox"
+          checked={formData.services[label]}
+          onChange={(e) =>
+            setFormData((prev) => ({
+              ...prev,
+              services: {
+                ...prev.services,
+                [label]: e.target.checked,
+              },
+            }))
+          }
+        />
+      </div>
+      <div className="notes-cell">{serviceNotes[label] || ""}</div>
+    </div>
+  ))}
+</div>
           </>
         )}
 
         {page === 4 && (
           <>
-            <h3>Comforts</h3>
-            <div className="comforts-section">
-              {comforts.map((label) => (
-                <div key={label} className="inline-checkbox-row">
-                  <label className="label-container">{label}</label>
-                  <div className="checkbox-container">
-                    <input
-                      type="checkbox"
-                      checked={formData.comforts[label]}
-                      onChange={(e) =>
-                        setFormData((prev) => ({
-                          ...prev,
-                          comforts: {
-                            ...prev.comforts,
-                            [label]: e.target.checked,
-                          },
-                        }))
-                      }
-                    />
-                  </div>
-                </div>
-              ))}
-            </div>
+            <h3>Amenities</h3>
+<div className="amenities-section">
+  {amenities.map((label) => (
+    <div key={label} className="inline-checkbox-row">
+      <label className="label-container">{label}</label>
+      <div className="checkbox-container">
+        <input
+          type="checkbox"
+          checked={formData.amenities[label]}
+          onChange={(e) =>
+            setFormData((prev) => ({
+              ...prev,
+              amenities: {
+                ...prev.amenities,
+                [label]: e.target.checked,
+              },
+            }))
+          }
+        />
+      </div>
+      <div className="notes-cell">{amenityNotes[label] || ""}</div>
+    </div>
+  ))}
+</div>
           </>
         )}
 
@@ -328,8 +342,6 @@ function AddLocationModal({ isOpen, onClose, setMarkers }) {
           {page < 4 ? (
             <button onClick={() => setPage(page + 1)}>Next</button>
           ) : (
-            console.log(formData),
-
             <button onClick={handleSubmit}>Submit</button>
           )}
         </div>

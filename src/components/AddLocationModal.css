@@ -1,15 +1,12 @@
-/* src/components/AddLocationModal.css */
-
-
-body .modal-overlay {
+ .add-modal-overlay {
   position: fixed;
-  top: 3vh;
-  bottom: 3vh;
+  top: 0;
+  bottom: 0;
   left: 0;
   right: 0;
   width: 52vw;             
   max-width: 90vw; 
-  margin: auto;
+  margin:auto;
   padding: 2vh 2vw;          
   background-color: rgba(0,0,0,0.5);
   overflow-y: auto;
@@ -22,7 +19,7 @@ body .modal-overlay {
   backdrop-filter: blur(70px);          
 }
 
-.modal-overlay * {
+.add-modal-overlay * {
   direction: ltr;
 }
 
@@ -51,11 +48,13 @@ body .modal-overlay {
   top: 10px;
   right: 14px;
   border: none;
+  background:none;
   font-size: 1.5rem;
   color: #ff4d4d;
   text-shadow: 0 0 3px rgba(0, 0, 0, 0.7);
   cursor: pointer;
 }
+
 
 /* Labels + Inputs */
 .add-location-modal label {

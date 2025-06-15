@@ -12,6 +12,23 @@ import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import "./MapPanel.css";
 
+import { useMapEvents } from "react-leaflet";
+
+function MapSync({ setMapCenter, setMapZoom }) {
+  useMapEvents({
+    moveend: (e) => {
+      const map = e.target;
+      setMapCenter(map.getCenter());
+      setMapZoom(map.getZoom());
+    },
+    zoomend: (e) => {
+      const map = e.target;
+      setMapZoom(map.getZoom());
+    },
+  });
+  return null;
+}
+
 const customIcon = new L.Icon({
   iconUrl: "https://unpkg.com/leaflet@1.9.3/dist/images/marker-icon.png",
   iconSize: [25, 41],
@@ -21,7 +38,7 @@ const customIcon = new L.Icon({
   shadowSize: [41, 41],
 });
 
-function MapPanel({ tileUrl, filteredMarkers, setSelectedLocation }) {
+function MapPanel({ tileUrl, filteredMarkers, setSelectedLocation, setMapCenter,setMapZoom }) {
   return (
     <div className="map-panel">
       <MapContainer
@@ -39,11 +56,14 @@ function MapPanel({ tileUrl, filteredMarkers, setSelectedLocation }) {
           [85, 180],
         ]}
       >
+         <MapSync setMapCenter={setMapCenter} setMapZoom={setMapZoom} />
+  ...
         <ZoomControl position="bottomleft" />
         <TileLayer
           attribution="&copy; OpenStreetMap contributors"
           url={tileUrl}
           noWrap={true}
+          crossOrigin="anonymous"
         />
         {filteredMarkers.map((marker) => (
           <Marker

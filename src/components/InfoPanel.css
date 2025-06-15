@@ -4,7 +4,7 @@
 
   padding: 15px;
   overflow:hidden;
-  width: 25vw;
+  width: 100%;
   border: 2px solid rgb(25, 80, 59);
   border-radius: 12px;
   backdrop-filter: blur(10px);

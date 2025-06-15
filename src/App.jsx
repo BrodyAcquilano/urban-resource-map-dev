@@ -11,7 +11,7 @@ import axios from "axios";
 import Header from "./components/Header.jsx";
 import FilterPanel from "./components/FilterPanel.jsx";
 import MapPanel from "./components/MapPanel.jsx";
-
+import OffscreenMap from "./components/OffscreenMap.jsx";
 // ─────────────────────────────────────────────
 // 📄 Page Routes
 // ─────────────────────────────────────────────
@@ -34,11 +34,14 @@ function App() {
   // 📊 Global State for Map + UI
   // ─────────────────────────────────────────────
 
+  const [selectedFilters, setSelectedFilters] = useState([]);//List of currently applied filters for exporting
   const [markers, setMarkers] = useState([]); // All location data from the database
-  const [filteredMarkers, setFilteredMarkers] = useState([]); // Filtered view for the map
+  const [filteredMarkers, setFilteredMarkers] = useState([]); // Filtered set of markers to display on the map
   const [showFilter, setShowFilter] = useState(true); // Toggle for Filter Panel
-  const [selectedLocation, setSelectedLocation] = useState(null); // Selected location for Info or Edit
+  const [selectedLocation, setSelectedLocation] = useState(null); // Selected location for Info or Edit or Export
   const [tileStyle, setTileStyle] = useState("Standard"); // Current tile map style
+  const [mapCenter, setMapCenter] = useState([43.4516, -80.4925]);
+const [mapZoom, setMapZoom] = useState(13);
 
   // 📡 Fetch all markers once on app load
   useEffect(() => {
@@ -71,6 +74,9 @@ function App() {
     <div className="app-container">
       {/* Top Navigation Header */}
       <Header />
+{/* Invisible map used for export snapshot */}
+<OffscreenMap tileUrl={TILE_STYLES[tileStyle]} filteredMarkers={filteredMarkers}  center={mapCenter}
+  zoom={mapZoom} />
 
       {/* Main UI Layer */}
       <div className="main-layer">
@@ -95,6 +101,7 @@ function App() {
             setTileStyle={setTileStyle}
             markers={markers}
             setFilteredMarkers={setFilteredMarkers}
+            setSelectedFilters={setSelectedFilters}
           />
         </div>
 
@@ -103,6 +110,8 @@ function App() {
           tileUrl={TILE_STYLES[tileStyle]}
           filteredMarkers={filteredMarkers}
           setSelectedLocation={setSelectedLocation}
+          setMapCenter={setMapCenter}
+  setMapZoom={setMapZoom}
         />
 
         {/* Page Routing */}
@@ -121,7 +130,16 @@ function App() {
               />
             }
           />
-          <Route path="/export" element={<Export />} />
+          <Route
+            path="/export"
+            element={
+              <Export
+                filteredMarkers={filteredMarkers}
+                selectedLocation={selectedLocation}
+                selectedFilters={selectedFilters}
+              />
+            }
+          />
         </Routes>
       </div>
     </div>
@@ -129,8 +147,6 @@ function App() {
 }
 
 export default App;
-
-
 
 // ─────────────────────────────────────────────
 // 🌐 REACT APP STRUCTURE & GLOBAL WORKFLOWS

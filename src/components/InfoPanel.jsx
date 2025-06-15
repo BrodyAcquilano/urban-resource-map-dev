@@ -3,7 +3,7 @@ import "./InfoPanel.css";
 import {
   resources,
   services,
-  comforts,
+  amenities,
   renderCheckedItems,
 } from "../data/dataModel.jsx";
 
@@ -26,7 +26,7 @@ function InfoPanel({ selectedLocation }) {
     openHours,
     resources: selectedResources = {},
     services: selectedServices = {},
-    comforts: selectedComforts = {},
+    amenities: selectedAmenities = {},
   } = selectedLocation;
 
   return (
@@ -47,7 +47,7 @@ function InfoPanel({ selectedLocation }) {
       <hr />
 
       <p>
-        ♿ Accessibility:{" "}
+        ♿{" "}
         <strong>
           {wheelchairAccessible ? "Wheelchair Accessible" : "Not Accessible"}
         </strong>
@@ -75,7 +75,7 @@ function InfoPanel({ selectedLocation }) {
 
       {renderCheckedItems(selectedResources, resources, "Resources")}
       {renderCheckedItems(selectedServices, services, "Services")}
-      {renderCheckedItems(selectedComforts, comforts, "Comforts")}
+      {renderCheckedItems(selectedAmenities, amenities, "Amenities")}
     </div>
   );
 }

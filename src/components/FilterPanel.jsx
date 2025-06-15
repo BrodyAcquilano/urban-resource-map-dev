@@ -4,13 +4,19 @@ import {
   daysOfWeek,
   resources,
   services,
-  comforts,
+  amenities,
   timeOptionsAMPM,
   timeAMPMToMinutes,
 } from "../data/dataModel.jsx";
 import "./FilterPanel.css";
 
-function FilterPanel({ tileStyle, setTileStyle, markers, setFilteredMarkers }) {
+function FilterPanel({
+  tileStyle,
+  setTileStyle,
+  markers,
+  setFilteredMarkers,
+  setSelectedFilters,
+}) {
   const [wheelchairOnly, setWheelchairOnly] = useState(false);
   const [dayFilter, setDayFilter] = useState("Any");
   const [timeFilter, setTimeFilter] = useState("Any");
@@ -24,12 +30,13 @@ function FilterPanel({ tileStyle, setTileStyle, markers, setFilteredMarkers }) {
   const [serviceChecks, setServiceChecks] = useState(
     initCheckedState(services)
   );
-  const [comfortChecks, setComfortChecks] = useState(
-    initCheckedState(comforts)
+  const [amenityChecks, setAmenityChecks] = useState(
+    initCheckedState(amenities)
   );
 
-  const handleCheckboxChange = (key, state, setState) => {
-    setState((prev) => ({ ...prev, [key]: !prev[key] }));
+  const handleCheckboxChange = (key, checks, setChecks) => {
+    // Toggle local checkbox state
+    setChecks((prev) => ({ ...prev, [key]: !prev[key] }));
   };
 
   useEffect(() => {
@@ -61,7 +68,7 @@ function FilterPanel({ tileStyle, setTileStyle, markers, setFilteredMarkers }) {
       const allChecks = [
         [resourceChecks, marker.resources],
         [serviceChecks, marker.services],
-        [comfortChecks, marker.comforts],
+        [amenityChecks, marker.amenities],
       ];
 
       return allChecks.every(([checks, values]) =>
@@ -79,7 +86,7 @@ function FilterPanel({ tileStyle, setTileStyle, markers, setFilteredMarkers }) {
     timeFilter,
     resourceChecks,
     serviceChecks,
-    comfortChecks,
+    amenityChecks,
     setFilteredMarkers,
   ]);
 
@@ -98,6 +105,90 @@ function FilterPanel({ tileStyle, setTileStyle, markers, setFilteredMarkers }) {
       ))}
     </section>
   );
+
+  useEffect(() => {
+    const filterMinutes =
+      timeFilter !== "Any" ? timeAMPMToMinutes(timeFilter) : null;
+
+    const matchesFilter = (marker) => {
+      if (wheelchairOnly && !marker.wheelchairAccessible) return false;
+
+      if (dayFilter !== "Any") {
+        if (!marker.isLocationOpen?.[dayFilter]) return false;
+        if (filterMinutes !== null) {
+          const hours = marker.openHours?.[dayFilter];
+          const open = timeAMPMToMinutes(hours?.open || "12:00 a.m.");
+          const close = timeAMPMToMinutes(hours?.close || "12:00 a.m.");
+          if (filterMinutes < open || filterMinutes > close) return false;
+        }
+      } else if (filterMinutes !== null) {
+        const matchesAny = daysOfWeek.some((day) => {
+          if (!marker.isLocationOpen?.[day]) return false;
+          const hours = marker.openHours?.[day];
+          const open = timeAMPMToMinutes(hours?.open || "12:00 a.m.");
+          const close = timeAMPMToMinutes(hours?.close || "12:00 a.m.");
+          return filterMinutes >= open && filterMinutes <= close;
+        });
+        if (!matchesAny) return false;
+      }
+
+      const allChecks = [
+        [resourceChecks, marker.resources],
+        [serviceChecks, marker.services],
+        [amenityChecks, marker.amenities],
+      ];
+
+      return allChecks.every(([checks, values]) =>
+        Object.entries(checks).every(([key, active]) =>
+          active ? values?.[key] : true
+        )
+      );
+    };
+
+    setFilteredMarkers(markers.filter(matchesFilter));
+
+    // Build selectedFilters array for export
+    const updatedFilters = [];
+
+    if (dayFilter !== "Any") {
+      updatedFilters.push({ type: "day", label: dayFilter });
+    }
+
+    if (timeFilter !== "Any") {
+      updatedFilters.push({ type: "time", label: timeFilter });
+    }
+
+    if (wheelchairOnly) {
+      updatedFilters.push({ type: "accessibility", label: true });
+    }
+
+    const collectChecked = (checks, categoryLabel) => {
+      const items = Object.entries(checks)
+        .filter(([_, checked]) => checked)
+        .map(([label]) => ({ type: "category-item", label }));
+
+      return items.length
+        ? [{ type: "category-header", label: categoryLabel }, ...items]
+        : [];
+    };
+
+    updatedFilters.push(
+      ...collectChecked(resourceChecks, "Resources"),
+      ...collectChecked(serviceChecks, "Services"),
+      ...collectChecked(amenityChecks, "Amenities")
+    );
+
+    setSelectedFilters(updatedFilters);
+  }, [
+    markers,
+    wheelchairOnly,
+    dayFilter,
+    timeFilter,
+    resourceChecks,
+    serviceChecks,
+    amenityChecks,
+    setFilteredMarkers,
+  ]);
 
   return (
     <div className="filter-panel">
@@ -155,13 +246,13 @@ function FilterPanel({ tileStyle, setTileStyle, markers, setFilteredMarkers }) {
             checked={wheelchairOnly}
             onChange={() => setWheelchairOnly(!wheelchairOnly)}
           />{" "}
-          Show accessible locations only
+          ♿ Wheelchair Accessible
         </label>
       </section>
 
       {renderCheckboxGroup("Resources", resourceChecks, setResourceChecks)}
       {renderCheckboxGroup("Services", serviceChecks, setServiceChecks)}
-      {renderCheckboxGroup("Comforts", comfortChecks, setComfortChecks)}
+      {renderCheckboxGroup("Amenities", amenityChecks, setAmenityChecks)}
     </div>
   );
 }
