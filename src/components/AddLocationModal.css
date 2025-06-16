@@ -19,6 +19,8 @@
   backdrop-filter: blur(70px);          
 }
 
+
+
 .add-modal-overlay * {
   direction: ltr;
 }
@@ -40,6 +42,17 @@
   display: flex;
   flex-direction: column;
 }
+
+@media (max-width: 600px) {
+  .add-modal-overlay {
+    width: 95vw;
+  }
+
+  .add-location-modal {
+    width: 92vw;
+  }
+}
+
 
 
 /* Close Button */

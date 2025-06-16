@@ -43,6 +43,18 @@
   flex-direction: column;
 }
 
+@media (max-width: 600px) {
+  .export-modal-overlay {
+    margin: auto;
+    width: 95vw;
+  }
+
+  .export-preview-modal {
+    width: 92vw;
+  }
+}
+
+
 
 /* Close Button */
 .export-preview-modal .close-button {
