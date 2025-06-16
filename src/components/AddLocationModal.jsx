@@ -9,6 +9,7 @@ import {
   resources,
   services,
   amenities,
+  resourceNotes,
   serviceNotes,
   amenityNotes,
   timeOptionsAMPM,
@@ -23,7 +24,7 @@ function AddLocationModal({ isOpen, onClose, setMarkers }) {
   const resetForm = () => {
     setFormData(initialLocationData);
   };
-  
+
   const BASE_URL = import.meta.env.VITE_API_URL;
   const handleSubmit = async () => {
     const locationData = {
@@ -34,7 +35,7 @@ function AddLocationModal({ isOpen, onClose, setMarkers }) {
 
     if (!validateRequiredFields(locationData)) {
       window.alert(
-        "Missing required entries, no open days selected, or invalid open/close hours."
+        "Missing required entries, invalid latitude or longitude, no open days selected, or invalid hours (closing must be after opening)."
       );
       return;
     }
@@ -255,7 +256,6 @@ function AddLocationModal({ isOpen, onClose, setMarkers }) {
             </table>
           </>
         )}
-
         {page === 2 && (
           <>
             <h3>Resources</h3>
@@ -278,12 +278,12 @@ function AddLocationModal({ isOpen, onClose, setMarkers }) {
                       }
                     />
                   </div>
+                  <div className="notes-cell">{resourceNotes[res] || ""}</div>
                 </div>
               ))}
             </div>
           </>
         )}
-
         {page === 3 && (
           <>
             <h3>Services</h3>

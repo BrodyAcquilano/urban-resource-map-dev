@@ -178,6 +178,37 @@
   font-style: italic;
 }
 
+@media (max-width: 600px) {
+.add-location-modal .inline-checkbox-row {
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1px;
+  
+  border-style: solid;
+  border-left: 0;
+  border-right: 0;
+  border-top: 1px solid darkgrey;
+  border-bottom: 1px solid darkgrey;
+}
+  .add-location-modal .label-container {
+    min-width: unset;
+    font-size: 1rem;
+  }
+
+  .add-location-modal .checkbox-container {
+    margin-top: 0px;
+  }
+
+  .add-location-modal .notes-cell {
+    font-size: 0.75rem;
+    color: #ccc;
+    font-style: italic;
+    margin-top: 0px;
+    margin-bottom:5px;
+    
+  }
+}
+
 
 
 .navigation-buttons {

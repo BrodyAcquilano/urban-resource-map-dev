@@ -81,10 +81,11 @@ fetch("http://localhost:3000/api/locations");
 
 ## 🧪 Environment Variables
 
-Create a `.env` file at the root of the project with this line:
+Create a `.env` file at the root of the project with these two lines:
 
 ```bash
 MONGO_URI=your-mongodb-connection-string-here
+VITE_API_URL=your-vite-api-base-url
 ```
 
 ---

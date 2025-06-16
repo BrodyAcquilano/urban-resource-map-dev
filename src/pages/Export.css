@@ -14,9 +14,7 @@
   transition: left 0.4s ease, right 0.4s ease;
 }
 
-.export-toggle {
-  right: 350px;
-}
+
 
 .export-toggle.collapsed-toggle {
   right: 10px;

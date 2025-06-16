@@ -7,7 +7,7 @@ import "./Editor.css";
 
 function Editor({ setMarkers, selectedLocation, setSelectedLocation }) {
   const [isAddModalOpen, setAddModalOpen] = useState(false);
-  const [showEditLocation, setShowEditLocation] = useState(true);
+  const [showEditLocation, setShowEditLocation] = useState(false);
 
   return (
     <>

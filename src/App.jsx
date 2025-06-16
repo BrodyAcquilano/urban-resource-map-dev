@@ -37,7 +37,7 @@ function App() {
   const [selectedFilters, setSelectedFilters] = useState([]); //List of currently applied filters for exporting
   const [markers, setMarkers] = useState([]); // All location data from the database
   const [filteredMarkers, setFilteredMarkers] = useState([]); // Filtered set of markers to display on the map
-  const [showFilter, setShowFilter] = useState(true); // Toggle for Filter Panel
+  const [showFilter, setShowFilter] = useState(false); // Toggle for Filter Panel
   const [selectedLocation, setSelectedLocation] = useState(null); // Selected location for Info or Edit or Export
   const [tileStyle, setTileStyle] = useState("Standard"); // Current tile map style
   const [mapCenter, setMapCenter] = useState([43.4516, -80.4925]);

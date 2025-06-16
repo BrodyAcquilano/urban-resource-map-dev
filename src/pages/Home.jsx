@@ -3,7 +3,7 @@ import InfoPanel from "../components/InfoPanel.jsx";
 import './Home.css';
 
 function Home({ selectedLocation }) {
-  const [showInfo, setShowInfo] = useState(true);
+  const [showInfo, setShowInfo] = useState(false);
 
   return (
     <>

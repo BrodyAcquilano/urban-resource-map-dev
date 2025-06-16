@@ -8,7 +8,7 @@ import { captureOffscreenMap } from "../utils/captureOffscreenMap.js";
 
 function Export({ filteredMarkers, selectedLocation, selectedFilters }) {
   const [isExportModalOpen, setExportModalOpen] = useState(false);
-  const [showExportOptions, setShowExportOptions] = useState(true);
+  const [showExportOptions, setShowExportOptions] = useState(false);
   const [title, setTitle] = useState("");
   const [includeFilters, setIncludeFilters] = useState(false);
   const [includeAllLocations, setIncludeAllLocations] = useState(false);

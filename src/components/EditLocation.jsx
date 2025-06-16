@@ -26,7 +26,7 @@ function EditLocation({ setMarkers, selectedLocation, setSelectedLocation }) {
   const handleEditSubmit = async () => {
     if (!validateRequiredFields(formData)) {
       window.alert(
-        "Missing required entries, ivalid latitude or longitude, no open days selected, or invalid hours (closing must be after opening)."
+        "Missing required entries, invalid latitude or longitude, no open days selected, or invalid hours (closing must be after opening)."
       );
       return;
     }
