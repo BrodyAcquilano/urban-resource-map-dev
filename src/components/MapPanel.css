@@ -18,7 +18,7 @@
 /* Center zoom control at the bottom */
 .leaflet-bottom.leaflet-left .leaflet-control-zoom {
   left: 50vw !important;
-  bottom: 40px ;
+  bottom: calc(20px + env(safe-area-inset-bottom)) !important;
   transform: translateX(-50%);
   flex-direction: row;
   display: flex !important;
