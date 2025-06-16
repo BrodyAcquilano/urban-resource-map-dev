@@ -1,7 +1,7 @@
 .info-side-toggle {
   position: absolute;
   right:350px;
-   bottom: calc(20px + env(safe-area-inset-bottom)) !important;
+   bottom: 60px;
   font-size: 1.5rem;
   background: rgba(0, 0, 0, 0.3);
   border: none;
