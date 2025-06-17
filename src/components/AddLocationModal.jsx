@@ -2,8 +2,6 @@ import React, { useState } from "react";
 import "./AddLocationModal.css";
 import axios from "axios";
 
-const BASE_URL = import.meta.env.VITE_API_URL;
-
 import {
   daysOfWeek,
   resources,
@@ -267,15 +265,23 @@ function AddLocationModal({ isOpen, onClose, setMarkers }) {
                     <input
                       type="checkbox"
                       checked={formData.resources[res]}
-                      onChange={(e) =>
+                      onChange={(e) => {
+                        const checked = e.target.checked;
                         setFormData((prev) => ({
                           ...prev,
                           resources: {
                             ...prev.resources,
-                            [res]: e.target.checked,
+                            [res]: checked,
                           },
-                        }))
-                      }
+                          scores: {
+                            ...prev.scores,
+                            resources: {
+                              ...prev.scores.resources,
+                              [res]: checked ? 3 : 0,
+                            },
+                          },
+                        }));
+                      }}
                     />
                   </div>
                   <div className="notes-cell">{resourceNotes[res] || ""}</div>
@@ -295,15 +301,23 @@ function AddLocationModal({ isOpen, onClose, setMarkers }) {
                     <input
                       type="checkbox"
                       checked={formData.services[label]}
-                      onChange={(e) =>
+                      onChange={(e) => {
+                        const checked = e.target.checked;
                         setFormData((prev) => ({
                           ...prev,
                           services: {
                             ...prev.services,
-                            [label]: e.target.checked,
+                            [srv]: checked,
                           },
-                        }))
-                      }
+                          scores: {
+                            ...prev.scores,
+                            services: {
+                              ...prev.scores.services,
+                              [srv]: checked ? 3 : 0,
+                            },
+                          },
+                        }));
+                      }}
                     />
                   </div>
                   <div className="notes-cell">{serviceNotes[label] || ""}</div>
@@ -324,15 +338,23 @@ function AddLocationModal({ isOpen, onClose, setMarkers }) {
                     <input
                       type="checkbox"
                       checked={formData.amenities[label]}
-                      onChange={(e) =>
+                      onChange={(e) => {
+                        const checked = e.target.checked;
                         setFormData((prev) => ({
                           ...prev,
                           amenities: {
                             ...prev.amenities,
-                            [label]: e.target.checked,
+                            [amn]: checked,
                           },
-                        }))
-                      }
+                          scores: {
+                            ...prev.scores,
+                            amenities: {
+                              ...prev.scores.amenities,
+                              [amn]: checked ? 3 : 0,
+                            },
+                          },
+                        }));
+                      }}
                     />
                   </div>
                   <div className="notes-cell">{amenityNotes[label] || ""}</div>

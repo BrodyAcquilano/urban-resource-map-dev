@@ -11,6 +11,7 @@ function Header() {
         <Link to="/">Home</Link>
         <Link to="/editor">Editor</Link>
         <Link to="/export">Export</Link>
+        <Link to="/analysis">Analysis</Link>
       </nav>
     </header>
   );

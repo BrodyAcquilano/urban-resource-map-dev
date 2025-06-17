@@ -181,6 +181,13 @@ export const amenityNotes = {
 // Initialization
 // ────────────────
 
+//Used in itialLocationData()
+export const defaultScores = {
+  resources: Object.fromEntries(resources.map((r) => [r, 0])),
+  services: Object.fromEntries(services.map((s) => [s, 0])),
+  amenities: Object.fromEntries(amenities.map((a) => [a, 0])),
+};
+
 //Used in: AddLocationModal.jsx to initialize a new location object using default values, before setting them manually.
 export const initialLocationData = {
   name: "",
@@ -195,9 +202,10 @@ export const initialLocationData = {
   resources: Object.fromEntries(resources.map((label) => [label, false])),
   services: Object.fromEntries(services.map((label) => [label, false])),
   amenities: Object.fromEntries(amenities.map((label) => [label, false])),
+   scores: JSON.parse(JSON.stringify(defaultScores)),
 };
 
-// Used in: EditLocation.jsx for initializing states to the values from the selected Location.
+// Used in: EditLocation.jsx and EditScoreModal.jsx for initializing states to the values from the selected Location.
 export function getSafeLocationData(raw = {}) {
   return {
     name: raw.name || "",
@@ -218,11 +226,27 @@ export function getSafeLocationData(raw = {}) {
       ...(raw.services || {}),
     },
     amenities: {
-      ...Object.fromEntries(amenities.map((c) => [c, false])),
+      ...Object.fromEntries(amenities.map((a) => [a, false])),
       ...(raw.amenities || {}),
+    },
+    scores: {
+      resources: {
+        ...Object.fromEntries(resources.map((r) => [r, 0])),
+        ...(raw.scores?.resources || {}),
+      },
+      services: {
+        ...Object.fromEntries(services.map((s) => [s, 0])),
+        ...(raw.scores?.services || {}),
+      },
+      amenities: {
+        ...Object.fromEntries(amenities.map((a) => [a, 0])),
+        ...(raw.scores?.amenities || {}),
+      },
     },
   };
 }
+
+
 
 // ────────────────
 // Utility Functions

@@ -32,7 +32,10 @@ function EditLocation({ setMarkers, selectedLocation, setSelectedLocation }) {
     }
 
     try {
-      await axios.put(`${BASE_URL}/api/locations/${selectedLocation._id}`, formData);
+      await axios.put(
+        `${BASE_URL}/api/locations/${selectedLocation._id}`,
+        formData
+      );
       const response = await axios.get(`${BASE_URL}/api/locations`);
       setMarkers(response.data);
       const updated = response.data.find(
@@ -246,15 +249,23 @@ function EditLocation({ setMarkers, selectedLocation, setSelectedLocation }) {
               <input
                 type="checkbox"
                 checked={formData.resources[key]}
-                onChange={(e) =>
-                  setFormData({
-                    ...formData,
+                onChange={(e) => {
+                  const checked = e.target.checked;
+                  setFormData((prev) => ({
+                    ...prev,
                     resources: {
-                      ...formData.resources,
-                      [key]: e.target.checked,
+                      ...prev.resources,
+                      [key]: checked,
                     },
-                  })
-                }
+                    scores: {
+                      ...prev.scores,
+                      resources: {
+                        ...prev.scores.resources,
+                        [key]: checked ? 3 : 0,
+                      },
+                    },
+                  }));
+                }}
               />
             </div>
           </div>
@@ -270,15 +281,23 @@ function EditLocation({ setMarkers, selectedLocation, setSelectedLocation }) {
               <input
                 type="checkbox"
                 checked={formData.services[key]}
-                onChange={(e) =>
-                  setFormData({
-                    ...formData,
+                onChange={(e) => {
+                  const checked = e.target.checked;
+                  setFormData((prev) => ({
+                    ...prev,
                     services: {
-                      ...formData.services,
-                      [key]: e.target.checked,
+                      ...prev.services,
+                      [key]: checked,
                     },
-                  })
-                }
+                    scores: {
+                      ...prev.scores,
+                      services: {
+                        ...prev.scores.services,
+                        [key]: checked ? 3 : 0,
+                      },
+                    },
+                  }));
+                }}
               />
             </div>
           </div>
@@ -294,15 +313,23 @@ function EditLocation({ setMarkers, selectedLocation, setSelectedLocation }) {
               <input
                 type="checkbox"
                 checked={formData.amenities[key]}
-                onChange={(e) =>
-                  setFormData({
-                    ...formData,
+                onChange={(e) => {
+                  const checked = e.target.checked;
+                  setFormData((prev) => ({
+                    ...prev,
                     amenities: {
-                      ...formData.amenities,
-                      [key]: e.target.checked,
+                      ...prev.amenities,
+                      [key]: checked,
                     },
-                  })
-                }
+                    scores: {
+                      ...prev.scores,
+                      amenities: {
+                        ...prev.scores.amenities,
+                        [key]: checked ? 3 : 0,
+                      },
+                    },
+                  }));
+                }}
               />
             </div>
           </div>

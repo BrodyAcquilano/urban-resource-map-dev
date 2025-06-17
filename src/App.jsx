@@ -18,6 +18,7 @@ import OffscreenMap from "./components/OffscreenMap.jsx";
 import Home from "./pages/Home.jsx";
 import Editor from "./pages/Editor.jsx";
 import Export from "./pages/Export.jsx";
+import Analysis from "./pages/Analysis.jsx"
 
 // ─────────────────────────────────────────────
 // 🗺 Tile Style Options (Leaflet + OpenStreetMap)
@@ -143,6 +144,18 @@ function App() {
                 filteredMarkers={filteredMarkers}
                 selectedLocation={selectedLocation}
                 selectedFilters={selectedFilters}
+              />
+            }
+          />
+           <Route
+            path="/analysis"
+            element={
+              <Analysis
+              markers={markers}
+              setMarkers={setMarkers}
+              filteredMarkers={filteredMarkers}
+              selectedLocation={selectedLocation}
+              setSelectedLocation={setSelectedLocation}
               />
             }
           />

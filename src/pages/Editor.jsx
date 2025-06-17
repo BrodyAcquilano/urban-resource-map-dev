@@ -37,7 +37,7 @@ function Editor({ setMarkers, selectedLocation, setSelectedLocation }) {
         className="add-location-button"
         onClick={() => setAddModalOpen(true)}
       >
-        +
+        ➕
       </button>
 
       {/* Modal */}
