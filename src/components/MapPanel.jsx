@@ -1,29 +1,30 @@
-// src/components/MapPanel.jsx
 import React from "react";
-
 import {
   MapContainer,
   TileLayer,
   Marker,
   Popup,
   ZoomControl,
+  GeoJSON,
+  useMapEvents,
 } from "react-leaflet";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
+import HeatMapLayer from "./HeatMapLayer";
 import "./MapPanel.css";
 
-import { useMapEvents } from "react-leaflet";
-
-function MapSync({ setMapCenter, setMapZoom }) {
+function MapSync({ setMapCenter, setMapZoom, clearPatches }) {
   useMapEvents({
     moveend: (e) => {
       const map = e.target;
       setMapCenter(map.getCenter());
       setMapZoom(map.getZoom());
+      clearPatches();
     },
     zoomend: (e) => {
       const map = e.target;
       setMapZoom(map.getZoom());
+      clearPatches();
     },
   });
   return null;
@@ -38,7 +39,15 @@ const customIcon = new L.Icon({
   shadowSize: [41, 41],
 });
 
-function MapPanel({ tileUrl, filteredMarkers, setSelectedLocation, setMapCenter,setMapZoom }) {
+function MapPanel({
+  tileUrl,
+  filteredMarkers,
+  setSelectedLocation,
+  setMapCenter,
+  setMapZoom,
+  heatMap,
+  setHeatMap,
+}) {
   return (
     <div className="map-panel">
       <MapContainer
@@ -56,22 +65,27 @@ function MapPanel({ tileUrl, filteredMarkers, setSelectedLocation, setMapCenter,
           [85, 180],
         ]}
       >
-         <MapSync setMapCenter={setMapCenter} setMapZoom={setMapZoom} />
-  ...
+        <MapSync
+          setMapCenter={setMapCenter}
+          setMapZoom={setMapZoom}
+          clearPatches={() => {
+            setHeatMap(null);
+          }}
+        />
+
         <ZoomControl position="bottomleft" />
+
         <TileLayer
           attribution="&copy; OpenStreetMap contributors"
           url={tileUrl}
           noWrap={true}
           crossOrigin="anonymous"
         />
+
         {filteredMarkers.map((marker) => (
           <Marker
             key={marker._id}
-            position={[
-              parseFloat(marker.latitude),
-              parseFloat(marker.longitude),
-            ]}
+            position={[parseFloat(marker.latitude), parseFloat(marker.longitude)]}
             icon={customIcon}
             eventHandlers={{
               click: () => setSelectedLocation(marker),
@@ -84,9 +98,15 @@ function MapPanel({ tileUrl, filteredMarkers, setSelectedLocation, setMapCenter,
             </Popup>
           </Marker>
         ))}
+
+
+        {heatMap && heatMap.pixels && heatMap.bounds && (
+          <HeatMapLayer pixels={heatMap.pixels} bounds={heatMap.bounds} />
+        )}
       </MapContainer>
     </div>
   );
 }
 
 export default MapPanel;
+

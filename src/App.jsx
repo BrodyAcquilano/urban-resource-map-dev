@@ -43,6 +43,7 @@ function App() {
   const [tileStyle, setTileStyle] = useState("Standard"); // Current tile map style
   const [mapCenter, setMapCenter] = useState([43.4516, -80.4925]);
   const [mapZoom, setMapZoom] = useState(13);
+  const [heatMap, setHeatMap]=useState([]);
 
   const BASE_URL = import.meta.env.VITE_API_URL;
 
@@ -119,6 +120,8 @@ function App() {
           setSelectedLocation={setSelectedLocation}
           setMapCenter={setMapCenter}
           setMapZoom={setMapZoom}
+          heatMap={heatMap}
+          setHeatMap={setHeatMap}
         />
 
         {/* Page Routing */}
@@ -153,9 +156,9 @@ function App() {
               <Analysis
               markers={markers}
               setMarkers={setMarkers}
-              filteredMarkers={filteredMarkers}
               selectedLocation={selectedLocation}
               setSelectedLocation={setSelectedLocation}
+              setHeatMap={setHeatMap}
               />
             }
           />

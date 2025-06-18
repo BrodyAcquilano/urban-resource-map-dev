@@ -6,9 +6,9 @@ import "./Analysis.css";
 function Analysis({
   markers,
   setMarkers,
-  filteredMarkers,
   selectedLocation,
   setSelectedLocation,
+  setHeatMap,
 }) {
   const [showOptions, setShowOptions] = useState(false);
   const [isEditScoreModalOpen, setIsEditScoreModalOpen] = useState(false);
@@ -29,7 +29,7 @@ function Analysis({
           showOptions ? "" : "collapsed"
         }`}
       >
-        <AnalysisOptions selectedLocation={selectedLocation} />
+        <AnalysisOptions markers={markers} setHeatMap={setHeatMap} />
       </div>
 
       {/* Centered EditScore Button */}
