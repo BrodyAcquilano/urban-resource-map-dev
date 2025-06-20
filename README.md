@@ -130,12 +130,14 @@ const res = await axios.get("/api/locations");
 
 ## 🧱 Tech Stack
 
-- **Frontend**: React, Vite, Leaflet, React-Leaflet, React Router DOM, Axios
-- **Backend**: Express, Node.js
-- **Database**: MongoDB Atlas (cloud-hosted)
+- **Frontend**: React, Vite, Leaflet, React-Leaflet, React Router DOM
+- **Backend**: Express (API Server), Node.js
+- **Database**: MongoDB Atlas (cloud-database)
+- **Data Fetching**: Axios (connects to backend API)
 - **Geospatial Tools**: Turf.js (for overlays, heatmaps, scoring zones)
 - **Export Tools**: html2canvas, jsPDF (snapshot + PDF generation)
 - **Dev Tools**: Nodemon, Concurrently, ESLint, Vite Plugin React
+- **Environment Management**: dotenv (for .env config), CORS (for cross-origin access)
 
 ---
 
