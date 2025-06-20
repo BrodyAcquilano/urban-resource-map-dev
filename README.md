@@ -1,11 +1,13 @@
-# Urban Resource Map
+# 🌐 Urban Resource Map (Admin Version)
 
-A full-stack web app for mapping urban resources like water fountains, food banks, libraries, and more.
+A full-stack web app for managing and analyzing free public resources like shelters, washrooms, water fountains, libraries, and more.
+
+This version includes full data management tools — add, edit, score, and export locations using a visual interface with advanced filtering and heatmap generation.
 
 Built with:
 
 - React + Vite (frontend)
-- Express + MongoDB (backend)
+- Express + MongoDB (read/write backend)
 - Leaflet for interactive maps
 
 ---
@@ -88,26 +90,98 @@ MONGO_URI=your-mongodb-connection-string-here
 VITE_API_URL=your-vite-api-base-url
 ```
 
+> 🧠 `VITE_API_URL` is required for **production environments** (e.g. Vercel and Render deployment).  
+> It’s used to connect your frontend React app to the Express API backend.
+
+In components like `App.jsx`, `AddLocationModal.jsx`, `EditLocation.jsx`, and `EditScoreModal.jsx`, the following line is used to access the base API path:
+
+```js
+const BASE_URL = import.meta.env.VITE_API_URL;
+```
+
+This `BASE_URL` is then used for all **GET**, **POST**, **PUT**, and **DELETE** operations:
+
+```js
+const res = await axios.get(`${BASE_URL}/api/locations`);
+const res = await axios.post(`${BASE_URL}/api/locations`, data);
+const res = await axios.put(`${BASE_URL}/api/locations/${id}`, updatedData);
+await axios.delete(`${BASE_URL}/api/locations/${id}`);
+```
+
+These calls are necessary for reading and writing location or score data to MongoDB via your backend.
+
+---
+
+> ❓ Why not used in other components like `FilterPanel`, `AnalysisOptions`, or `InfoPanel`?
+
+Those components do not interact with the database directly. Instead, they receive data from the parent `App.jsx` as props (like the `markers` array) and use it for filtering, di
+
 ---
 
 ## 🧱 Tech Stack
 
-- **Frontend**: React, Vite, Leaflet, React-Leaflet, React Router DOM
+- **Frontend**: React, Vite, Leaflet, React-Leaflet, React Router DOM, Axios
 - **Backend**: Express, Node.js
 - **Database**: MongoDB Atlas (cloud-hosted)
-- **Dev Tools**: Nodemon, Concurrently, ESLint
+- **Geospatial Tools**: Turf.js (for overlays, heatmaps, scoring zones)
+- **Export Tools**: html2canvas, jsPDF (snapshot + PDF generation)
+- **Dev Tools**: Nodemon, Concurrently, ESLint, Vite Plugin React
 
 ---
+
+## 📦 Notable Dependencies
+
+These packages power the core features of the application:
+
+| Package              | Purpose                                                    |
+| -------------------- | ---------------------------------------------------------- |
+| **react**            | Frontend UI framework                                      |
+| **vite**             | Lightning-fast development/build tool                      |
+| **express**          | Backend API server                                         |
+| **mongodb**          | NoSQL database for location and score data                 |
+| **react-router-dom** | Enables multi-page routing in SPA                          |
+| **react-leaflet**    | Wraps Leaflet.js for use with React                        |
+| **leaflet**          | Interactive map rendering                                  |
+| **axios**            | Handles all HTTP requests (GET, POST, PUT, DELETE)         |
+| **dotenv**           | Loads environment variables from `.env`                    |
+| **cors**             | Enables cross-origin requests between frontend and backend |
+| **@turf/turf**       | Performs spatial calculations (buffers, overlays, etc.)    |
+| **html2canvas**      | Captures map snapshots for export as image                 |
+| **jspdf**            | Converts images into downloadable PDF files                |
+| **concurrently**     | Runs frontend and backend together in development mode     |
+| **nodemon**          | Auto-restarts backend server on code changes               |
+| **eslint**           | Lints and enforces code style                              |
+| **react-dom**        | Renders React components to the DOM                        |
+
+## 🧪 Dev-Only Dependencies
+
+These packages are used during development only (not bundled into production builds):
+
+| Package                         | Purpose                                                       |
+| ------------------------------- | ------------------------------------------------------------- |
+| **@vitejs/plugin-react**        | Enables fast refresh and JSX support with Vite                |
+| **@types/react**                | TypeScript type definitions for React                         |
+| **@types/react-dom**            | TypeScript type definitions for ReactDOM                      |
+| **@eslint/js**                  | Core ESLint configuration                                     |
+| **eslint**                      | JavaScript/React linter                                       |
+| **eslint-plugin-react-hooks**   | Lints rules of hooks usage in React                           |
+| **eslint-plugin-react-refresh** | Ensures proper setup for React Fast Refresh                   |
+| **globals**                     | Provides predefined global variables to ESLint                |
+| **nodemon**                     | Auto-restarts the backend server on file changes              |
+| **concurrently**                | Runs multiple commands/scripts at once (used in dev workflow) |
+
+## 🧠 App Structure & Routing
 
 ## 🧠 App Structure & Routing
 
 The `App.jsx` file serves as the root of the application. It contains:
 
 - Global UI components like the **Header**, **MapPanel**, and **FilterPanel**
-- Route definitions for three main pages:
-  - `/` → **Home Page**: View nearby resources
+- Route definitions for four main pages:
+  - `/` → **Home Page**: View and filter nearby resources
   - `/editor` → **Editor Page**: Add, edit, or delete location data
   - `/export` → **Export Page**: Generate and export maps as PDFs
+  - `/analysis` → **Analysis Page**: Generate heatmaps and scoring overlays based on selected metrics
 
 These pages share global state (markers, filters, etc.) to avoid redundant reloads. Changing pages doesn’t reset filters or trigger new fetches unless needed.
 
@@ -142,7 +216,7 @@ Changes to the label lists (like `resources` or `services`) automatically affect
 
 ## 🧭 Workflows and Use Cases
 
-The app is structured around three key workflows:
+The app is structured around four key workflows:
 
 ### 🗺 Viewing Controls (Home Page)
 
@@ -155,11 +229,24 @@ Find free resources based on user-selected filters — without needing to search
 
 ### ✏️ Data Management (Editor Page)
 
-Edit resource data manually or crowdsource input. Possible configurations:
+Add, edit, or remove location data directly through the interface. This enables:
 
-- Open access (default)
-- Admin-restricted access (via login logic, not yet implemented)
-- Add, edit, or delete locations dynamically with live updates to the map
+- Dynamic updates to map content
+- Manual correction of errors or outdated listings
+- Scalable community mapping or admin moderation
+
+Only the admin version includes this functionality.
+
+### 📊 Data Analysis (Analysis Page)
+
+Analyze location coverage and quality across the city using tools for:
+
+- Generating heatmaps from scored data (services, resources, amenities)
+- Viewing score-based zones with customizable overlays
+- Filtering by resource type, minimum score, or location cluster
+- Identifying gaps, redundancies, or outreach opportunities
+
+Scores are created or modified via the **Edit Score Modal**, available only in the admin version.
 
 ### 🖨 Export Tools (Export Page)
 
@@ -173,11 +260,16 @@ Generate PDF maps with filtered results for offline use or sharing with:
 
 ## 🔮 Future Improvements
 
-- ✅ Add scoring logic to highlight strong/weak areas
-- ✅ Add seasonal/time filters to track shifting availability
-- ✅ Add user login or role-based permissions for editing
-- ✅ Export full-page PDFs with custom map overlays
-- ✅ Add import/export buttons for bulk JSON or CSV data
+- 🔒 Add optional login system to restrict access to a private admin version (link both client and admin versions)
+- 🧠 Add weighted scoring logic to better reflect importance of specific services
+- 🔐 Add user login or admin roles for secure access to editing and scoring
+- 🛠 Enable custom data model settings (e.g. editable categories, filters, label sets)
+- 🧩 Allow users to connect to their own MongoDB database via input or config screen (currently done in development by updating .env file)
+- 📦 Add import/export for location data in JSON or CSV formats
+- 📅 Add more advanced time/seasonal exceptions logic (e.g. hourly shifts, closures)
+- 🌐 Add multi-user support for collaborative community data collection
+
+> These improvements are intended to enhance long-term flexibility and allow community-led deployments with custom configurations.
 
 ---
 

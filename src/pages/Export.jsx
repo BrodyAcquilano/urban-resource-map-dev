@@ -15,12 +15,12 @@ function Export({ filteredMarkers, selectedLocation, selectedFilters }) {
   const [includeSelected, setIncludeSelected] = useState(false);
   const [orientation, setOrientation] = useState("portrait");
   const [notes, setNotes] = useState("");
-const [mapImage, setMapImage] = useState(null);
+  const [mapImage, setMapImage] = useState(null);
   return (
     <>
       {/* Editor Panel Toggle + Panel */}
       <button
-        className={`export-side-toggle editor-toggle ${
+        className={`export-side-toggle export-toggle ${
           showExportOptions ? "" : "collapsed-toggle"
         }`}
         onClick={() => setShowExportOptions(!showExportOptions)}
@@ -44,16 +44,16 @@ const [mapImage, setMapImage] = useState(null);
       </div>
 
       {/* Centered Export Button */}
-     <button
-  className="export-preview-button"
-  onClick={async () => {
-    const snapshot = await captureOffscreenMap();
-    setMapImage(snapshot);
-    setExportModalOpen(true);
-  }}
->
-  ⬇️
-</button>
+      <button
+        className="export-preview-button"
+        onClick={async () => {
+          const snapshot = await captureOffscreenMap();
+          setMapImage(snapshot);
+          setExportModalOpen(true);
+        }}
+      >
+        ⬇️
+      </button>
 
       {/* Modal */}
       <ExportPreviewModal
@@ -68,7 +68,7 @@ const [mapImage, setMapImage] = useState(null);
         filteredMarkers={filteredMarkers}
         selectedLocation={selectedLocation}
         selectedFilters={selectedFilters}
-         mapImage={mapImage}
+        mapImage={mapImage}
       />
     </>
   );

@@ -68,9 +68,9 @@ function App() {
   // across all routes. This avoids reloading data or state between pages.
   //
   // For example:
-  // - Switching between Home, Editor, or Export keeps the same filtered markers.
+  // - Switching between Home, Editor,Export, or Analysis keeps the same filtered markers.
   // - Shared components (e.g. MapPanel) remain mounted and responsive to updates.
-  // - Only new route-specific panels (like modals or editors) get reloaded on navigation.
+  // - Only new route-specific panels (like modals,editors, or option panels) get reloaded on navigation.
   //
   // This design improves performance and enables smooth workflow transitions.
 
@@ -180,7 +180,7 @@ export default App;
 // - Data that should persist between page changes (e.g. React Router navigation).
 // - Shared state across components (e.g. filters, selected markers, base data).
 // - Things that improve performance and user experience by avoiding unnecessary reloads.
-
+//
 // Keeping state here improves efficiency, modularity, and functional consistency across routes.
 
 // ─────────────────────────────
@@ -203,16 +203,7 @@ export default App;
 // - Visualize social or physical risk (hostile zones, accessibility deserts).
 // - Add route analysis (safe corridors, transit access, bike/walk paths).
 
-// Filtering precision comes from the data model:
-// - You can add new labels and filters to highlight seasonal or time-based differences.
-//   For example: “Free meals every Tuesday at 6 PM” could be added as an exception dataset.
-
-// ⚠️ Current logic assumes resources are *always* available when a location is open.
-//   But this is not the same as tracking:
-//   “Location open” at time T ⧸= “Resource available” at time T.
-
-// Possible upgrade: layered data model for specific-time availability.
-
+// ▶ Input → Database (initial marker data)
 // ▶ Input → FilterPanel.jsx (user filters)
 // ▶ Output → MapPanel.jsx (filtered markers on map)
 
@@ -226,43 +217,80 @@ export default App;
 
 // Integration with viewing controls:
 // - Export uses the same filter panel as the map view
-// - No need to reconfigure settings — preview updates live
+// - A hidden map instance (OffscreenMap.jsx) renders in the background to create clean, printable images
 // - Once filtered, user can export a ready-to-use PDF
 
-// ▶ Input → ExportOptionsPanel.jsx (export controls)
-// ▶ Output → ExportPreviewModal.jsx (PDF preview & export)
-// ▶ Shared Input → FilterPanel.jsx
-// ▶ Shared Output → MapPanel.jsx
+// ▶ Input → Database (filtered markers from base data)
+// ▶ Input → FilterPanel.jsx (controls applied to dataset)
+// ▶ Input → ExportOptions.jsx (controls applied to Export Preview)
+// ▶ Output → OffscreenMap.jsx (snapshot layer)
+// ▶ Output → ExportPreviewModal.jsx (PDF preview/export)
+
+
+// ─────────────────────────────
+// 🛠 ADMIN WORKFLOWS
+// ─────────────────────────────
 
 // ── ✏️ DATA MANAGEMENT WORKFLOW (Editor Page) ──
 // Purpose: Add, edit, or delete location data — either as an admin tool or crowdsourced platform.
 
 // Modes of use:
 // - Open-source: anyone can contribute
-// - Restricted access: require admin login (e.g. for agencies or moderators)
+// - Restricted access: require admin login (future-ready)
 
-// Current setup is open-source, but can easily be secured by gating the Editor route.
-
-// ▶ Input → AddLocationModal.jsx (new data submission)
-// ▶ Input → EditLocationPanel.jsx (edit/update existing data)
-// ▶ Input → EditLocationPanel.jsx (delete location)
+// ▶ Input → AddLocationModal.jsx (submit new location)
+// ▶ Input → EditLocationPanel.jsx (edit or delete location)
 // ▶ Shared Input → FilterPanel.jsx (test filters after changes)
-// ▶ Shared Output → MapPanel.jsx (see changes reflected immediately)
+// ▶ Shared Output → MapPanel.jsx (see live feedback)
+// ▶ Output → Database (create/update/delete location entries)
 
 // 🔄 Real-time validation:
 // - After edits, user can verify location changes visually
-// - Filter to confirm a tag or category was applied correctly
-// - Ensures map reflects the true state of the database without page reloads
+// - Filters can confirm tags/categories were applied correctly
+// - Ensures map reflects true state of database without page reloads
+
+// ── 📊 ANALYSIS WORKFLOW (Analysis Page) ──
+// Purpose: View and update score-based overlays used in resource analysis and planning.
+
+// Core features:
+// - Heatmaps and service zones reflect score data from the database
+// - Admins can adjust score values manually using EditScoreModal.jsx
+// - Filter-based overlays (e.g. combinations of resources, services, or amenities)
+// - Visual output updates based on filters and scoring
+// - Advanced options for heatmap generation (e.g. decay, buffer, filters)
+
+// Note on scoring:
+// - EditScoreModal.jsx writes directly to the database
+// - Score values are applied to each location and used in display calculations
+
+// This page is read-only in the client version:
+// - Users cannot submit scores or edit data
+// - Score values are pre-calculated and stored with the location data
+// - Limited Options for analysis (uses preset values for decay or buffer radius)
+
+// ▶ Input → Database (pre-existing score data)
+// ▶ Input → AnalysisOptions.jsx (filters and analysis type)
+// ▶ Shared Output → MapPanel.jsx
+// ▶ Output → HeatMapLayer.jsx (overlay visualization)
+// ▶ Admin Input → EditScoreModal.jsx (manual score adjustments)
+// ▶ Output → Database (score updates written directly)
+
 
 // ─────────────────────────────
 // 🔁 STREAM FLOW SUMMARIES
 // ─────────────────────────────
 
-// Add Workflow:
-// Input → AddLocationModal.jsx → FilterPanel.jsx → MapPanel.jsx → Output
-
-// Edit Workflow:
-// Input → EditLocationModal.jsx → FilterPanel.jsx → MapPanel.jsx → Output
+// Viewing Controls Workflow:
+// Input → Database → FilterPanel.jsx → MapPanel.jsx → Output (visible markers)
 
 // Export Workflow:
-// Input → FilterPanel.jsx → MapPanel.jsx → ExportPreviewModal.jsx → PDF
+// Input → Database → FilterPanel.jsx → ExportOptions.jsx → OffscreenMap.jsx → ExportPreviewModal.jsx → PDF
+
+// Data Management Workflow:
+// Input → AddLocationModal.jsx → FilterPanel.jsx → MapPanel.jsx → Output (adds new marker + writes to database)
+// Input → EditLocationPanel.jsx → FilterPanel.jsx → MapPanel.jsx → Output (updates or deletes marker + writes to database)
+
+// Analysis Workflow:
+// Input → Database → AnalysisOptions.jsx → MapPanel.jsx → HeatMapLayer.jsx → Output
+// Admin Input → EditScoreModal.jsx → Output → Database (score updates)
+
