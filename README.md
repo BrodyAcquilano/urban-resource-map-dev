@@ -1,4 +1,4 @@
-# 🌐 Urban Resource Map (Admin Version)
+# 🌐 Urban Resource Map (Dev Version)
 
 A full-stack web app for managing and analyzing free public resources like shelters, washrooms, water fountains, libraries, and more.
 
