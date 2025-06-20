@@ -184,8 +184,6 @@ These packages are used during development only (not bundled into production bui
 
 ## 🧠 App Structure & Routing
 
-## 🧠 App Structure & Routing
-
 The `App.jsx` file serves as the root of the application. It contains:
 
 - Global UI components like the **Header**, **MapPanel**, and **FilterPanel**
