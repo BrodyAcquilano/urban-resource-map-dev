@@ -116,7 +116,15 @@ These calls are necessary for reading and writing location or score data to Mong
 
 > ❓ Why not used in other components like `FilterPanel`, `AnalysisOptions`, or `InfoPanel`?
 
-Those components do not interact with the database directly. Instead, they receive data from the parent `App.jsx` as props (like the `markers` array) and use it for filtering, di
+Those components do not interact with the database directly. Instead, they receive data from the parent `App.jsx` as props (like the `markers` array) and use it for filtering, displaying, or analyzing data.
+
+To run locally, you can remove the `BASE_URL` reference and use a relative path:
+
+```js
+const res = await axios.get("/api/locations");
+```
+
+> ✅ Local development works without `VITE_API_URL` because the Vite dev server is configured to proxy API requests to the Express backend.
 
 ---
 
