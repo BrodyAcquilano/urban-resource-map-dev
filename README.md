@@ -112,8 +112,6 @@ await axios.delete(`${BASE_URL}/api/locations/${id}`);
 
 These calls are necessary for reading and writing location or score data to MongoDB via your backend.
 
----
-
 > ❓ Why not used in other components like `FilterPanel`, `AnalysisOptions`, or `InfoPanel`?
 
 Those components do not interact with the database directly. Instead, they receive data from the parent `App.jsx` as props (like the `markers` array) and use it for filtering, displaying, or analyzing data.
@@ -165,6 +163,8 @@ These packages power the core features of the application:
 | **eslint**           | Lints and enforces code style                              |
 | **react-dom**        | Renders React components to the DOM                        |
 
+---
+
 ## 🧪 Dev-Only Dependencies
 
 These packages are used during development only (not bundled into production builds):
@@ -181,6 +181,8 @@ These packages are used during development only (not bundled into production bui
 | **globals**                     | Provides predefined global variables to ESLint                |
 | **nodemon**                     | Auto-restarts the backend server on file changes              |
 | **concurrently**                | Runs multiple commands/scripts at once (used in dev workflow) |
+
+---
 
 ## 🧠 App Structure & Routing
 
@@ -296,6 +298,8 @@ This app can be customized for:
 
 Its modular data structure allows the same core system to support new applications by simply changing the data model and UI copy.
 
+---
+
 ## 🌍 Beyond Emergency Services — What This Platform Can Become
 
 The Urban Resource Map is currently focused on mapping free or essential urban services like water fountains, food banks, and shelters. But underneath that is a **powerful, reusable map-based data management system**.
@@ -392,6 +396,8 @@ This platform is a **general-purpose, spatial data management interface** with:
 - 📊 Exportable insights
 
 And it can be customized to serve nearly **any industry that works with location-based data.**
+
+---
 
 ## ⚡ Rapid Pinning Mode (Symbol-Only Marker Inventory)
 
