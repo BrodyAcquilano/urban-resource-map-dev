@@ -29,6 +29,8 @@ Built with:
 
    > 🔐 Do not commit your `.env` file — it is ignored by `.gitignore`.
 
+✅ In local development, a proxy handles /api requests, so VITE_API_URL is optional if using localhost.
+
 4. **Start the development servers**:
    ```bash
    npm run dev
