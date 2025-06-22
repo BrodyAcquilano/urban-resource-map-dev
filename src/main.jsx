@@ -5,7 +5,6 @@ import App from "./App.jsx";
 import "leaflet/dist/leaflet.css";
 import "./styles/global.css";
 
-
 ReactDOM.createRoot(document.getElementById("root")).render(
   <BrowserRouter>
     <App />

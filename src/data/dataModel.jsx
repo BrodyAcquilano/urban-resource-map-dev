@@ -202,7 +202,7 @@ export const initialLocationData = {
   resources: Object.fromEntries(resources.map((label) => [label, false])),
   services: Object.fromEntries(services.map((label) => [label, false])),
   amenities: Object.fromEntries(amenities.map((label) => [label, false])),
-   scores: JSON.parse(JSON.stringify(defaultScores)),
+  scores: JSON.parse(JSON.stringify(defaultScores)),
 };
 
 // Used in: EditLocation.jsx and EditScoreModal.jsx for initializing states to the values from the selected Location.
