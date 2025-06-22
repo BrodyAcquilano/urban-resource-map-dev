@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import * as turf from "@turf/turf";
-import "./AnalysisOptions.css";
+import "../styles/panels.css";
 
 function AnalysisOptions({ markers, setHeatMap }) {
   //state for Proximity Influence Zones
@@ -336,10 +336,12 @@ function AnalysisOptions({ markers, setHeatMap }) {
   };
 
   return (
-    <div className="options-panel">
-      <h2>Analysis Options</h2>
+    <div className="panel">
+      <div className="section">
+          <h2>Analysis Options</h2>
+        </div>
 
-      <div className="options-section">
+      <div className="section">
         <h3>Proximity Influence Zones</h3>
         <p className="tooltip">
           A measure of closeness. Having many locations close together is a good
@@ -355,7 +357,8 @@ function AnalysisOptions({ markers, setHeatMap }) {
           of each individual location when locations are far apart.
         </p>
 
-        <div className="inputs">
+        
+          <div className="form-group">
           <label>
             Buffer Radius (m) - Adjust based on Mobility or Desired Scale:
           </label>
@@ -369,7 +372,9 @@ function AnalysisOptions({ markers, setHeatMap }) {
               </option>
             ))}
           </select>
+          </div>
 
+<div className="form-group">
           <label>
             Decay Rate - increase when increasing buffer radius for scale and
             not based on mobility.
@@ -381,7 +386,9 @@ function AnalysisOptions({ markers, setHeatMap }) {
             <option value="slow">slow</option>
             <option value="fast">fast</option>
           </select>
+          </div>
 
+<div className="form-group">
           <label>
             Resolution- used for heat map pixel grid rows and columns:
           </label>
@@ -395,14 +402,14 @@ function AnalysisOptions({ markers, setHeatMap }) {
               </option>
             ))}
           </select>
-        </div>
+          </div>
+      
 
-        <div className="analysis-buttons">
-          <button className="generate-button" onClick={handleGenerateProximity}>
+        <div className="buttons-container">
+          <button  onClick={handleGenerateProximity}>
             Generate
           </button>
           <button
-            className="clear-button"
             onClick={() => {
               setHeatMap(null);
             }}
@@ -412,7 +419,7 @@ function AnalysisOptions({ markers, setHeatMap }) {
         </div>
       </div>
 
-      <div className="options-section">
+      <div className="section">
         <h3>Resource Distribution Mapping</h3>
 
         <p className="tooltip">
@@ -437,7 +444,7 @@ function AnalysisOptions({ markers, setHeatMap }) {
           others around it.
         </p>
 
-        <div className="inputs">
+        <div className="form-group">
           <label>
             Buffer Radius (m) - Adjust for mobility or desired scale:
           </label>
@@ -454,7 +461,9 @@ function AnalysisOptions({ markers, setHeatMap }) {
               </option>
             ))}
           </select>
+          </div>
 
+<div className="form-group">
           <label>Resolution- Adjust for precision</label>
           <select
             value={distributionResolution}
@@ -466,7 +475,9 @@ function AnalysisOptions({ markers, setHeatMap }) {
               </option>
             ))}
           </select>
+          </div>
 
+<div className="form-group">
           <label>Resource Type:</label>
           <select
             value={distributionResourceType}
@@ -480,9 +491,10 @@ function AnalysisOptions({ markers, setHeatMap }) {
             <option value="services">Services</option>
             <option value="amenities">Amenities</option>
           </select>
+          </div>
 
+<div className="form-group">
           <label>Percentile Range - Adjust for outliers.</label>
-          <div className="percentile-controls">
             <select
               value={distributionMinPercentile}
               onChange={(e) =>
@@ -508,17 +520,14 @@ function AnalysisOptions({ markers, setHeatMap }) {
               ))}
             </select>
           </div>
-        </div>
+          
+       
 
-        <div className="analysis-buttons">
-          <button
-            className="generate-button"
-            onClick={handleGenerateDistribution}
-          >
+        <div className="buttons-container">
+          <button onClick={handleGenerateDistribution}>
             Generate
           </button>
           <button
-            className="clear-button"
             onClick={() => {
               setHeatMap(null);
             }}
@@ -528,7 +537,7 @@ function AnalysisOptions({ markers, setHeatMap }) {
         </div>
       </div>
 
-      <div className="options-section">
+      <div className="section">
         <h3>Cumulative Resource Influence</h3>
 
         <p className="tooltip">
@@ -556,7 +565,7 @@ function AnalysisOptions({ markers, setHeatMap }) {
           those around it, they just add less.
         </p>
 
-        <div className="inputs">
+        <div className="form-group">
           <label>
             Buffer Radius (m) - Adjust for mobility or desired scale:
           </label>
@@ -571,9 +580,12 @@ function AnalysisOptions({ markers, setHeatMap }) {
               </option>
             ))}
           </select>
+          </div>
 
+<div className="form-group">
           <label>
             Decay Power:
+            </label>
             <select
               value={cumulativeDecayPower}
               onChange={(e) => setCumulativeDecayPower(Number(e.target.value))}
@@ -584,8 +596,9 @@ function AnalysisOptions({ markers, setHeatMap }) {
                 </option>
               ))}
             </select>
-          </label>
+          </div>
 
+<div className="form-group">
           <label>Resolution- Adjust for precision</label>
           <select
             value={cumulativeResolution}
@@ -597,7 +610,9 @@ function AnalysisOptions({ markers, setHeatMap }) {
               </option>
             ))}
           </select>
+          </div>
 
+<div className="form-group">
           <label>Resource Type:</label>
           <select
             value={cumulativeResourceType}
@@ -611,9 +626,10 @@ function AnalysisOptions({ markers, setHeatMap }) {
             <option value="services">Services</option>
             <option value="amenities">Amenities</option>
           </select>
+          </div>
 
+<div className="form-group">
           <label>Percentile Range - Adjust for outliers.</label>
-          <div className="percentile-controls">
             <select
               value={cumulativeMinPercentile}
               onChange={(e) =>
@@ -639,17 +655,15 @@ function AnalysisOptions({ markers, setHeatMap }) {
               ))}
             </select>
           </div>
-        </div>
+        
 
-        <div className="analysis-buttons">
+        <div className="buttons-container">
           <button
-            className="generate-button"
             onClick={handleGenerateCumulative}
           >
             Generate
           </button>
           <button
-            className="clear-button"
             onClick={() => {
               setHeatMap(null);
             }}
@@ -659,8 +673,8 @@ function AnalysisOptions({ markers, setHeatMap }) {
         </div>
       </div>
 
-      <div className="legend">
-        <h4>Color Legend:</h4>
+      <div className="section">
+        <h3>Color Legend:</h3>
         <ul>
           <li>
             <span></span> 🟢 = Well-Served / High Resource Zone
@@ -677,10 +691,9 @@ function AnalysisOptions({ markers, setHeatMap }) {
         </ul>
       </div>
 
-      <div className="notes">
-        <h4>Notes on buffer radius and decay:</h4>
+      <div className="section">
+        <h3>Notes on buffer radius and decay:</h3>
         <p>
-          {" "}
           There are two reasons to increase buffer radius. The first is based on
           mobility. If a person is more mobile they can walk long distances fast
           and so buffer radius can be increased. Also if you are driving or
@@ -699,7 +712,16 @@ function AnalysisOptions({ markers, setHeatMap }) {
           locations. In that case it is about geographical distribution of
           quality, not user interaction. Therfore in that case decay rate
           increases naturally as buffer radius increases, and there is no
-          setting for decay rate.
+          setting for decay rate. Other things that may affect this are the
+          "shelf-life" of resources or frequency of use required. For example
+          one person be able to go a long time without going to the washroom,
+          but another person may need to stop frequently for medical reasons.
+          Resources like water may be more important because they are required
+          frequently whereas a person can go many hours without eating. Seasonal
+          conditions like heat, may make water more important. Also seasonal
+          conditions like low temeperatures make warmth more important. In
+          really cold temperatures it is not recommended to stay outside for
+          longer than 15 minutes to an hour.
         </p>
       </div>
     </div>

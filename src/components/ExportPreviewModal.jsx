@@ -1,7 +1,7 @@
 import React, { useRef, useEffect, useState } from "react";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
-import "./ExportPreviewModal.css";
+import "../styles/modals.css";
 
 function groupChildrenIntoPages(container, pageHeightPx) {
   const children = Array.from(container.children);
