@@ -10,7 +10,7 @@ async function connectToMongo() {
   try {
     await client.connect();
     console.log("✅ Connected to MongoDB Atlas");
-    return client.db("urban_resource_map");
+    return clientdb("urban-resource-map-dev");
   } catch (err) {
     console.error("❌ MongoDB connection failed:", err);
     process.exit(1);
