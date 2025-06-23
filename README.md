@@ -124,6 +124,51 @@ const res = await axios.get("/api/locations");
 
 > ✅ Local development works without `VITE_API_URL` because the Vite dev server is configured to proxy API requests to the Express backend.
 
+## 🔧 MongoDB Database Setup
+
+When using this app, the **MongoDB database name and collection name are important.**
+
+1. You can **create a MongoDB database with any name you like.**  
+   In your `db.js` file, update this line to match your chosen database name:
+   ```js
+   return client.db("your-database-name-here");
+   ```
+   Example:
+   ```js
+   return client.db("urban-resource-map-dev");
+   ```
+
+2. You **must name your collection `locations`.**  
+   The backend is preconfigured to read and write to a MongoDB collection named `locations`.
+
+   If you want to use a different collection name, you will need to update the backend file `/routes/locations.js` on this line:
+   ```js
+   db.collection("locations")
+   ```
+   You will need to update every instance of `db.collection("locations")` to your custom collection name.
+
+---
+
+## 🚨 Important Note:
+The term `locations` is used **in two different contexts:**
+- **MongoDB Collection Name:**  
+  This is the actual name of your data storage collection.
+- **API Route Name:**  
+  Example: `axios.get("/api/locations")`  
+  This is just a frontend/backend URL convention. It is unrelated to your MongoDB collection name.
+
+> 🔑 **You can change the collection name, but you should not change the API route name unless you fully understand the backend routing system.**
+
+---
+
+## ✅ Quick Reference
+
+| Setting           | Where to Update                 |
+|-------------------|----------------------------------|
+| Database Name     | `db.js` (return client.db(...))  |
+| Collection Name   | MongoDB → Must be `locations` unless you modify backend files |
+| API Base URL      | `.env` → `VITE_API_URL`          |
+
 ---
 
 ## 🧱 Tech Stack
