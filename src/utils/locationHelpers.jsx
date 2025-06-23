@@ -33,7 +33,7 @@ export function buildDefaultCategories(schema) {
   const categories = {};
   schema.categories.forEach((category) => {
     categories[category.categoryName] = Object.fromEntries(
-      category.items.map((item) => [item, false])
+      category.items.map((item) => [item.label, false])
     );
   });
   return categories;
@@ -43,7 +43,7 @@ export function buildDefaultScores(schema) {
   const scores = {};
   schema.categories.forEach((category) => {
     scores[category.categoryName] = Object.fromEntries(
-      category.items.map((item) => [item, 0])
+      category.items.map((item) => [item.label, 0])
     );
   });
   return scores;
@@ -71,7 +71,7 @@ export function getSafeLocationData(raw = {}, schema) {
   const safeCategories = {};
   schema.categories.forEach((category) => {
     safeCategories[category.categoryName] = {
-      ...Object.fromEntries(category.items.map((item) => [item, false])),
+      ...Object.fromEntries(category.items.map((item) => [item.label, false])),
       ...(raw.categories?.[category.categoryName] || {}),
     };
   });
@@ -79,7 +79,7 @@ export function getSafeLocationData(raw = {}, schema) {
   const safeScores = {};
   schema.categories.forEach((category) => {
     safeScores[category.categoryName] = {
-      ...Object.fromEntries(category.items.map((item) => [item, 0])),
+      ...Object.fromEntries(category.items.map((item) => [item.label, 0])),
       ...(raw.scores?.[category.categoryName] || {}),
     };
   });
@@ -98,7 +98,6 @@ export function getSafeLocationData(raw = {}, schema) {
     scores: safeScores,
   };
 }
-
 
 // ────────────────
 // Utility Functions
