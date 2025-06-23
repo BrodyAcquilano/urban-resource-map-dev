@@ -6,7 +6,11 @@ import ExportPreviewModal from "../components/ExportPreviewModal.jsx";
 import '../styles/pages.css';
 import { captureOffscreenMap } from "../utils/captureOffscreenMap.js";
 
-function Export({ filteredMarkers, selectedLocation, selectedFilters }) {
+function Export({
+  filteredMarkers,
+  selectedLocation,
+  selectedFilters,   
+}) {
   const [isExportModalOpen, setExportModalOpen] = useState(false);
   const [showExportOptions, setShowExportOptions] = useState(false);
   const [title, setTitle] = useState("");
@@ -16,21 +20,19 @@ function Export({ filteredMarkers, selectedLocation, selectedFilters }) {
   const [orientation, setOrientation] = useState("portrait");
   const [notes, setNotes] = useState("");
   const [mapImage, setMapImage] = useState(null);
+
   return (
     <>
       {/* Editor Panel Toggle + Panel */}
       <button
-        className={`side-toggle toggle ${
-          showExportOptions ? "" : "collapsed-toggle"
-        }`}
+        className={`side-toggle toggle ${showExportOptions ? "" : "collapsed-toggle"}`}
         onClick={() => setShowExportOptions(!showExportOptions)}
       >
         ☰
       </button>
+
       <div
-        className={`overlay-panel panel-wrapper ${
-          showExportOptions ? "" : "collapsed"
-        }`}
+        className={`overlay-panel panel-wrapper ${showExportOptions ? "" : "collapsed"}`}
       >
         <ExportOptions
           setTitle={setTitle}
@@ -39,7 +41,7 @@ function Export({ filteredMarkers, selectedLocation, selectedFilters }) {
           setIncludeSelected={setIncludeSelected}
           orientation={orientation}
           setOrientation={setOrientation}
-          setNotes={setNotes}
+          setNotes={setNotes}          
         />
       </div>
 
@@ -68,7 +70,7 @@ function Export({ filteredMarkers, selectedLocation, selectedFilters }) {
         filteredMarkers={filteredMarkers}
         selectedLocation={selectedLocation}
         selectedFilters={selectedFilters}
-        mapImage={mapImage}
+        mapImage={mapImage}    
       />
     </>
   );

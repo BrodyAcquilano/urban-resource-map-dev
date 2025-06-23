@@ -9,6 +9,8 @@ function Analysis({
   selectedLocation,
   setSelectedLocation,
   setHeatMap,
+  currentCollection,
+  currentSchema,
 }) {
   const [showOptions, setShowOptions] = useState(false);
   const [isEditScoreModalOpen, setIsEditScoreModalOpen] = useState(false);
@@ -29,7 +31,7 @@ function Analysis({
           showOptions ? "" : "collapsed"
         }`}
       >
-        <AnalysisOptions markers={markers} setHeatMap={setHeatMap} />
+        <AnalysisOptions markers={markers} setHeatMap={setHeatMap} currentCollection={currentCollection} currentSchema={currentSchema}/>
       </div>
 
       {/* Centered EditScore Button */}
@@ -47,6 +49,7 @@ function Analysis({
         selectedLocation={selectedLocation}
         setSelectedLocation={setSelectedLocation}
         setMarkers={setMarkers}
+        currentCollection={currentCollection}
       />
     </>
   );

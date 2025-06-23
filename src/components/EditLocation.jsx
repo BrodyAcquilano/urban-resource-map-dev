@@ -5,25 +5,23 @@ import "../styles/panels.css";
 import axios from "axios";
 import {
   daysOfWeek,
-  resources,
-  services,
-  amenities,
   timeOptionsAMPM,
   validateRequiredFields,
   getSafeLocationData,
-} from "../data/dataModel.jsx";
-import { renderCheckboxGroup } from "../utils/renderingHelpers.jsx";
+} from "../utils/locationHelpers.jsx";
+import { renderCheckboxGroupBySchema } from "../utils/renderingHelpers.jsx";
 
-function EditLocation({ setMarkers, selectedLocation, setSelectedLocation }) {
-  const [formData, setFormData] = useState(getSafeLocationData());
+function EditLocation({ setMarkers, selectedLocation, setSelectedLocation, currentSchema, currentCollection }) {
+  const [formData, setFormData] = useState(getSafeLocationData(currentSchema));
 
   useEffect(() => {
     if (selectedLocation) {
-      setFormData(getSafeLocationData(selectedLocation));
+      setFormData(getSafeLocationData(selectedLocation, currentSchema));
     }
-  }, [selectedLocation]);
+  }, [selectedLocation, currentSchema]);
 
   const BASE_URL = import.meta.env.VITE_API_URL;
+
   const handleEditSubmit = async () => {
     if (!validateRequiredFields(formData)) {
       window.alert(
@@ -35,13 +33,16 @@ function EditLocation({ setMarkers, selectedLocation, setSelectedLocation }) {
     try {
       await axios.put(
         `${BASE_URL}/api/locations/${selectedLocation._id}`,
-        formData
+        formData,
+        { params: { collectionName: currentCollection } }
       );
-      const response = await axios.get(`${BASE_URL}/api/locations`);
+
+      const response = await axios.get(`${BASE_URL}/api/locations`, {
+        params: { collectionName: currentCollection }
+      });
       setMarkers(response.data);
-      const updated = response.data.find(
-        (loc) => loc._id === selectedLocation._id
-      );
+
+      const updated = response.data.find((loc) => loc._id === selectedLocation._id);
       if (updated) {
         setSelectedLocation(updated);
       }
@@ -53,14 +54,17 @@ function EditLocation({ setMarkers, selectedLocation, setSelectedLocation }) {
   };
 
   const handleDelete = async () => {
-    const confirmDelete = window.confirm(
-      "Are you sure you want to delete this location?"
-    );
+    const confirmDelete = window.confirm("Are you sure you want to delete this location?");
     if (!confirmDelete) return;
 
     try {
-      await axios.delete(`${BASE_URL}/api/locations/${selectedLocation._id}`);
-      const response = await axios.get(`${BASE_URL}/api/locations`);
+      await axios.delete(`${BASE_URL}/api/locations/${selectedLocation._id}`, {
+        params: { collectionName: currentCollection }
+      });
+
+      const response = await axios.get(`${BASE_URL}/api/locations`, {
+        params: { collectionName: currentCollection }
+      });
       setMarkers(response.data);
       setSelectedLocation(null);
       alert("Location deleted.");
@@ -70,51 +74,20 @@ function EditLocation({ setMarkers, selectedLocation, setSelectedLocation }) {
     }
   };
 
-  const handleResourceChange = (label, checked) => {
+  const handleCheckboxChange = (categoryName, label, checked) => {
     setFormData((prev) => ({
       ...prev,
-      resources: {
-        ...prev.resources,
-        [label]: checked,
-      },
-      scores: {
-        ...prev.scores,
-        resources: {
-          ...prev.scores.resources,
-          [label]: checked ? 3 : 0,
+      categories: {
+        ...prev.categories,
+        [categoryName]: {
+          ...prev.categories[categoryName],
+          [label]: checked,
         },
       },
-    }));
-  };
-
-  const handleServiceChange = (label, checked) => {
-    setFormData((prev) => ({
-      ...prev,
-      services: {
-        ...prev.services,
-        [label]: checked,
-      },
       scores: {
         ...prev.scores,
-        services: {
-          ...prev.scores.services,
-          [label]: checked ? 3 : 0,
-        },
-      },
-    }));
-  };
-
-  const handleAmenityChange = (label, checked) => {
-    setFormData((prev) => ({
-      ...prev,
-      amenities: {
-        ...prev.amenities,
-        [label]: checked,
-      },
-      scores: {
-        ...prev.scores,
-        amenities: {
-          ...prev.scores.amenities,
+        [categoryName]: {
+          ...prev.scores[categoryName],
           [label]: checked ? 3 : 0,
         },
       },
@@ -153,9 +126,7 @@ function EditLocation({ setMarkers, selectedLocation, setSelectedLocation }) {
           <label>Latitude:</label>
           <input
             value={formData.latitude}
-            onChange={(e) =>
-              setFormData({ ...formData, latitude: e.target.value })
-            }
+            onChange={(e) => setFormData({ ...formData, latitude: e.target.value })}
             placeholder="Required..."
             required
           />
@@ -165,9 +136,7 @@ function EditLocation({ setMarkers, selectedLocation, setSelectedLocation }) {
           <label>Longitude:</label>
           <input
             value={formData.longitude}
-            onChange={(e) =>
-              setFormData({ ...formData, longitude: e.target.value })
-            }
+            onChange={(e) => setFormData({ ...formData, longitude: e.target.value })}
             placeholder="Required..."
             required
           />
@@ -177,9 +146,7 @@ function EditLocation({ setMarkers, selectedLocation, setSelectedLocation }) {
           <label>Address:</label>
           <input
             value={formData.address}
-            onChange={(e) =>
-              setFormData({ ...formData, address: e.target.value })
-            }
+            onChange={(e) => setFormData({ ...formData, address: e.target.value })}
             placeholder="Optional..."
           />
         </div>
@@ -188,9 +155,7 @@ function EditLocation({ setMarkers, selectedLocation, setSelectedLocation }) {
           <label>Website:</label>
           <input
             value={formData.website}
-            onChange={(e) =>
-              setFormData({ ...formData, website: e.target.value })
-            }
+            onChange={(e) => setFormData({ ...formData, website: e.target.value })}
             placeholder="Optional..."
           />
         </div>
@@ -199,9 +164,7 @@ function EditLocation({ setMarkers, selectedLocation, setSelectedLocation }) {
           <label>Phone:</label>
           <input
             value={formData.phone}
-            onChange={(e) =>
-              setFormData({ ...formData, phone: e.target.value })
-            }
+            onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
             placeholder="Optional..."
           />
         </div>
@@ -212,12 +175,10 @@ function EditLocation({ setMarkers, selectedLocation, setSelectedLocation }) {
             <input
               type="checkbox"
               checked={formData.wheelchairAccessible}
-              onChange={(e) =>
-                setFormData({
-                  ...formData,
-                  wheelchairAccessible: e.target.checked,
-                })
-              }
+              onChange={(e) => setFormData({
+                ...formData,
+                wheelchairAccessible: e.target.checked
+              })}
             />
           </div>
         </div>
@@ -246,10 +207,7 @@ function EditLocation({ setMarkers, selectedLocation, setSelectedLocation }) {
                       const checked = e.target.checked;
                       setFormData((prev) => ({
                         ...prev,
-                        isLocationOpen: {
-                          ...prev.isLocationOpen,
-                          [day]: checked,
-                        },
+                        isLocationOpen: { ...prev.isLocationOpen, [day]: checked },
                         openHours: {
                           ...prev.openHours,
                           [day]: checked
@@ -265,46 +223,32 @@ function EditLocation({ setMarkers, selectedLocation, setSelectedLocation }) {
                     <td>
                       <select
                         value={formData.openHours[day]?.open || ""}
-                        onChange={(e) =>
-                          setFormData((prev) => ({
-                            ...prev,
-                            openHours: {
-                              ...prev.openHours,
-                              [day]: {
-                                ...prev.openHours[day],
-                                open: e.target.value,
-                              },
-                            },
-                          }))
-                        }
+                        onChange={(e) => setFormData((prev) => ({
+                          ...prev,
+                          openHours: {
+                            ...prev.openHours,
+                            [day]: { ...prev.openHours[day], open: e.target.value }
+                          }
+                        }))}
                       >
                         {timeOptionsAMPM.map((time) => (
-                          <option key={time} value={time}>
-                            {time}
-                          </option>
+                          <option key={time} value={time}>{time}</option>
                         ))}
                       </select>
                     </td>
                     <td>
                       <select
                         value={formData.openHours[day]?.close || ""}
-                        onChange={(e) =>
-                          setFormData((prev) => ({
-                            ...prev,
-                            openHours: {
-                              ...prev.openHours,
-                              [day]: {
-                                ...prev.openHours[day],
-                                close: e.target.value,
-                              },
-                            },
-                          }))
-                        }
+                        onChange={(e) => setFormData((prev) => ({
+                          ...prev,
+                          openHours: {
+                            ...prev.openHours,
+                            [day]: { ...prev.openHours[day], close: e.target.value }
+                          }
+                        }))}
                       >
                         {timeOptionsAMPM.map((time) => (
-                          <option key={time} value={time}>
-                            {time}
-                          </option>
+                          <option key={time} value={time}>{time}</option>
                         ))}
                       </select>
                     </td>
@@ -320,30 +264,17 @@ function EditLocation({ setMarkers, selectedLocation, setSelectedLocation }) {
         </table>
       </div>
 
-      {renderCheckboxGroup(
-        "Resources",
-        resources,
-        formData.resources,
-        handleResourceChange
-      )}
-      {renderCheckboxGroup(
-        "Services",
-        services,
-        formData.services,
-        handleServiceChange
-      )}
-      {renderCheckboxGroup(
-        "Amenities",
-        amenities,
-        formData.amenities,
-        handleAmenityChange
+      {currentSchema.categories.map((category) =>
+        renderCheckboxGroupBySchema(
+          category,
+          formData.categories?.[category.categoryName] || {},
+          (label, checked) => handleCheckboxChange(category.categoryName, label, checked)
+        )
       )}
 
       <div className="buttons-container">
         <button onClick={handleEditSubmit}>Save Changes</button>
-        <button onClick={handleDelete} className="delete-btn">
-          Delete Location
-        </button>
+        <button onClick={handleDelete} className="delete-btn">Delete Location</button>
       </div>
     </div>
   );

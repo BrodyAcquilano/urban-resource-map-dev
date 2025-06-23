@@ -1,9 +1,9 @@
+// src/components/InfoPanel.jsx
 import React from "react";
 import "../styles/panels.css";
-import { resources, services, amenities } from "../data/dataModel.jsx";
-import { renderCheckedItems } from "../utils/renderingHelpers.jsx";
+import { renderCheckedItemsBySchema } from "../utils/renderingHelpers.jsx";
 
-function InfoPanel({ selectedLocation }) {
+function InfoPanel({ selectedLocation, currentSchema }) {
   if (!selectedLocation) {
     return (
       <div className="panel">
@@ -22,9 +22,7 @@ function InfoPanel({ selectedLocation }) {
     website,
     wheelchairAccessible,
     openHours,
-    resources: selectedResources = {},
-    services: selectedServices = {},
-    amenities: selectedAmenities = {},
+    categories = {},
   } = selectedLocation;
 
   return (
@@ -58,9 +56,7 @@ function InfoPanel({ selectedLocation }) {
             {Object.entries(openHours).map(([day, times]) => (
               <li key={day}>
                 <strong>{day}</strong>:{" "}
-                {times.open
-                  ? `${times.open || "??"} – ${times.close || "??"}`
-                  : "Closed"}
+                {times.open ? `${times.open || "??"} – ${times.close || "??"}` : "Closed"}
               </li>
             ))}
           </ul>
@@ -69,9 +65,8 @@ function InfoPanel({ selectedLocation }) {
         )}
       </div>
 
-      {renderCheckedItems(selectedResources, resources, "Resources")}
-      {renderCheckedItems(selectedServices, services, "Services")}
-      {renderCheckedItems(selectedAmenities, amenities, "Amenities")}
+      {/* Render dynamic categories */}
+      {renderCheckedItemsBySchema(categories, currentSchema?.categories || [])}
     </div>
   );
 }

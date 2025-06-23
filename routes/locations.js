@@ -4,8 +4,15 @@ import express from "express";
 import { ObjectId } from "mongodb";
 const router = express.Router();
 
+// POST - Add Location
 router.post("/", async (req, res) => {
   const db = req.app.locals.db;
+  const collectionName = req.query.collectionName;
+
+  if (!collectionName) {
+    return res.status(400).json({ error: "Missing collection name." });
+  }
+
   const {
     name,
     latitude,
@@ -16,9 +23,8 @@ router.post("/", async (req, res) => {
     wheelchairAccessible,
     isLocationOpen,
     openHours,
-    resources,
-    services,
-    amenities,
+    categories,
+    scores 
   } = req.body;
 
   if (!name || !latitude || !longitude) {
@@ -26,7 +32,7 @@ router.post("/", async (req, res) => {
   }
 
   try {
-    const result = await db.collection("locations").insertOne({
+    const result = await db.collection(collectionName).insertOne({
       name,
       latitude: parseFloat(latitude),
       longitude: parseFloat(longitude),
@@ -36,9 +42,8 @@ router.post("/", async (req, res) => {
       wheelchairAccessible: !!wheelchairAccessible,
       isLocationOpen: isLocationOpen || {},
       openHours: openHours || {},
-      resources: resources || {},
-      services: services || {},
-      amenities: amenities || {},
+      categories: categories || {},
+      scores: scores || {},
       createdAt: new Date(),
     });
 
@@ -49,11 +54,17 @@ router.post("/", async (req, res) => {
   }
 });
 
+// GET - Fetch All Locations
 router.get("/", async (req, res) => {
   const db = req.app.locals.db;
+  const collectionName = req.query.collectionName;
+
+  if (!collectionName) {
+    return res.status(400).json({ error: "Missing collection name." });
+  }
 
   try {
-    const locations = await db.collection("locations").find().toArray();
+    const locations = await db.collection(collectionName).find().toArray();
     res.json(locations);
   } catch (err) {
     console.error("Fetch failed:", err);
@@ -61,15 +72,21 @@ router.get("/", async (req, res) => {
   }
 });
 
-// PUT to update
+// PUT - Update Location
 router.put("/:id", async (req, res) => {
   const db = req.app.locals.db;
   const { id } = req.params;
+  const collectionName = req.query.collectionName;
+
+  if (!collectionName) {
+    return res.status(400).json({ error: "Missing collection name." });
+  }
 
   try {
     const updateResult = await db
-      .collection("locations")
+      .collection(collectionName)
       .updateOne({ _id: new ObjectId(id) }, { $set: req.body });
+
     res.status(200).json({ message: "Location updated" });
   } catch (err) {
     console.error("Update failed:", err);
@@ -77,13 +94,19 @@ router.put("/:id", async (req, res) => {
   }
 });
 
+// DELETE - Remove Location
 router.delete("/:id", async (req, res) => {
   const db = req.app.locals.db;
   const { id } = req.params;
+  const collectionName = req.query.collectionName;
+
+  if (!collectionName) {
+    return res.status(400).json({ error: "Missing collection name." });
+  }
 
   try {
     const result = await db
-      .collection("locations")
+      .collection(collectionName)
       .deleteOne({ _id: new ObjectId(id) });
 
     if (result.deletedCount === 0) {

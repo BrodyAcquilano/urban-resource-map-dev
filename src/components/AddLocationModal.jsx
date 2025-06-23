@@ -1,30 +1,33 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "../styles/modals.css";
 import axios from "axios";
-import { renderCheckboxGroupWithNotes } from "../utils/renderingHelpers.jsx";
+import { renderCheckboxGroupWithNotesBySchema } from "../utils/renderingHelpers.jsx";
 
 import {
   daysOfWeek,
-  resources,
-  services,
-  amenities,
-  resourceNotes,
-  serviceNotes,
-  amenityNotes,
   timeOptionsAMPM,
   validateRequiredFields,
-  initialLocationData,
-} from "../data/dataModel.jsx";
+  initializeLocationData,
+} from "../utils/locationHelpers.jsx";
 
-function AddLocationModal({ isOpen, onClose, setMarkers }) {
+function AddLocationModal({ isOpen, onClose, setMarkers, currentCollection, currentSchema }) {
   const [page, setPage] = useState(1);
-  const [formData, setFormData] = useState(initialLocationData);
+  const [formData, setFormData] = useState(initializeLocationData(currentSchema));
+
+  // Reset form when modal opens or schema changes
+  useEffect(() => {
+    if (isOpen) {
+      setFormData(initializeLocationData(currentSchema));
+      setPage(1);
+    }
+  }, [isOpen, currentSchema]);
 
   const resetForm = () => {
-    setFormData(initialLocationData);
+    setFormData(initializeLocationData(currentSchema));
   };
 
   const BASE_URL = import.meta.env.VITE_API_URL;
+
   const handleSubmit = async () => {
     const locationData = {
       ...formData,
@@ -40,7 +43,7 @@ function AddLocationModal({ isOpen, onClose, setMarkers }) {
     }
 
     try {
-      const res = await axios.post(`${BASE_URL}/api/locations`, locationData);
+      const res = await axios.post(`${BASE_URL}/api/locations?collectionName=${currentCollection}`, locationData);
       const newMarker = { _id: res.data.id, ...locationData };
       setMarkers((prev) => [...prev, newMarker]);
 
@@ -54,56 +57,25 @@ function AddLocationModal({ isOpen, onClose, setMarkers }) {
     }
   };
 
-  const handleResourceChange = (label, checked) => {
-  setFormData((prev) => ({
-    ...prev,
-    resources: {
-      ...prev.resources,
-      [label]: checked,
-    },
-    scores: {
-      ...prev.scores,
-      resources: {
-        ...prev.scores.resources,
-        [label]: checked ? 3 : 0,
+  const handleCheckboxChange = (categoryName, label, checked) => {
+    setFormData((prev) => ({
+      ...prev,
+      categories: {
+        ...prev.categories,
+        [categoryName]: {
+          ...prev.categories[categoryName],
+          [label]: checked,
+        },
       },
-    },
-  }));
-};
-
-const handleServiceChange = (label, checked) => {
-  setFormData((prev) => ({
-    ...prev,
-    services: {
-      ...prev.services,
-      [label]: checked,
-    },
-    scores: {
-      ...prev.scores,
-      services: {
-        ...prev.scores.services,
-        [label]: checked ? 3 : 0,
+      scores: {
+        ...prev.scores,
+        [categoryName]: {
+          ...prev.scores[categoryName],
+          [label]: checked ? 3 : 0,
+        },
       },
-    },
-  }));
-};
-
-const handleAmenityChange = (label, checked) => {
-  setFormData((prev) => ({
-    ...prev,
-    amenities: {
-      ...prev.amenities,
-      [label]: checked,
-    },
-    scores: {
-      ...prev.scores,
-      amenities: {
-        ...prev.scores.amenities,
-        [label]: checked ? 3 : 0,
-      },
-    },
-  }));
-};
+    }));
+  };
 
   if (!isOpen) return null;
 
@@ -123,9 +95,7 @@ const handleAmenityChange = (label, checked) => {
               <input
                 type="text"
                 value={formData.name}
-                onChange={(e) =>
-                  setFormData((prev) => ({ ...prev, name: e.target.value }))
-                }
+                onChange={(e) => setFormData((prev) => ({ ...prev, name: e.target.value }))}
                 placeholder="Required..."
                 required
               />
@@ -135,12 +105,7 @@ const handleAmenityChange = (label, checked) => {
               <input
                 type="number"
                 value={formData.latitude}
-                onChange={(e) =>
-                  setFormData((prev) => ({
-                    ...prev,
-                    latitude: e.target.value,
-                  }))
-                }
+                onChange={(e) => setFormData((prev) => ({ ...prev, latitude: e.target.value }))}
                 placeholder="Required..."
                 required
               />
@@ -150,12 +115,7 @@ const handleAmenityChange = (label, checked) => {
               <input
                 type="number"
                 value={formData.longitude}
-                onChange={(e) =>
-                  setFormData((prev) => ({
-                    ...prev,
-                    longitude: e.target.value,
-                  }))
-                }
+                onChange={(e) => setFormData((prev) => ({ ...prev, longitude: e.target.value }))}
                 placeholder="Required..."
                 required
               />
@@ -166,9 +126,7 @@ const handleAmenityChange = (label, checked) => {
                 type="text"
                 value={formData.address}
                 placeholder="Optional..."
-                onChange={(e) =>
-                  setFormData((prev) => ({ ...prev, address: e.target.value }))
-                }
+                onChange={(e) => setFormData((prev) => ({ ...prev, address: e.target.value }))}
               />
             </label>
             <label>
@@ -177,9 +135,7 @@ const handleAmenityChange = (label, checked) => {
                 type="text"
                 value={formData.website}
                 placeholder="Optional..."
-                onChange={(e) =>
-                  setFormData((prev) => ({ ...prev, website: e.target.value }))
-                }
+                onChange={(e) => setFormData((prev) => ({ ...prev, website: e.target.value }))}
               />
             </label>
             <label>
@@ -188,24 +144,17 @@ const handleAmenityChange = (label, checked) => {
                 type="text"
                 value={formData.phone}
                 placeholder="Optional..."
-                onChange={(e) =>
-                  setFormData((prev) => ({ ...prev, phone: e.target.value }))
-                }
+                onChange={(e) => setFormData((prev) => ({ ...prev, phone: e.target.value }))}
               />
             </label>
             <div className="inline-checkbox-row">
-              <label className="label-container">
-                ♿ Wheelchair Accessible
-              </label>
+              <label className="label-container">♿ Wheelchair Accessible</label>
               <div className="checkbox-container">
                 <input
                   type="checkbox"
                   checked={formData.wheelchairAccessible}
                   onChange={(e) =>
-                    setFormData((prev) => ({
-                      ...prev,
-                      wheelchairAccessible: e.target.checked,
-                    }))
+                    setFormData((prev) => ({ ...prev, wheelchairAccessible: e.target.checked }))
                   }
                 />
               </div>
@@ -233,10 +182,7 @@ const handleAmenityChange = (label, checked) => {
                           const checked = e.target.checked;
                           setFormData((prev) => ({
                             ...prev,
-                            isLocationOpen: {
-                              ...prev.isLocationOpen,
-                              [day]: checked,
-                            },
+                            isLocationOpen: { ...prev.isLocationOpen, [day]: checked },
                             openHours: {
                               ...prev.openHours,
                               [day]: checked
@@ -257,10 +203,7 @@ const handleAmenityChange = (label, checked) => {
                                 ...prev,
                                 openHours: {
                                   ...prev.openHours,
-                                  [day]: {
-                                    ...prev.openHours[day],
-                                    open: e.target.value,
-                                  },
+                                  [day]: { ...prev.openHours[day], open: e.target.value },
                                 },
                               }))
                             }
@@ -280,10 +223,7 @@ const handleAmenityChange = (label, checked) => {
                                 ...prev,
                                 openHours: {
                                   ...prev.openHours,
-                                  [day]: {
-                                    ...prev.openHours[day],
-                                    close: e.target.value,
-                                  },
+                                  [day]: { ...prev.openHours[day], close: e.target.value },
                                 },
                               }))
                             }
@@ -307,36 +247,19 @@ const handleAmenityChange = (label, checked) => {
             </table>
           </>
         )}
-        {page === 2 &&
-  renderCheckboxGroupWithNotes(
-    "Resources",
-    resources,
-    formData.resources,
-    handleResourceChange,
-    resourceNotes
-  )}
 
-{page === 3 &&
-  renderCheckboxGroupWithNotes(
-    "Services",
-    services,
-    formData.services,
-    handleServiceChange,
-    serviceNotes
-  )}
-
-{page === 4 &&
-  renderCheckboxGroupWithNotes(
-    "Amenities",
-    amenities,
-    formData.amenities,
-    handleAmenityChange,
-    amenityNotes
-  )}
+        {/* Dynamic Category Rendering */}
+        {page > 1 &&
+          renderCheckboxGroupWithNotesBySchema(
+            currentSchema,
+            page,
+            formData.categories,
+            handleCheckboxChange
+          )}
 
         <div className="buttons-container">
           {page > 1 && <button onClick={() => setPage(page - 1)}>Back</button>}
-          {page < 4 ? (
+          {page < (currentSchema?.categories.length || 1) ? (
             <button onClick={() => setPage(page + 1)}>Next</button>
           ) : (
             <button onClick={handleSubmit}>Submit</button>
@@ -348,3 +271,4 @@ const handleAmenityChange = (label, checked) => {
 }
 
 export default AddLocationModal;
+
