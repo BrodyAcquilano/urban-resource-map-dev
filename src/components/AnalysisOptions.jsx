@@ -187,8 +187,8 @@ function AnalysisOptions({
     }));
 
     const allPoints = normalizedMarkers.map((m) =>
-      turf.point([m.longitude, m.latitude])
-    );
+  turf.point([parseFloat(m.longitude), parseFloat(m.latitude)])
+);
     const bbox = turf.bbox(turf.featureCollection(allPoints));
     let [minLng, minLat, maxLng, maxLat] = bbox;
 
@@ -270,9 +270,9 @@ function AnalysisOptions({
       normalized: normalize(m.score, min, max),
     }));
 
-    const allPoints = normalizedMarkers.map((m) =>
-      turf.point([m.longitude, m.latitude])
-    );
+   const allPoints = normalizedMarkers.map((m) =>
+  turf.point([parseFloat(m.longitude), parseFloat(m.latitude)])
+);
     const bbox = turf.bbox(turf.featureCollection(allPoints));
     let [minLng, minLat, maxLng, maxLat] = bbox;
 
