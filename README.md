@@ -1,14 +1,26 @@
-# 🌐 Urban Resource Map (Dev Version)
+# 🌐 Urban Resource Map
 
-A full-stack web app for managing and analyzing free public resources like shelters, washrooms, water fountains, libraries, and more.
-
-This version includes full data management tools — add, edit, score, and export locations using a visual interface with advanced filtering and heatmap generation.
+A full-stack web app for managing, visualizing, and analyzing **spatial data of any kind.**  
+Originally designed for mapping public resources like shelters and water fountains, the platform now supports **any location-based datasets** — including housing, parks, infrastructure, jobs, transit, and more.
 
 Built with:
 
 - React + Vite (frontend)
 - Express + MongoDB (read/write backend)
 - Leaflet for interactive maps
+
+---
+
+## 📁 Repository Overview
+
+I maintain **three separate versions** of this project:
+
+- **Admin Version (this repo):** Full editing, scoring, analysis, and export features. Includes the Editor Page and Edit Score Modal.
+- **Client Version (read-only):** Limited to viewing, filtering, and exporting. Editing and scoring tools are removed.
+- **Dev Version:** Experimental and in-progress features for future releases.
+
+Each version has a separate GitHub repository.  
+Most of the instructions in this README apply to all versions unless otherwise noted.
 
 ---
 
