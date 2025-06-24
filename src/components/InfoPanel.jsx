@@ -22,7 +22,6 @@ function InfoPanel({ selectedLocation, currentSchema }) {
     website,
     wheelchairAccessible,
     openHours,
-    categories = {},
   } = selectedLocation;
 
   return (
@@ -66,7 +65,7 @@ function InfoPanel({ selectedLocation, currentSchema }) {
       </div>
 
       {/* Render dynamic categories */}
-      {renderCheckedItemsBySchema(categories, currentSchema?.categories || [])}
+      {renderCheckedItemsBySchema(selectedLocation, currentSchema?.categories || [])}
     </div>
   );
 }

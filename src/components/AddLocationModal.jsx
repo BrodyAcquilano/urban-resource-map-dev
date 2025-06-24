@@ -1,3 +1,5 @@
+// src/components/AddLocationModal.jsx
+
 import React, { useState, useEffect } from "react";
 import "../styles/modals.css";
 import axios from "axios";
@@ -10,9 +12,17 @@ import {
   initializeLocationData,
 } from "../utils/locationHelpers.jsx";
 
-function AddLocationModal({ isOpen, onClose, setMarkers, currentCollection, currentSchema }) {
+function AddLocationModal({
+  isOpen,
+  onClose,
+  setMarkers,
+  currentSchema,
+  currentCollection,
+}) {
   const [page, setPage] = useState(1);
-  const [formData, setFormData] = useState(initializeLocationData(currentSchema));
+  const [formData, setFormData] = useState(
+    initializeLocationData(currentSchema)
+  );
 
   // Reset form when modal opens or schema changes
   useEffect(() => {
@@ -43,7 +53,10 @@ function AddLocationModal({ isOpen, onClose, setMarkers, currentCollection, curr
     }
 
     try {
-      const res = await axios.post(`${BASE_URL}/api/locations?collectionName=${currentCollection}`, locationData);
+      const res = await axios.post(
+        `${BASE_URL}/api/locations?collectionName=${currentCollection}`,
+        locationData
+      );
       const newMarker = { _id: res.data.id, ...locationData };
       setMarkers((prev) => [...prev, newMarker]);
 
@@ -79,6 +92,11 @@ function AddLocationModal({ isOpen, onClose, setMarkers, currentCollection, curr
 
   if (!isOpen) return null;
 
+  const totalPages = 1 + (currentSchema?.categories.length || 0);
+  const isCategoryPage = page > 1 && page <= totalPages;
+  const currentCategoryIndex = page - 2; // Page 2 is the first category
+  const currentCategory = currentSchema?.categories[currentCategoryIndex];
+
   return (
     <div className="modal-overlay centered-modal-overlay">
       <div className="modal">
@@ -95,7 +113,9 @@ function AddLocationModal({ isOpen, onClose, setMarkers, currentCollection, curr
               <input
                 type="text"
                 value={formData.name}
-                onChange={(e) => setFormData((prev) => ({ ...prev, name: e.target.value }))}
+                onChange={(e) =>
+                  setFormData((prev) => ({ ...prev, name: e.target.value }))
+                }
                 placeholder="Required..."
                 required
               />
@@ -105,7 +125,12 @@ function AddLocationModal({ isOpen, onClose, setMarkers, currentCollection, curr
               <input
                 type="number"
                 value={formData.latitude}
-                onChange={(e) => setFormData((prev) => ({ ...prev, latitude: e.target.value }))}
+                onChange={(e) =>
+                  setFormData((prev) => ({
+                    ...prev,
+                    latitude: parseFloat(e.target.value),
+                  }))
+                }
                 placeholder="Required..."
                 required
               />
@@ -115,7 +140,12 @@ function AddLocationModal({ isOpen, onClose, setMarkers, currentCollection, curr
               <input
                 type="number"
                 value={formData.longitude}
-                onChange={(e) => setFormData((prev) => ({ ...prev, longitude: e.target.value }))}
+                onChange={(e) =>
+                  setFormData((prev) => ({
+                    ...prev,
+                    longitude: parseFloat(e.target.value),
+                  }))
+                }
                 placeholder="Required..."
                 required
               />
@@ -126,7 +156,9 @@ function AddLocationModal({ isOpen, onClose, setMarkers, currentCollection, curr
                 type="text"
                 value={formData.address}
                 placeholder="Optional..."
-                onChange={(e) => setFormData((prev) => ({ ...prev, address: e.target.value }))}
+                onChange={(e) =>
+                  setFormData((prev) => ({ ...prev, address: e.target.value }))
+                }
               />
             </label>
             <label>
@@ -135,7 +167,9 @@ function AddLocationModal({ isOpen, onClose, setMarkers, currentCollection, curr
                 type="text"
                 value={formData.website}
                 placeholder="Optional..."
-                onChange={(e) => setFormData((prev) => ({ ...prev, website: e.target.value }))}
+                onChange={(e) =>
+                  setFormData((prev) => ({ ...prev, website: e.target.value }))
+                }
               />
             </label>
             <label>
@@ -144,17 +178,24 @@ function AddLocationModal({ isOpen, onClose, setMarkers, currentCollection, curr
                 type="text"
                 value={formData.phone}
                 placeholder="Optional..."
-                onChange={(e) => setFormData((prev) => ({ ...prev, phone: e.target.value }))}
+                onChange={(e) =>
+                  setFormData((prev) => ({ ...prev, phone: e.target.value }))
+                }
               />
             </label>
             <div className="inline-checkbox-row">
-              <label className="label-container">♿ Wheelchair Accessible</label>
+              <label className="label-container">
+                ♿ Wheelchair Accessible
+              </label>
               <div className="checkbox-container">
                 <input
                   type="checkbox"
                   checked={formData.wheelchairAccessible}
                   onChange={(e) =>
-                    setFormData((prev) => ({ ...prev, wheelchairAccessible: e.target.checked }))
+                    setFormData((prev) => ({
+                      ...prev,
+                      wheelchairAccessible: e.target.checked,
+                    }))
                   }
                 />
               </div>
@@ -182,7 +223,10 @@ function AddLocationModal({ isOpen, onClose, setMarkers, currentCollection, curr
                           const checked = e.target.checked;
                           setFormData((prev) => ({
                             ...prev,
-                            isLocationOpen: { ...prev.isLocationOpen, [day]: checked },
+                            isLocationOpen: {
+                              ...prev.isLocationOpen,
+                              [day]: checked,
+                            },
                             openHours: {
                               ...prev.openHours,
                               [day]: checked
@@ -203,7 +247,10 @@ function AddLocationModal({ isOpen, onClose, setMarkers, currentCollection, curr
                                 ...prev,
                                 openHours: {
                                   ...prev.openHours,
-                                  [day]: { ...prev.openHours[day], open: e.target.value },
+                                  [day]: {
+                                    ...prev.openHours[day],
+                                    open: e.target.value,
+                                  },
                                 },
                               }))
                             }
@@ -223,7 +270,10 @@ function AddLocationModal({ isOpen, onClose, setMarkers, currentCollection, curr
                                 ...prev,
                                 openHours: {
                                   ...prev.openHours,
-                                  [day]: { ...prev.openHours[day], close: e.target.value },
+                                  [day]: {
+                                    ...prev.openHours[day],
+                                    close: e.target.value,
+                                  },
                                 },
                               }))
                             }
@@ -249,17 +299,17 @@ function AddLocationModal({ isOpen, onClose, setMarkers, currentCollection, curr
         )}
 
         {/* Dynamic Category Rendering */}
-        {page > 1 &&
+        {isCategoryPage &&
           renderCheckboxGroupWithNotesBySchema(
-            currentSchema,
-            page,
-            formData.categories,
-            handleCheckboxChange
+            currentCategory,
+            formData.categories[currentCategory.categoryName],
+            (label, checked) =>
+              handleCheckboxChange(currentCategory.categoryName, label, checked)
           )}
 
         <div className="buttons-container">
           {page > 1 && <button onClick={() => setPage(page - 1)}>Back</button>}
-          {page < (currentSchema?.categories.length || 1) ? (
+          {page < totalPages ? (
             <button onClick={() => setPage(page + 1)}>Next</button>
           ) : (
             <button onClick={handleSubmit}>Submit</button>
@@ -271,4 +321,3 @@ function AddLocationModal({ isOpen, onClose, setMarkers, currentCollection, curr
 }
 
 export default AddLocationModal;
-

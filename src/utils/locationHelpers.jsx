@@ -1,4 +1,4 @@
-// src/data/dataModel.jsx
+// src/data/locationHelpers.jsx
 
 // ────────────────
 // Keys and Labels
@@ -76,14 +76,6 @@ export function getSafeLocationData(raw = {}, schema) {
     };
   });
 
-  const safeScores = {};
-  schema.categories.forEach((category) => {
-    safeScores[category.categoryName] = {
-      ...Object.fromEntries(category.items.map((item) => [item.label, 0])),
-      ...(raw.scores?.[category.categoryName] || {}),
-    };
-  });
-
   return {
     name: raw.name || "",
     latitude: raw.latitude || "",
@@ -95,9 +87,10 @@ export function getSafeLocationData(raw = {}, schema) {
     isLocationOpen: raw.isLocationOpen || { ...defaultIsLocationOpen },
     openHours: raw.openHours || { ...defaultOpenHours },
     categories: safeCategories,
-    scores: safeScores,
+    scores: raw.scores || {}, 
   };
 }
+
 
 // ────────────────
 // Utility Functions

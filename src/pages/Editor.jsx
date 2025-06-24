@@ -9,8 +9,8 @@ function Editor({
   setMarkers,
   selectedLocation,
   setSelectedLocation,
+  currentSchema,
   currentCollection,
-  currentSchema
 }) {
   const [isAddModalOpen, setAddModalOpen] = useState(false);
   const [showEditLocation, setShowEditLocation] = useState(false);
@@ -30,8 +30,8 @@ function Editor({
           setMarkers={setMarkers}
           selectedLocation={selectedLocation}
           setSelectedLocation={setSelectedLocation}
-          currentCollection={currentCollection}
           currentSchema={currentSchema}
+          currentCollection={currentCollection}
         />
       </div>
 
@@ -48,8 +48,8 @@ function Editor({
         isOpen={isAddModalOpen}
         onClose={() => setAddModalOpen(false)}
         setMarkers={setMarkers}
-        currentCollection={currentCollection}
         currentSchema={currentSchema}
+        currentCollection={currentCollection}
       />
     </>
   );

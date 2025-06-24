@@ -11,8 +11,14 @@ import {
 } from "../utils/locationHelpers.jsx";
 import { renderCheckboxGroupBySchema } from "../utils/renderingHelpers.jsx";
 
-function EditLocation({ setMarkers, selectedLocation, setSelectedLocation, currentSchema, currentCollection }) {
-  const [formData, setFormData] = useState(getSafeLocationData(currentSchema));
+function EditLocation({
+  setMarkers,
+  selectedLocation,
+  setSelectedLocation,
+  currentSchema,
+  currentCollection,
+}) {
+  const [formData, setFormData] = useState(getSafeLocationData({}, currentSchema));
 
   useEffect(() => {
     if (selectedLocation) {
@@ -38,7 +44,7 @@ function EditLocation({ setMarkers, selectedLocation, setSelectedLocation, curre
       );
 
       const response = await axios.get(`${BASE_URL}/api/locations`, {
-        params: { collectionName: currentCollection }
+        params: { collectionName: currentCollection },
       });
       setMarkers(response.data);
 
@@ -59,11 +65,11 @@ function EditLocation({ setMarkers, selectedLocation, setSelectedLocation, curre
 
     try {
       await axios.delete(`${BASE_URL}/api/locations/${selectedLocation._id}`, {
-        params: { collectionName: currentCollection }
+        params: { collectionName: currentCollection },
       });
 
       const response = await axios.get(`${BASE_URL}/api/locations`, {
-        params: { collectionName: currentCollection }
+        params: { collectionName: currentCollection },
       });
       setMarkers(response.data);
       setSelectedLocation(null);
@@ -124,22 +130,24 @@ function EditLocation({ setMarkers, selectedLocation, setSelectedLocation, curre
 
         <div className="form-group">
           <label>Latitude:</label>
-          <input
-            value={formData.latitude}
-            onChange={(e) => setFormData({ ...formData, latitude: e.target.value })}
-            placeholder="Required..."
-            required
-          />
+         <input
+  type="number"
+  value={formData.latitude}
+  onChange={(e) => setFormData({ ...formData, latitude: parseFloat(e.target.value) })}
+  placeholder="Required..."
+  required
+/>
         </div>
 
         <div className="form-group">
           <label>Longitude:</label>
-          <input
-            value={formData.longitude}
-            onChange={(e) => setFormData({ ...formData, longitude: e.target.value })}
-            placeholder="Required..."
-            required
-          />
+        <input
+  type="number"
+  value={formData.longitude}
+  onChange={(e) => setFormData({ ...formData, longitude: parseFloat(e.target.value) })}
+  placeholder="Required..."
+  required
+/>
         </div>
 
         <div className="form-group">
@@ -175,10 +183,12 @@ function EditLocation({ setMarkers, selectedLocation, setSelectedLocation, curre
             <input
               type="checkbox"
               checked={formData.wheelchairAccessible}
-              onChange={(e) => setFormData({
-                ...formData,
-                wheelchairAccessible: e.target.checked
-              })}
+              onChange={(e) =>
+                setFormData({
+                  ...formData,
+                  wheelchairAccessible: e.target.checked,
+                })
+              }
             />
           </div>
         </div>
@@ -223,32 +233,40 @@ function EditLocation({ setMarkers, selectedLocation, setSelectedLocation, curre
                     <td>
                       <select
                         value={formData.openHours[day]?.open || ""}
-                        onChange={(e) => setFormData((prev) => ({
-                          ...prev,
-                          openHours: {
-                            ...prev.openHours,
-                            [day]: { ...prev.openHours[day], open: e.target.value }
-                          }
-                        }))}
+                        onChange={(e) =>
+                          setFormData((prev) => ({
+                            ...prev,
+                            openHours: {
+                              ...prev.openHours,
+                              [day]: { ...prev.openHours[day], open: e.target.value },
+                            },
+                          }))
+                        }
                       >
                         {timeOptionsAMPM.map((time) => (
-                          <option key={time} value={time}>{time}</option>
+                          <option key={time} value={time}>
+                            {time}
+                          </option>
                         ))}
                       </select>
                     </td>
                     <td>
                       <select
                         value={formData.openHours[day]?.close || ""}
-                        onChange={(e) => setFormData((prev) => ({
-                          ...prev,
-                          openHours: {
-                            ...prev.openHours,
-                            [day]: { ...prev.openHours[day], close: e.target.value }
-                          }
-                        }))}
+                        onChange={(e) =>
+                          setFormData((prev) => ({
+                            ...prev,
+                            openHours: {
+                              ...prev.openHours,
+                              [day]: { ...prev.openHours[day], close: e.target.value },
+                            },
+                          }))
+                        }
                       >
                         {timeOptionsAMPM.map((time) => (
-                          <option key={time} value={time}>{time}</option>
+                          <option key={time} value={time}>
+                            {time}
+                          </option>
                         ))}
                       </select>
                     </td>
@@ -266,7 +284,8 @@ function EditLocation({ setMarkers, selectedLocation, setSelectedLocation, curre
 
       {currentSchema.categories.map((category) =>
         renderCheckboxGroupBySchema(
-          category,
+          category.categoryName,
+           category.items,
           formData.categories?.[category.categoryName] || {},
           (label, checked) => handleCheckboxChange(category.categoryName, label, checked)
         )
@@ -274,7 +293,9 @@ function EditLocation({ setMarkers, selectedLocation, setSelectedLocation, curre
 
       <div className="buttons-container">
         <button onClick={handleEditSubmit}>Save Changes</button>
-        <button onClick={handleDelete} className="delete-btn">Delete Location</button>
+        <button onClick={handleDelete} className="delete-btn">
+          Delete Location
+        </button>
       </div>
     </div>
   );

@@ -7,9 +7,11 @@ import React from "react";
 // Used in: InfoPanel.jsx to display only checked items by dynamic category.
 export const renderCheckedItemsBySchema = (marker, categories) => {
   return categories.map((category) => {
+    // Correct: Check inside the correct category
     const checkedItems = category.items.filter(
-      (item) => marker.categories?.[item.label]
+      (item) => marker.categories?.[category.categoryName]?.[item.label]
     );
+
     return (
       <div className="section" key={category.categoryName}>
         <h3>{category.categoryName}</h3>

@@ -15,6 +15,7 @@ function FilterPanel({
   markers,
   setFilteredMarkers,
   setSelectedFilters,
+  setSelectedLocation
 }) {
   const [wheelchairOnly, setWheelchairOnly] = useState(false);
   const [dayFilter, setDayFilter] = useState("Any");
@@ -23,9 +24,9 @@ function FilterPanel({
   // Initialize dynamic checkboxes
   const initCheckedState = () => {
     if (!currentSchema) return {};
-    return Object.fromEntries(
-      currentSchema.categories.flatMap((cat) => cat.items.map((label) => [label, false]))
-    );
+   return Object.fromEntries(
+  currentSchema.categories.flatMap((cat) => cat.items.map((item) => [item.label, false]))
+);
   };
 
   const [categoryChecks, setCategoryChecks] = useState(initCheckedState);
@@ -133,6 +134,7 @@ function FilterPanel({
               const fetchedSchema = await fetchSchemaByProjectName(selectedProjectName);
               setCurrentSchema(fetchedSchema);
               setCurrentCollection(fetchedSchema.collectionName);
+              setSelectedLocation(null);
             }}
           >
             {schemas.map((schema) => (

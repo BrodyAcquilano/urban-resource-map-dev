@@ -102,8 +102,8 @@ function AnalysisOptions({
 
   const handleGenerateProximity = () => {
     const allPoints = markers.map((m) =>
-      turf.point([m.longitude, m.latitude], { marker: m })
-    );
+  turf.point([parseFloat(m.longitude), parseFloat(m.latitude)], { marker: m })
+);
 
     const bbox = turf.bbox(turf.featureCollection(allPoints));
     let [minLng, minLat, maxLng, maxLat] = bbox;
@@ -132,10 +132,10 @@ function AnalysisOptions({
 
         for (const m of markers) {
           const dist = turf.distance(
-            pixelPoint,
-            turf.point([m.longitude, m.latitude]),
-            { units: "kilometers" }
-          );
+  pixelPoint,
+  turf.point([parseFloat(m.longitude), parseFloat(m.latitude)]),
+  { units: "kilometers" }
+);
 
           const distance = dist * 1000;
           if (distance > proximityBufferRadius) continue;

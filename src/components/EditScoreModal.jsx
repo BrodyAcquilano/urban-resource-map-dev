@@ -14,18 +14,18 @@ function EditScoreModal({
   currentSchema,
   currentCollection,
 }) {
-  const [page, setPage] = useState(0); // Start at index 0 (first category)
-  const [locationData, setLocationData] = useState(getSafeLocationData());
+  const [page, setPage] = useState(1); // Page 1 is the selected location page
+  const [locationData, setLocationData] = useState(getSafeLocationData({}, currentSchema));
+
   const BASE_URL = import.meta.env.VITE_API_URL;
 
-  // Initialize locationData safely when modal opens
   useEffect(() => {
     if (selectedLocation) {
-      setLocationData(getSafeLocationData(selectedLocation));
+      setLocationData(getSafeLocationData(selectedLocation, currentSchema));
+      setPage(1);
     }
-  }, [selectedLocation]);
+  }, [selectedLocation, currentSchema]);
 
-  // Score editing handler
   const handleScoreChange = (categoryName, key, value) => {
     setLocationData((prev) => ({
       ...prev,
@@ -39,7 +39,6 @@ function EditScoreModal({
     }));
   };
 
-  // Handle submit and resync local state
   const handleSubmit = async () => {
     if (!selectedLocation || !locationData) {
       alert("No location selected.");
@@ -64,7 +63,7 @@ function EditScoreModal({
       }
 
       alert("Location updated!");
-      setPage(0);
+      setPage(1);
       onClose();
     } catch (err) {
       console.error("Update failed:", err);
@@ -73,6 +72,7 @@ function EditScoreModal({
   };
 
   if (!isOpen) return null;
+
   if (!selectedLocation) {
     return (
       <div className="modal-overlay centered-modal-overlay">
@@ -87,8 +87,10 @@ function EditScoreModal({
     );
   }
 
-  const { categories = [] } = currentSchema || {};
-  const currentCategory = categories[page];
+  const totalPages = 1 + (currentSchema?.categories.length || 0);
+  const isCategoryPage = page > 1 && page <= totalPages;
+  const currentCategoryIndex = page - 2; // Page 2 is the first category
+  const currentCategory = currentSchema?.categories[currentCategoryIndex];
 
   return (
     <div className="modal-overlay centered-modal-overlay">
@@ -98,19 +100,17 @@ function EditScoreModal({
         </button>
         <h2>Edit Score</h2>
 
-        {page === 0 && (
+        {page === 1 && (
           <>
             <h3>Selected Location:</h3>
             <p>{locationData.name}</p>
           </>
         )}
 
-        {page > 0 && currentCategory && (
+        {isCategoryPage && currentCategory && (
           <>
             <h3>{currentCategory.categoryName}</h3>
-            {Object.values(locationData[currentCategory.categoryName] || {}).some(
-              (val) => val
-            ) ? (
+            {Object.values(locationData.categories?.[currentCategory.categoryName] || {}).some((val) => val) ? (
               <table>
                 <thead>
                   <tr>
@@ -120,19 +120,17 @@ function EditScoreModal({
                   </tr>
                 </thead>
                 <tbody>
-                  {currentCategory.items.map((key) =>
-                    locationData[currentCategory.categoryName]?.[key] ? (
-                      <tr key={key}>
-                        <td>{key}</td>
+                  {currentCategory.items.map((item) =>
+                    locationData.categories?.[currentCategory.categoryName]?.[item.label] ? (
+                      <tr key={item.label}>
+                        <td>{item.label}</td>
                         <td>
                           <select
-                            value={
-                              locationData.scores?.[currentCategory.categoryName]?.[key] || ""
-                            }
+                            value={locationData.scores?.[currentCategory.categoryName]?.[item.label] || ""}
                             onChange={(e) =>
                               handleScoreChange(
                                 currentCategory.categoryName,
-                                key,
+                                item.label,
                                 e.target.value
                               )
                             }
@@ -147,7 +145,7 @@ function EditScoreModal({
                         </td>
                         <td>
                           {"⭐".repeat(
-                            locationData.scores?.[currentCategory.categoryName]?.[key] || 0
+                            locationData.scores?.[currentCategory.categoryName]?.[item.label] || 0
                           )}
                         </td>
                       </tr>
@@ -162,8 +160,8 @@ function EditScoreModal({
         )}
 
         <div className="buttons-container">
-          {page > 0 && <button onClick={() => setPage(page - 1)}>Back</button>}
-          {page < categories.length ? (
+          {page > 1 && <button onClick={() => setPage(page - 1)}>Back</button>}
+          {page < totalPages ? (
             <button onClick={() => setPage(page + 1)}>Next</button>
           ) : (
             <button onClick={handleSubmit}>Submit</button>
@@ -175,3 +173,4 @@ function EditScoreModal({
 }
 
 export default EditScoreModal;
+

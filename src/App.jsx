@@ -48,7 +48,6 @@ function App() {
   const [schemas, setSchemas] = useState([]);
   const [currentSchema, setCurrentSchema] = useState(null);
   const [currentCollection, setCurrentCollection] = useState("");
-
   const [selectedFilters, setSelectedFilters] = useState([]);
   const [markers, setMarkers] = useState([]);
   const [filteredMarkers, setFilteredMarkers] = useState([]);
@@ -144,6 +143,7 @@ function App() {
           markers={markers}
           setFilteredMarkers={setFilteredMarkers}
           setSelectedFilters={setSelectedFilters}
+          setSelectedLocation={setSelectedLocation}
         />
       </div>
 
@@ -160,7 +160,7 @@ function App() {
 
       {/* Page Routing */}
       <Routes>
-        <Route path="/" element={<Home selectedLocation={selectedLocation} />} />
+        <Route path="/" element={<Home selectedLocation={selectedLocation} currentSchema={currentSchema} />} />
         <Route
           path="/editor"
           element={
@@ -168,6 +168,7 @@ function App() {
               setMarkers={setMarkers}
               selectedLocation={selectedLocation}
               setSelectedLocation={setSelectedLocation}
+              currentSchema={currentSchema}
               currentCollection={currentCollection} 
             />
           }
@@ -191,8 +192,8 @@ function App() {
               selectedLocation={selectedLocation}
               setSelectedLocation={setSelectedLocation}
               setHeatMap={setHeatMap}
-              currentCollection={currentCollection}
               currentSchema={currentSchema}
+              currentCollection={currentCollection}
             />
           }
         />
