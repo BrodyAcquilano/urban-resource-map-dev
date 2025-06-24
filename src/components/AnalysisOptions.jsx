@@ -4,11 +4,7 @@ import React, { useState } from "react";
 import * as turf from "@turf/turf";
 import "../styles/panels.css";
 
-function AnalysisOptions({
-  markers,
-  setHeatMap,
-  currentSchema,
-}) {
+function AnalysisOptions({ markers, setHeatMap, currentSchema }) {
   const categories = currentSchema?.categories || [];
   const categoryNames = categories.map((cat) => cat.categoryName);
 
@@ -24,11 +20,14 @@ function AnalysisOptions({
   const [proximityResolution, setProximityResolution] = useState(100);
   const [proximityDecay, setProximityDecay] = useState("slow");
 
-  const [distributionBufferRadius, setDistributionBufferRadius] = useState(1000);
+  const [distributionBufferRadius, setDistributionBufferRadius] =
+    useState(1000);
   const [distributionResolution, setDistributionResolution] = useState(100);
-  const [distributionCategoryType, setDistributionCategoryType] = useState("all");
+  const [distributionCategoryType, setDistributionCategoryType] =
+    useState("all");
   const [distributionMinPercentile, setDistributionMinPercentile] = useState(0);
-  const [distributionMaxPercentile, setDistributionMaxPercentile] = useState(100);
+  const [distributionMaxPercentile, setDistributionMaxPercentile] =
+    useState(100);
 
   const [cumulativeBufferRadius, setCumulativeBufferRadius] = useState(1000);
   const [cumulativeResolution, setCumulativeResolution] = useState(100);
@@ -102,8 +101,10 @@ function AnalysisOptions({
 
   const handleGenerateProximity = () => {
     const allPoints = markers.map((m) =>
-  turf.point([parseFloat(m.longitude), parseFloat(m.latitude)], { marker: m })
-);
+      turf.point([parseFloat(m.longitude), parseFloat(m.latitude)], {
+        marker: m,
+      })
+    );
 
     const bbox = turf.bbox(turf.featureCollection(allPoints));
     let [minLng, minLat, maxLng, maxLat] = bbox;
@@ -132,10 +133,10 @@ function AnalysisOptions({
 
         for (const m of markers) {
           const dist = turf.distance(
-  pixelPoint,
-  turf.point([parseFloat(m.longitude), parseFloat(m.latitude)]),
-  { units: "kilometers" }
-);
+            pixelPoint,
+            turf.point([parseFloat(m.longitude), parseFloat(m.latitude)]),
+            { units: "kilometers" }
+          );
 
           const distance = dist * 1000;
           if (distance > proximityBufferRadius) continue;
@@ -187,8 +188,8 @@ function AnalysisOptions({
     }));
 
     const allPoints = normalizedMarkers.map((m) =>
-  turf.point([parseFloat(m.longitude), parseFloat(m.latitude)])
-);
+      turf.point([parseFloat(m.longitude), parseFloat(m.latitude)])
+    );
     const bbox = turf.bbox(turf.featureCollection(allPoints));
     let [minLng, minLat, maxLng, maxLat] = bbox;
 
@@ -270,9 +271,9 @@ function AnalysisOptions({
       normalized: normalize(m.score, min, max),
     }));
 
-   const allPoints = normalizedMarkers.map((m) =>
-  turf.point([parseFloat(m.longitude), parseFloat(m.latitude)])
-);
+    const allPoints = normalizedMarkers.map((m) =>
+      turf.point([parseFloat(m.longitude), parseFloat(m.latitude)])
+    );
     const bbox = turf.bbox(turf.featureCollection(allPoints));
     let [minLng, minLat, maxLng, maxLat] = bbox;
 
@@ -337,8 +338,8 @@ function AnalysisOptions({
   return (
     <div className="panel">
       <div className="section">
-          <h2>Analysis Options</h2>
-        </div>
+        <h2>Analysis Options</h2>
+      </div>
 
       <div className="section">
         <h3>Proximity Influence Zones</h3>
@@ -356,8 +357,7 @@ function AnalysisOptions({
           of each individual location when locations are far apart.
         </p>
 
-        
-          <div className="form-group">
+        <div className="form-group">
           <label>
             Buffer Radius (m) - Adjust based on Mobility or Desired Scale:
           </label>
@@ -371,9 +371,9 @@ function AnalysisOptions({
               </option>
             ))}
           </select>
-          </div>
+        </div>
 
-<div className="form-group">
+        <div className="form-group">
           <label>
             Decay Rate - increase when increasing buffer radius for scale and
             not based on mobility.
@@ -385,9 +385,9 @@ function AnalysisOptions({
             <option value="slow">slow</option>
             <option value="fast">fast</option>
           </select>
-          </div>
+        </div>
 
-<div className="form-group">
+        <div className="form-group">
           <label>
             Resolution- used for heat map pixel grid rows and columns:
           </label>
@@ -401,13 +401,10 @@ function AnalysisOptions({
               </option>
             ))}
           </select>
-          </div>
-      
+        </div>
 
         <div className="buttons-container">
-          <button  onClick={handleGenerateProximity}>
-            Generate
-          </button>
+          <button onClick={handleGenerateProximity}>Generate</button>
           <button
             onClick={() => {
               setHeatMap(null);
@@ -460,9 +457,9 @@ function AnalysisOptions({
               </option>
             ))}
           </select>
-          </div>
+        </div>
 
-<div className="form-group">
+        <div className="form-group">
           <label>Resolution- Adjust for precision</label>
           <select
             value={distributionResolution}
@@ -474,60 +471,56 @@ function AnalysisOptions({
               </option>
             ))}
           </select>
-          </div>
+        </div>
 
-<div className="form-group">
-  <label>Category Type:</label>
-  <select
-    value={distributionCategoryType}
-    onChange={(e) => setDistributionCategoryType(e.target.value)}
-  >
-    {allOptions.map((option) => (
-      <option key={option} value={option}>
-        {option === "all"
-          ? "All"
-          : option.includes("_")
-          ? option.split("_").join(" + ")
-          : option}
-      </option>
-    ))}
-  </select>
-</div>
+        <div className="form-group">
+          <label>Category Type:</label>
+          <select
+            value={distributionCategoryType}
+            onChange={(e) => setDistributionCategoryType(e.target.value)}
+          >
+            {allOptions.map((option) => (
+              <option key={option} value={option}>
+                {option === "all"
+                  ? "All"
+                  : option.includes("_")
+                  ? option.split("_").join(" + ")
+                  : option}
+              </option>
+            ))}
+          </select>
+        </div>
 
-<div className="form-group">
+        <div className="form-group">
           <label>Percentile Range - Adjust for outliers.</label>
-            <select
-              value={distributionMinPercentile}
-              onChange={(e) =>
-                setDistributionMinPercentile(Number(e.target.value))
-              }
-            >
-              {[0, 5, 10, 15, 20].map((val) => (
-                <option key={val} value={val}>
-                  Min: {val}%
-                </option>
-              ))}
-            </select>
-            <select
-              value={distributionMaxPercentile}
-              onChange={(e) =>
-                setDistributionMaxPercentile(Number(e.target.value))
-              }
-            >
-              {[80, 85, 90, 95, 100].map((val) => (
-                <option key={val} value={val}>
-                  Max: {val}%
-                </option>
-              ))}
-            </select>
-          </div>
-          
-       
+          <select
+            value={distributionMinPercentile}
+            onChange={(e) =>
+              setDistributionMinPercentile(Number(e.target.value))
+            }
+          >
+            {[0, 5, 10, 15, 20].map((val) => (
+              <option key={val} value={val}>
+                Min: {val}%
+              </option>
+            ))}
+          </select>
+          <select
+            value={distributionMaxPercentile}
+            onChange={(e) =>
+              setDistributionMaxPercentile(Number(e.target.value))
+            }
+          >
+            {[80, 85, 90, 95, 100].map((val) => (
+              <option key={val} value={val}>
+                Max: {val}%
+              </option>
+            ))}
+          </select>
+        </div>
 
         <div className="buttons-container">
-          <button onClick={handleGenerateDistribution}>
-            Generate
-          </button>
+          <button onClick={handleGenerateDistribution}>Generate</button>
           <button
             onClick={() => {
               setHeatMap(null);
@@ -581,25 +574,23 @@ function AnalysisOptions({
               </option>
             ))}
           </select>
-          </div>
+        </div>
 
-<div className="form-group">
-          <label>
-            Decay Power:
-            </label>
-            <select
-              value={cumulativeDecayPower}
-              onChange={(e) => setCumulativeDecayPower(Number(e.target.value))}
-            >
-              {[0.5, 1, 2, 5, 10].map((val) => (
-                <option key={val} value={val}>
-                  {val}
-                </option>
-              ))}
-            </select>
-          </div>
+        <div className="form-group">
+          <label>Decay Power:</label>
+          <select
+            value={cumulativeDecayPower}
+            onChange={(e) => setCumulativeDecayPower(Number(e.target.value))}
+          >
+            {[0.5, 1, 2, 5, 10].map((val) => (
+              <option key={val} value={val}>
+                {val}
+              </option>
+            ))}
+          </select>
+        </div>
 
-<div className="form-group">
+        <div className="form-group">
           <label>Resolution- Adjust for precision</label>
           <select
             value={cumulativeResolution}
@@ -611,61 +602,52 @@ function AnalysisOptions({
               </option>
             ))}
           </select>
-          </div>
+        </div>
 
-<div className="form-group">
-  <label>Category Type:</label>
-  <select
-    value={cumulativeCategoryType}
-    onChange={(e) => setCumulativeCategoryType(e.target.value)}
-  >
-    {allOptions.map((option) => (
-      <option key={option} value={option}>
-        {option === "all"
-          ? "All"
-          : option.includes("_")
-          ? option.split("_").join(" + ")
-          : option}
-      </option>
-    ))}
-  </select>
-</div>
+        <div className="form-group">
+          <label>Category Type:</label>
+          <select
+            value={cumulativeCategoryType}
+            onChange={(e) => setCumulativeCategoryType(e.target.value)}
+          >
+            {allOptions.map((option) => (
+              <option key={option} value={option}>
+                {option === "all"
+                  ? "All"
+                  : option.includes("_")
+                  ? option.split("_").join(" + ")
+                  : option}
+              </option>
+            ))}
+          </select>
+        </div>
 
-<div className="form-group">
+        <div className="form-group">
           <label>Percentile Range - Adjust for outliers.</label>
-            <select
-              value={cumulativeMinPercentile}
-              onChange={(e) =>
-                setCumulativeMinPercentile(Number(e.target.value))
-              }
-            >
-              {[0, 5, 10, 15, 20].map((val) => (
-                <option key={val} value={val}>
-                  Min: {val}%
-                </option>
-              ))}
-            </select>
-            <select
-              value={cumulativeMaxPercentile}
-              onChange={(e) =>
-                setCumulativeMaxPercentile(Number(e.target.value))
-              }
-            >
-              {[80, 85, 90, 95, 100].map((val) => (
-                <option key={val} value={val}>
-                  Max: {val}%
-                </option>
-              ))}
-            </select>
-          </div>
-        
+          <select
+            value={cumulativeMinPercentile}
+            onChange={(e) => setCumulativeMinPercentile(Number(e.target.value))}
+          >
+            {[0, 5, 10, 15, 20].map((val) => (
+              <option key={val} value={val}>
+                Min: {val}%
+              </option>
+            ))}
+          </select>
+          <select
+            value={cumulativeMaxPercentile}
+            onChange={(e) => setCumulativeMaxPercentile(Number(e.target.value))}
+          >
+            {[80, 85, 90, 95, 100].map((val) => (
+              <option key={val} value={val}>
+                Max: {val}%
+              </option>
+            ))}
+          </select>
+        </div>
 
         <div className="buttons-container">
-          <button
-            onClick={handleGenerateCumulative}
-          >
-            Generate
-          </button>
+          <button onClick={handleGenerateCumulative}>Generate</button>
           <button
             onClick={() => {
               setHeatMap(null);
@@ -679,18 +661,10 @@ function AnalysisOptions({
       <div className="section">
         <h3>Color Legend:</h3>
         <ul>
-          <li>
-            <span></span> 🟢 = Well-Served / High Resource Zone
-          </li>
-          <li>
-            <span></span> 🟡 = Moderately Served / Stable but Limited
-          </li>
-          <li>
-            <span></span> 🟠 = Under-Served / Needs Attention
-          </li>
-          <li>
-            <span></span> 🔴 = Critical Shortage / Resource Desert
-          </li>
+          <li>🟢 = Well-Served / High Resource Zone</li>
+          <li>🟡 = Moderately Served / Stable but Limited</li>
+          <li>🟠 = Under-Served / Needs Attention</li>
+          <li>🔴 = Critical Shortage / Resource Desert</li>
         </ul>
       </div>
 
