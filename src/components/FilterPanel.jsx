@@ -1,6 +1,10 @@
 // src/components/FilterPanel.jsx
 import React, { useState, useEffect } from "react";
-import { daysOfWeek, timeOptionsAMPM, timeAMPMToMinutes } from "../utils/locationHelpers.jsx";
+import {
+  daysOfWeek,
+  timeOptionsAMPM,
+  timeAMPMToMinutes,
+} from "../utils/locationHelpers.jsx";
 import "../styles/panels.css";
 import { renderCheckboxGroupBySchema } from "../utils/renderingHelpers.jsx";
 import { fetchSchemaByProjectName } from "../utils/schemaFetcher.js";
@@ -15,7 +19,7 @@ function FilterPanel({
   markers,
   setFilteredMarkers,
   setSelectedFilters,
-  setSelectedLocation
+  setSelectedLocation,
 }) {
   const [wheelchairOnly, setWheelchairOnly] = useState(false);
   const [dayFilter, setDayFilter] = useState("Any");
@@ -24,9 +28,11 @@ function FilterPanel({
   // Initialize dynamic checkboxes
   const initCheckedState = () => {
     if (!currentSchema) return {};
-   return Object.fromEntries(
-  currentSchema.categories.flatMap((cat) => cat.items.map((item) => [item.label, false]))
-);
+    return Object.fromEntries(
+      currentSchema.categories.flatMap((cat) =>
+        cat.items.map((item) => [item.label, false])
+      )
+    );
   };
 
   const [categoryChecks, setCategoryChecks] = useState(initCheckedState);
@@ -37,7 +43,8 @@ function FilterPanel({
 
   // Filter logic
   useEffect(() => {
-    const filterMinutes = timeFilter !== "Any" ? timeAMPMToMinutes(timeFilter) : null;
+    const filterMinutes =
+      timeFilter !== "Any" ? timeAMPMToMinutes(timeFilter) : null;
 
     const matchesFilter = (marker) => {
       if (wheelchairOnly && !marker.wheelchairAccessible) return false;
@@ -61,9 +68,14 @@ function FilterPanel({
         if (!matchesAny) return false;
       }
 
-      return Object.entries(categoryChecks).every(([key, active]) =>
-        active ? marker.categories?.[key] : true
-      );
+      return Object.entries(categoryChecks).every(([key, active]) => {
+        if (!active) return true;
+
+        // Search through all categories to see if this key is active anywhere
+        return Object.values(marker.categories || {}).some(
+          (categoryGroup) => categoryGroup?.[key]
+        );
+      });
     };
 
     setFilteredMarkers(markers.filter(matchesFilter));
@@ -94,7 +106,9 @@ function FilterPanel({
     };
 
     currentSchema?.categories.forEach((category) => {
-      updatedFilters.push(...collectChecked(categoryChecks, category.categoryName));
+      updatedFilters.push(
+        ...collectChecked(categoryChecks, category.categoryName)
+      );
     });
 
     setSelectedFilters(updatedFilters);
@@ -131,7 +145,9 @@ function FilterPanel({
             value={currentSchema?.projectName || ""}
             onChange={async (e) => {
               const selectedProjectName = e.target.value;
-              const fetchedSchema = await fetchSchemaByProjectName(selectedProjectName);
+              const fetchedSchema = await fetchSchemaByProjectName(
+                selectedProjectName
+              );
               setCurrentSchema(fetchedSchema);
               setCurrentCollection(fetchedSchema.collectionName);
               setSelectedLocation(null);
@@ -148,7 +164,10 @@ function FilterPanel({
         {/* Tile Style Selector */}
         <div className="form-group">
           <label>Map Style:</label>
-          <select value={tileStyle} onChange={(e) => setTileStyle(e.target.value)}>
+          <select
+            value={tileStyle}
+            onChange={(e) => setTileStyle(e.target.value)}
+          >
             <option value="Standard">Standard</option>
             <option value="Light">Light</option>
             <option value="Dark">Dark</option>
@@ -159,7 +178,10 @@ function FilterPanel({
         {/* Day of Week Selector */}
         <div className="form-group">
           <label>Day of Week:</label>
-          <select value={dayFilter} onChange={(e) => setDayFilter(e.target.value)}>
+          <select
+            value={dayFilter}
+            onChange={(e) => setDayFilter(e.target.value)}
+          >
             <option value="Any">Any Day</option>
             {daysOfWeek.map((day) => (
               <option key={day} value={day}>
@@ -172,7 +194,10 @@ function FilterPanel({
         {/* Time Selector */}
         <div className="form-group">
           <label>Time of Day:</label>
-          <select value={timeFilter} onChange={(e) => setTimeFilter(e.target.value)}>
+          <select
+            value={timeFilter}
+            onChange={(e) => setTimeFilter(e.target.value)}
+          >
             <option value="Any">Any Time</option>
             {timeOptionsAMPM.map((opt) => (
               <option key={opt} value={opt}>
