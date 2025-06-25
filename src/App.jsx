@@ -43,6 +43,7 @@ function App() {
   // 📊 Global State for Map + UI
   // ─────────────────────────────────────────────
 
+  const [isLoading, setIsLoading] = useState(true);
 const [mongoURI, setMongoURI] = useState(import.meta.env.VITE_DEFAULT_MONGO_URI);
   const [schemas, setSchemas] = useState([]);
   const [currentSchema, setCurrentSchema] = useState(null);
@@ -62,6 +63,7 @@ const [mongoURI, setMongoURI] = useState(import.meta.env.VITE_DEFAULT_MONGO_URI)
   // 📡 Fetch all schemas and default markers on app load
  useEffect(() => {
   const loadSchemas = async () => {
+    setIsLoading(true);
     const loadedSchemas = await fetchAllSchemas(mongoURI);
     setSchemas(loadedSchemas);
 
@@ -69,6 +71,8 @@ const [mongoURI, setMongoURI] = useState(import.meta.env.VITE_DEFAULT_MONGO_URI)
       setCurrentSchema(loadedSchemas[0]);
       setCurrentCollection(loadedSchemas[0].collectionName);
     }
+
+    setIsLoading(false);
   };
 
   loadSchemas();
@@ -76,21 +80,27 @@ const [mongoURI, setMongoURI] = useState(import.meta.env.VITE_DEFAULT_MONGO_URI)
 
   // 📡 Fetch markers when the current collection changes
   useEffect(() => {
-    if (!currentCollection) return;
+  if (!currentCollection) return;
 
-   const fetchMarkers = async () => {
-  try {
-    const res = await axios.get(`${BASE_URL}/api/locations`, {
-      params: { 
-        collectionName: currentCollection,
-        mongoURI 
-      },
-    });
-    setMarkers(res.data);
-  } catch (err) {
-    console.error("Failed to fetch markers:", err);
-  }
-};
+  const fetchMarkers = async () => {
+    setIsLoading(true); 
+    try {
+      const res = await axios.get(`${BASE_URL}/api/locations`, {
+        params: {
+          collectionName: currentCollection,
+          mongoURI
+        },
+      });
+      setMarkers(res.data);
+    } catch (err) {
+      console.error("Failed to fetch markers:", err);
+    } finally {
+      setIsLoading(false); 
+    }
+  };
+
+  fetchMarkers();
+}, [currentCollection]);
 
 fetchMarkers();
   }, [currentCollection]);
@@ -112,7 +122,7 @@ fetchMarkers();
  return (
   <div className="app-container">
     {/* Top Navigation Header */}
-    <Header />
+    <Header isLoading={isLoading}/>
 
     {/* Invisible map used for export snapshot */}
     <OffscreenMap
