@@ -102,9 +102,6 @@ const [mongoURI, setMongoURI] = useState(import.meta.env.VITE_DEFAULT_MONGO_URI)
   fetchMarkers();
 }, [currentCollection]);
 
-fetchMarkers();
-  }, [currentCollection]);
-
   // ─────────────────────────────────────────────
   // ⚙️ App Structure & Routing
   // ─────────────────────────────────────────────
