@@ -66,7 +66,6 @@ export function initializeLocationData(schema) {
   };
 }
 
-// Used to safely load existing location data into forms
 export function getSafeLocationData(raw = {}, schema) {
   const safeCategories = {};
   const safeScores = {};
@@ -99,6 +98,7 @@ export function getSafeLocationData(raw = {}, schema) {
     scores: safeScores,
   };
 }
+
 
 // ────────────────
 // Utility Functions

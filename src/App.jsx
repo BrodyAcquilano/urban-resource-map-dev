@@ -35,8 +35,6 @@ import "./styles/App.css";
 // ─────────────────────────────────────────────
 const TILE_STYLES = {
   Standard: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-  Light: "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png",
-  Dark: "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png",
   Terrain: "https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png",
 };
 
@@ -45,6 +43,7 @@ function App() {
   // 📊 Global State for Map + UI
   // ─────────────────────────────────────────────
 
+const [mongoURI, setMongoURI] = useState(import.meta.env.VITE_DEFAULT_MONGO_URI);
   const [schemas, setSchemas] = useState([]);
   const [currentSchema, setCurrentSchema] = useState(null);
   const [currentCollection, setCurrentCollection] = useState("");
@@ -61,37 +60,39 @@ function App() {
   const BASE_URL = import.meta.env.VITE_API_URL;
 
   // 📡 Fetch all schemas and default markers on app load
-  useEffect(() => {
-    const loadSchemas = async () => {
-      const loadedSchemas = await fetchAllSchemas();
-      setSchemas(loadedSchemas);
+ useEffect(() => {
+  const loadSchemas = async () => {
+    const loadedSchemas = await fetchAllSchemas(mongoURI);
+    setSchemas(loadedSchemas);
 
-      if (loadedSchemas.length > 0) {
-        // Set first schema as default
-        setCurrentSchema(loadedSchemas[0]);
-        setCurrentCollection(loadedSchemas[0].collectionName);
-      }
-    };
+    if (loadedSchemas.length > 0) {
+      setCurrentSchema(loadedSchemas[0]);
+      setCurrentCollection(loadedSchemas[0].collectionName);
+    }
+  };
 
-    loadSchemas();
-  }, []);
+  loadSchemas();
+}, [mongoURI]);
 
   // 📡 Fetch markers when the current collection changes
   useEffect(() => {
     if (!currentCollection) return;
 
-    const fetchMarkers = async () => {
-      try {
-        const res = await axios.get(`${BASE_URL}/api/locations`, {
-          params: { collectionName: currentCollection },
-        });
-        setMarkers(res.data);
-      } catch (err) {
-        console.error("Failed to fetch markers:", err);
-      }
-    };
+   const fetchMarkers = async () => {
+  try {
+    const res = await axios.get(`${BASE_URL}/api/locations`, {
+      params: { 
+        collectionName: currentCollection,
+        mongoURI 
+      },
+    });
+    setMarkers(res.data);
+  } catch (err) {
+    console.error("Failed to fetch markers:", err);
+  }
+};
 
-    fetchMarkers();
+fetchMarkers();
   }, [currentCollection]);
 
   // ─────────────────────────────────────────────
@@ -134,6 +135,7 @@ function App() {
       {/* Filter Panel */}
       <div className={`filter-overlay-panel filter-panel-wrapper ${showFilter ? "" : "collapsed"}`}>
         <FilterPanel
+           mongoURI={mongoURI}
           schemas={schemas} 
           currentSchema={currentSchema} 
           setCurrentSchema={setCurrentSchema} 
@@ -160,11 +162,12 @@ function App() {
 
       {/* Page Routing */}
       <Routes>
-        <Route path="/" element={<Home selectedLocation={selectedLocation} currentSchema={currentSchema} />} />
+        <Route path="/" element={<Home mongoURI={mongoURI} setMongoURI={setMongoURI} selectedLocation={selectedLocation} currentSchema={currentSchema} />} />
         <Route
           path="/editor"
           element={
             <Editor
+              mongoURI={mongoURI}
               setMarkers={setMarkers}
               selectedLocation={selectedLocation}
               setSelectedLocation={setSelectedLocation}
@@ -187,6 +190,7 @@ function App() {
           path="/analysis"
           element={
             <Analysis
+             mongoURI={mongoURI}
               markers={markers}
               setMarkers={setMarkers}
               selectedLocation={selectedLocation}
