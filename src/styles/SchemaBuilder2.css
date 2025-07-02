@@ -1,0 +1,132 @@
+/* ───────────────────────────────────────────── */
+/* 🎨 Schema Builder Page Styles - Glassmorphism  */
+/* ───────────────────────────────────────────── */
+
+/* Page Background */
+.schema-builder-container {
+  display: flex;
+  gap: 2rem;
+  padding: 2rem;
+  min-height: 80vh;
+  background-image: url('/marita-kavelashvili-ugnrXk1129g-unsplash.jpg');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  align-items: stretch; /* ✅ All columns same height */
+}
+
+/* Column Panels */
+.schema-column {
+  flex: 1;
+  border-radius: 20px;
+  padding: 1rem;
+  background-color: rgba(54, 164, 109, 0.2);
+  border: 2px solid rgb(25, 80, 59);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 0 8px rgba(0, 0, 0, 1);
+  color: rgb(59, 71, 63);
+  box-sizing: border-box;
+  min-height: 100%;
+}
+
+/* Left Column: Invisible Container */
+.schema-column-left {
+  max-width: 300px;
+  background-color: transparent;
+  border: none;
+  box-shadow: none;
+  backdrop-filter: none; /* ✅ No blur on the container */
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem; /* Optional: add vertical space between panels */
+ 
+}
+
+/* Sections Manager and Add Input Containers */
+.sections-manager,
+.add-input-container {
+  border: 1px solid rgb(25, 80, 59);
+  border-radius: 12px;
+  padding: 1rem;
+  background-color: rgba(54, 164, 109, 0.4);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 0 8px rgba(0, 0, 0, 1);
+  color: white;
+}
+
+/* Section Headers */
+.sections-manager h2,
+.add-input-container h2,
+.schema-column-center h2,
+.schema-column-right h2 {
+  background-color: #36a46d;
+  color: white;
+  padding: 0.5rem;
+  border-radius: 6px;
+  margin-bottom: 1rem;
+  font-size: 1.2rem;
+  text-align: center;
+}
+
+/* Buttons */
+button {
+  padding: 6px 16px;
+  font-size: 0.9rem;
+  background-color: #36a46d;
+  color: white;
+  border: 1px solid #1b5c3f;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  margin: 0.3rem 0.3rem 0.3rem 0;
+}
+
+button:hover {
+  background-color: #2b8258;
+}
+
+/* Schema Preview Modal */
+.schema-preview-modal {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 52vw;
+  max-width: 90vw;
+  padding: 2vh 2vw;
+  background-color: rgba(0, 0, 0, 0.5);
+  overflow-y: auto;
+  overflow-x: hidden;
+  z-index: 2000;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  backdrop-filter: blur(70px);
+}
+
+.modal-content {
+  width: 50vw;
+  max-width: 100%;
+  font-family: sans-serif;
+  background-color: rgba(54, 164, 109, 0.4);
+  margin: 2vh 2vw;
+  padding: 2vh 2vw;
+  border: 2px solid rgb(25, 80, 59);
+  backdrop-filter: blur(10px);
+  color: white;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 1);
+  box-sizing: border-box;
+  border-radius: 20px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+/* List Styling */
+ul {
+  padding-left: 1.2rem;
+}
+
+

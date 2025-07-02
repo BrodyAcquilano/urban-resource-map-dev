@@ -3,6 +3,7 @@
 // ─────────────────────────────────────────────
 import React, { useState, useEffect } from "react";
 import { Routes, Route } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import axios from "axios";
 
 // ─────────────────────────────────────────────
@@ -17,13 +18,15 @@ import Header from "./components/Header.jsx";
 import FilterPanel from "./components/FilterPanel.jsx";
 import MapPanel from "./components/MapPanel.jsx";
 import OffscreenMap from "./components/OffscreenMap.jsx";
+
 // ─────────────────────────────────────────────
 // 📄 Page Routes
 // ─────────────────────────────────────────────
 import Home from "./pages/Home.jsx";
 import Editor from "./pages/Editor.jsx";
 import Export from "./pages/Export.jsx";
-import Analysis from "./pages/Analysis.jsx"
+import Analysis from "./pages/Analysis.jsx";
+import SchemaBuilder from "./pages/SchemaBuilder.jsx"; 
 
 // ─────────────────────────────────────────────
 // 🎨  Style Imports
@@ -44,7 +47,7 @@ function App() {
   // ─────────────────────────────────────────────
 
   const [isLoading, setIsLoading] = useState(true);
-const [mongoURI, setMongoURI] = useState(import.meta.env.VITE_DEFAULT_MONGO_URI);
+  const [mongoURI, setMongoURI] = useState(import.meta.env.VITE_DEFAULT_MONGO_URI);
   const [schemas, setSchemas] = useState([]);
   const [currentSchema, setCurrentSchema] = useState(null);
   const [currentCollection, setCurrentCollection] = useState("");
@@ -58,49 +61,52 @@ const [mongoURI, setMongoURI] = useState(import.meta.env.VITE_DEFAULT_MONGO_URI)
   const [mapZoom, setMapZoom] = useState(13);
   const [heatMap, setHeatMap] = useState([]);
 
+  const location = useLocation();
+  const isSchemaBuilderPage = location.pathname === "/schema-builder";
+
   const BASE_URL = import.meta.env.VITE_API_URL;
 
   // 📡 Fetch all schemas and default markers on app load
- useEffect(() => {
-  const loadSchemas = async () => {
-    setIsLoading(true);
-    const loadedSchemas = await fetchAllSchemas(mongoURI);
-    setSchemas(loadedSchemas);
+  useEffect(() => {
+    const loadSchemas = async () => {
+      setIsLoading(true);
+      const loadedSchemas = await fetchAllSchemas(mongoURI);
+      setSchemas(loadedSchemas);
 
-    if (loadedSchemas.length > 0) {
-      setCurrentSchema(loadedSchemas[0]);
-      setCurrentCollection(loadedSchemas[0].collectionName);
-    }
+      if (loadedSchemas.length > 0) {
+        setCurrentSchema(loadedSchemas[0]);
+        setCurrentCollection(loadedSchemas[0].collectionName);
+      }
 
-    setIsLoading(false);
-  };
+      setIsLoading(false);
+    };
 
-  loadSchemas();
-}, [mongoURI]);
+    loadSchemas();
+  }, [mongoURI]);
 
   // 📡 Fetch markers when the current collection changes
   useEffect(() => {
-  if (!currentCollection) return;
+    if (!currentCollection) return;
 
-  const fetchMarkers = async () => {
-    setIsLoading(true); 
-    try {
-      const res = await axios.get(`${BASE_URL}/api/locations`, {
-        params: {
-          collectionName: currentCollection,
-          mongoURI
-        },
-      });
-      setMarkers(res.data);
-    } catch (err) {
-      console.error("Failed to fetch markers:", err);
-    } finally {
-      setIsLoading(false); 
-    }
-  };
+    const fetchMarkers = async () => {
+      setIsLoading(true);
+      try {
+        const res = await axios.get(`${BASE_URL}/api/locations`, {
+          params: {
+            collectionName: currentCollection,
+            mongoURI,
+          },
+        });
+        setMarkers(res.data);
+      } catch (err) {
+        console.error("Failed to fetch markers:", err);
+      } finally {
+        setIsLoading(false);
+      }
+    };
 
-  fetchMarkers();
-}, [currentCollection]);
+    fetchMarkers();
+  }, [currentCollection]);
 
   // ─────────────────────────────────────────────
   // ⚙️ App Structure & Routing
@@ -110,111 +116,131 @@ const [mongoURI, setMongoURI] = useState(import.meta.env.VITE_DEFAULT_MONGO_URI)
   // across all routes. This avoids reloading data or state between pages.
   //
   // For example:
-  // - Switching between Home, Editor,Export, or Analysis keeps the same filtered markers.
+  // - Switching between Home, Editor, Export, or Analysis keeps the same filtered markers.
   // - Shared components (e.g. MapPanel) remain mounted and responsive to updates.
-  // - Only new route-specific panels (like modals,editors, or option panels) get reloaded on navigation.
+  // - Only new route-specific panels (like modals, editors, or option panels) get reloaded on navigation.
   //
   // This design improves performance and enables smooth workflow transitions.
 
- return (
-  <div className="app-container">
-    {/* Top Navigation Header */}
-    <Header isLoading={isLoading}/>
+  return (
+    <div className="app-container">
+      {/* Top Navigation Header */}
+      <Header isLoading={isLoading} />
 
-    {/* Invisible map used for export snapshot */}
-    <OffscreenMap
-      tileUrl={TILE_STYLES[tileStyle]}
-      filteredMarkers={filteredMarkers}
-      center={mapCenter}
-      zoom={mapZoom}
-    />
-
-    {/* Main UI Layer */}
-    <div className="main-layer">
-      {/* Filter Panel Toggle Button */}
-      <button
-        className={`filter-side-toggle filter-toggle ${showFilter ? "" : "collapsed-toggle"}`}
-        onClick={() => setShowFilter(!showFilter)}
-      >
-        ☰
-      </button>
-
-      {/* Filter Panel */}
-      <div className={`filter-overlay-panel filter-panel-wrapper ${showFilter ? "" : "collapsed"}`}>
-        <FilterPanel
-           mongoURI={mongoURI}
-          schemas={schemas} 
-          currentSchema={currentSchema} 
-          setCurrentSchema={setCurrentSchema} 
-          setCurrentCollection={setCurrentCollection} 
-          tileStyle={tileStyle}
-          setTileStyle={setTileStyle}
-          markers={markers}
-          setFilteredMarkers={setFilteredMarkers}
-          setSelectedFilters={setSelectedFilters}
-          setSelectedLocation={setSelectedLocation}
-        />
-      </div>
-
-      {/* Map Display */}
-      <MapPanel
+      {/* Invisible map used for export snapshot */}
+      <OffscreenMap
         tileUrl={TILE_STYLES[tileStyle]}
         filteredMarkers={filteredMarkers}
-        setSelectedLocation={setSelectedLocation}
-        setMapCenter={setMapCenter}
-        setMapZoom={setMapZoom}
-        heatMap={heatMap}
-        setHeatMap={setHeatMap}
+        center={mapCenter}
+        zoom={mapZoom}
       />
 
-      {/* Page Routing */}
-      <Routes>
-        <Route path="/" element={<Home mongoURI={mongoURI} setMongoURI={setMongoURI} selectedLocation={selectedLocation} currentSchema={currentSchema} />} />
-        <Route
-          path="/editor"
-          element={
-            <Editor
-              mongoURI={mongoURI}
-              setMarkers={setMarkers}
-              selectedLocation={selectedLocation}
-              setSelectedLocation={setSelectedLocation}
-              currentSchema={currentSchema}
-              currentCollection={currentCollection} 
-            />
-          }
+      {/* Main UI Layer */}
+      <div className="main-layer">
+
+        {!isSchemaBuilderPage && (
+  <>
+
+        {/* Filter Panel Toggle Button */}
+        <button
+          className={`filter-side-toggle filter-toggle ${showFilter ? "" : "collapsed-toggle"}`}
+          onClick={() => setShowFilter(!showFilter)}
+          aria-label="Toggle Filter Panel"
+        >
+          ☰
+        </button>
+
+        {/* Filter Panel */}
+        <div className={`filter-overlay-panel filter-panel-wrapper ${showFilter ? "" : "collapsed"}`}>
+          <FilterPanel
+            mongoURI={mongoURI}
+            schemas={schemas}
+            currentSchema={currentSchema}
+            setCurrentSchema={setCurrentSchema}
+            setCurrentCollection={setCurrentCollection}
+            tileStyle={tileStyle}
+            setTileStyle={setTileStyle}
+            markers={markers}
+            setFilteredMarkers={setFilteredMarkers}
+            setSelectedFilters={setSelectedFilters}
+            setSelectedLocation={setSelectedLocation}
+          />
+        </div>
+
+        {/* Map Display */}
+        <MapPanel
+          tileUrl={TILE_STYLES[tileStyle]}
+          filteredMarkers={filteredMarkers}
+          setSelectedLocation={setSelectedLocation}
+          setMapCenter={setMapCenter}
+          setMapZoom={setMapZoom}
+          heatMap={heatMap}
+          setHeatMap={setHeatMap}
         />
-        <Route
-          path="/export"
-          element={
-            <Export
-              filteredMarkers={filteredMarkers}
-              selectedLocation={selectedLocation}
-              selectedFilters={selectedFilters}
-            />
-          }
-        />
-        <Route
-          path="/analysis"
-          element={
-            <Analysis
-             mongoURI={mongoURI}
-              markers={markers}
-              setMarkers={setMarkers}
-              selectedLocation={selectedLocation}
-              setSelectedLocation={setSelectedLocation}
-              setHeatMap={setHeatMap}
-              currentSchema={currentSchema}
-              currentCollection={currentCollection}
-            />
-          }
-        />
-      </Routes>
+
+        </>
+        )}
+
+        {/* Page Routing */}
+        <Routes>
+          <Route
+            path="/"
+            element={
+              <Home
+                mongoURI={mongoURI}
+                setMongoURI={setMongoURI}
+                selectedLocation={selectedLocation}
+                currentSchema={currentSchema}
+              />
+            }
+          />
+          <Route
+            path="/editor"
+            element={
+              <Editor
+                mongoURI={mongoURI}
+                setMarkers={setMarkers}
+                selectedLocation={selectedLocation}
+                setSelectedLocation={setSelectedLocation}
+                currentSchema={currentSchema}
+                currentCollection={currentCollection}
+              />
+            }
+          />
+          <Route
+            path="/export"
+            element={
+              <Export
+                filteredMarkers={filteredMarkers}
+                selectedLocation={selectedLocation}
+                selectedFilters={selectedFilters}
+              />
+            }
+          />
+          <Route
+            path="/analysis"
+            element={
+              <Analysis
+                mongoURI={mongoURI}
+                markers={markers}
+                setMarkers={setMarkers}
+                selectedLocation={selectedLocation}
+                setSelectedLocation={setSelectedLocation}
+                setHeatMap={setHeatMap}
+                currentSchema={currentSchema}
+                currentCollection={currentCollection}
+              />
+            }
+          />
+          <Route path="/schema-builder" element={<SchemaBuilder mongoURI={mongoURI} />} />
+        </Routes>
+      </div>
     </div>
-  </div>
-);
+  );
 }
 
 export default App;
+
 
 
 // ─────────────────────────────────────────────

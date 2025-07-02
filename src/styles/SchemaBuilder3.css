@@ -1,0 +1,117 @@
+/* ───────────────────────────────────────────── */
+/* 🎨 Schema Builder Page Styles - Final Green   */
+/* ───────────────────────────────────────────── */
+
+/* Page Background */
+.schema-builder-container {
+  display: flex;
+  gap: 2rem;
+  padding: 2rem;
+  min-height: 100vh;
+  background-color: #a4d4ae;
+  align-items: stretch; /* Equal-height columns */
+}
+
+/* Column Panels */
+.schema-column {
+  flex: 1;
+  border-radius: 20px;
+  padding: 1rem;
+  background-color: #a4d4ae; /* 🍃 Your light green */
+  box-shadow: inset 9px 9px 16px #8ab495, inset -9px -9px 16px #bcefc6;
+  color: black; /* ✅ Black text everywhere */
+  box-sizing: border-box;
+}
+
+/* Left Column (Invisible Wrapper) */
+.schema-column-left {
+  max-width: 300px;
+  background-color: transparent;
+  box-shadow: none;
+  padding: 0;
+}
+
+/* Sections Manager and Add Input Panels */
+.sections-manager,
+.add-input-container {
+  border-radius: 12px;
+  padding: 1rem;
+  margin-bottom: 1.5rem;
+  background-color: #a4d4ae;
+  box-shadow: inset 6px 6px 10px #8ab495, inset -6px -6px 10px #bcefc6;
+  color: black;
+}
+
+/* Section Headers */
+.sections-manager h2,
+.add-input-container h2,
+.schema-column-center h2,
+.schema-column-right h2 {
+  background-color: #a4d4ae; /* ✅ Same light green as panels */
+  color: black; /* ✅ Black text */
+  padding: 0.5rem;
+  border-radius: 6px;
+  margin-bottom: 1rem;
+  font-size: 1.2rem;
+  text-align: center;
+  
+}
+
+/* Buttons */
+button {
+  padding: 6px 16px;
+  font-size: 0.9rem;
+  background-color: #a4d4ae; /* ✅ Same as panels */
+  color: black;
+  border: none;
+  border-radius: 10px;
+  box-shadow: 4px 4px 8px #8ab495, -4px -4px 8px #bcefc6;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin: 0.3rem 0.3rem 0.3rem 0;
+}
+
+button:hover {
+  box-shadow: inset 4px 4px 8px #8ab495, inset -4px -4px 8px #bcefc6;
+}
+
+/* Schema Preview Modal */
+.schema-preview-modal {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 52vw;
+  max-width: 90vw;
+  padding: 2vh 2vw;
+  background-color: rgba(0, 0, 0, 0.5);
+  overflow-y: auto;
+  overflow-x: hidden;
+  z-index: 2000;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+}
+
+.modal-content {
+  width: 50vw;
+  max-width: 100%;
+  font-family: sans-serif;
+  background-color: #a4d4ae;
+  margin: 2vh 2vw;
+  padding: 2vh 2vw;
+  border-radius: 20px;
+  box-shadow: 9px 9px 16px #8ab495, -9px -9px 16px #bcefc6;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  color: black; /* ✅ Black text in the modal too */
+}
+
+ul {
+  padding-left: 1.2rem;
+}
+
+
+

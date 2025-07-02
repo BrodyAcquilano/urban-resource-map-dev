@@ -1,0 +1,399 @@
+/* ───────────────────────────────────────────── */
+/* 📦 GLOBAL LAYOUT                              */
+/* ───────────────────────────────────────────── */
+
+.schema-builder-container {
+  display: grid;
+  grid-template-columns: 300px 1fr 1fr;
+  height: calc(100vh - 100px);
+  background-color: #f0f4f8;
+  overflow: hidden;
+}
+
+.schema-column-left {
+  display: flex;
+  flex-direction: column;
+  border: 2px solid rgb(48, 48, 48);
+  overflow: hidden;
+  background-color: #ffffff;
+}
+
+.schema-column {
+  border-right: 2px solid rgb(48, 48, 48);
+  border-top: 2px solid rgb(48, 48, 48);
+  border-bottom: 2px solid rgb(48, 48, 48);
+  overflow: hidden;
+  background-color: #ffffff;
+  display: flex;
+  flex-direction: column;
+}
+
+.schema-column:last-child {
+  border-right: none;
+}
+
+.section-header {
+  background-color: #3f4442;
+  color: white;
+  padding: 0px;
+  border-bottom: 2px solid rgb(48, 48, 48);
+  margin: 0;
+  font-size: 0.8rem;
+  font-family:monospace;
+  font-weight: 300;
+  text-align: center;
+  box-sizing: border-box;
+  flex: 0 0 auto;
+}
+
+.section-content {
+  flex: 1 1 auto;
+  overflow-y: auto;
+  padding: 1rem;
+  box-sizing: border-box;
+  background-color: #ffffff;
+}
+
+/* ───────────────────────────────────────────── */
+/* 🛠️  MODAL STYLES                               */
+/* ───────────────────────────────────────────── */
+
+.schema-preview-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2000;
+}
+
+.modal-content {
+  background-color: white;
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  max-width: 600px;
+  width: 90%;
+}
+
+.close-modal-button {
+  background-color: #302e2e;
+  color: white;
+  border: 1px solid #070707;
+  border-radius: 6px;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  margin-top: 1rem;
+  transition: background-color 0.2s ease;
+}
+
+.close-modal-button:hover {
+  background-color: #070707;
+}
+
+/* ───────────────────────────────────────────── */
+/* 📋 SECTIONS MANAGER                           */
+/* ───────────────────────────────────────────── */
+
+.sections-manager {
+  flex: 1;
+  border-bottom: 2px solid rgb(48, 48, 48);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background-color: #ffffff;
+}
+
+/* Toolbar Header */
+.sections-manager-toolbar {
+  background-color: #3f4442;
+  color: white;
+  padding: 0.3rem 0.5rem;
+  border-bottom: 2px solid rgb(48, 48, 48);
+  font-size: 1rem;
+  font-weight: 300;
+  text-align: left;
+  font-family: monospace;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height:1.5rem;
+}
+
+.sections-manager-toolbar-title {
+  margin: 0;
+}
+
+.sections-manager-add-tool {
+  cursor: pointer;
+  user-select: none;
+  font-size: 1rem;
+}
+
+.section-manager-content {
+  flex: 1 1 auto;
+  overflow-y: auto;
+  padding: 0px;
+  box-sizing: border-box;
+  background-color: #ffffff;
+}
+
+.sections-manager-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.sections-manager-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #ddd; /* Default box color */
+  color: black;
+  border-bottom: 2px solid rgb(48, 48, 48);
+  font-size: 0.8rem;
+  padding: 0.3rem 0.5rem;
+  cursor: pointer;
+  user-select: none;
+}
+
+.sections-manager-item-selected {
+  background-color:#aaa3a3; /* Light green when selected */
+}
+
+.sections-manager-item-content {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+}
+
+.sections-manager-bullet {
+  margin-right: 0.5rem;
+  color: #333;
+  font-weight: bold;
+  font-size: 1rem;
+}
+
+.sections-manager-name {
+  margin-right: 0.5rem;
+  cursor: text;
+  display: inline-block;
+  max-width: 150px;
+  min-width: 60px;
+  border: none;
+  background: transparent;
+  font-family: monospace;
+  font-size: 0.8rem;
+}
+
+.sections-manager-name:focus {
+  outline: none;
+}
+
+
+/* Sections Manager Delete Button */
+.sections-manager-delete {
+  color: red;
+  margin-left: 0.5rem;
+  cursor: pointer;
+  user-select: none;
+  font-weight: bold;
+  font-size: 1.3rem; 
+  transition: color 0.2s ease;
+}
+
+.sections-manager-delete:hover {
+  color: darkred;
+}
+
+.sections-manager-item:hover {
+  background-color: #aaa3a3;
+}
+
+
+/* ───────────────────────────────────────────── */
+/* ➕ ADD INPUT PANEL                             */
+/* ───────────────────────────────────────────── */
+
+.add-input-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background-color: #ffffff;
+  height: 1.5rem;
+}
+
+.add-input-toolbar {
+  background-color:  #ddd;
+  color: black;
+  padding: 0.3rem 0.5rem;
+  border-bottom: 2px solid rgb(48, 48, 48);
+  font-size: 0.8rem;
+  font-weight: 300;
+  font-family: monospace;
+  text-align: left;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height:1.5rem;
+}
+
+.add-input-toolbar-title {
+  margin: 0;
+}
+
+.add-input-add-tool {
+  cursor: pointer;
+  user-select: none;
+  font-size:1rem;
+}
+
+.add-input-toolbar:hover {
+  background-color: #aaa3a3;
+}
+
+
+/* ───────────────────────────────────────────── */
+/* 🎯 SELECTED SECTION STYLING                     */
+/* ───────────────────────────────────────────── */
+
+.selected-section-toolbar {
+  background-color: #3f4442;
+  color: white;
+  padding: 0.3rem 0.5rem;
+  border-bottom: 2px solid rgb(48, 48, 48);
+  font-size: 1rem;
+  font-weight: 300;
+  text-align: center;
+  height:1.5rem;
+   font-family: monospace;
+}
+
+.selected-section-toolbar-title {
+  margin: 0;
+}
+
+.selected-section-content {
+  flex: 1 1 auto;
+  overflow-y: auto;
+  padding: 0;
+  box-sizing: border-box;
+  background-color: #ffffff;
+}
+
+
+.selected-section-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+   height: 1.5rem;
+}
+
+.selected-section-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #ddd;
+  color: black;
+  border-bottom: 2px solid rgb(48, 48, 48);
+  font-size: 0.8rem;
+  padding: 0.3rem 0.5rem;
+  cursor: pointer;
+  user-select: none;
+ 
+}
+
+.selected-section-item-selected {
+  background-color: #aaa3a3;
+}
+
+.selected-section-item:hover {
+  background-color: #aaa3a3;
+}
+
+.selected-section-item-content {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+}
+
+.selected-section-bullet {
+  margin-right: 0.5rem;
+  color: #333;
+  font-weight: bold;
+  font-size: 1rem;
+}
+
+.selected-section-label {
+  margin-right: 0.5rem;
+  cursor: text;
+  display: inline-block;
+  max-width: 150px;
+  min-width: 60px;
+  border: none;
+  background: transparent;
+  font-family: monospace;
+  font-size: 0.8rem;
+}
+
+.selected-section-label:focus {
+  outline: none;
+}
+
+
+/* Selected Section Delete Button */
+.selected-section-delete {
+  color: red;
+  margin-left: 0.5rem;
+  cursor: pointer;
+  user-select: none;
+  font-weight: bold;
+  font-size: 1.3rem; 
+ 
+  transition: color 0.2s ease;
+}
+
+.selected-section-delete:hover {
+  color: darkred;
+}
+
+
+/* ───────────────────────────────────────────── */
+/* 🦶 FOOTER TOOLBAR                             */
+/* ───────────────────────────────────────────── */
+
+.schema-builder-footer-toolbar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 40px;
+  background-color: #3f4442;
+  border-top: 2px solid rgb(48, 48, 48);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.schema-builder-footer-toolbar button {
+  background-color: #ccc;
+  color: black;
+  border: 1px solid #070707;
+  border-radius: 6px;
+  padding: 0.4rem 1rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  font-family:monospace;
+}
+
+.schema-builder-footer-toolbar button:hover {
+  background-color: #aaa3a3;
+}
+
+
