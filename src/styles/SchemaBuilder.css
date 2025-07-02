@@ -59,6 +59,8 @@
 /* 🛠️  MODAL STYLES                               */
 /* ───────────────────────────────────────────── */
 
+
+
 .schema-preview-modal {
   position: fixed;
   top: 0;
@@ -70,6 +72,7 @@
   justify-content: center;
   align-items: center;
   z-index: 2000;
+  overflow-y:auto;
 }
 
 .modal-content {
@@ -79,6 +82,35 @@
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
   max-width: 600px;
   width: 90%;
+}
+
+.schema-preview-block {
+  background-color: #f7f7f7;
+  padding: 1rem;
+  max-height: 400px;
+  overflow-y: auto;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-family: monospace;
+  font-size: 0.8rem;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  margin-bottom: 1rem;
+}
+
+.copy-schema-button {
+  background-color: #302e2e;
+  color: white;
+  border: 1px solid #070707;
+  border-radius: 6px;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  margin-right: 0.5rem;
+  transition: background-color 0.2s ease;
+}
+
+.copy-schema-button:hover {
+  background-color: #070707;
 }
 
 .close-modal-button {
@@ -405,6 +437,8 @@
   font-size: 0.9rem;
 }
 
+
+
 /* 📝 Notes Field Styling */
 .input-configurator-notes {
   display: flex;
@@ -481,7 +515,7 @@
   background-color: #070707;
 }
 
-.input-configurator-hours-message {
+.input-configurator-message {
   font-family: monospace;
   font-size: 0.9rem;
   background-color: #f7f7f7;
@@ -524,4 +558,22 @@
   background-color: #aaa3a3;
 }
 
+.footer-input-group {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.footer-input-group label {
+  color: white;
+  font-family: monospace;
+  font-size: 0.9rem;
+}
+
+.footer-input-group input {
+  margin-left: 0.5rem;
+  padding: 0.3rem;
+  font-family: monospace;
+  font-size: 0.9rem;
+}
 
