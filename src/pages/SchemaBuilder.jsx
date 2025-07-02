@@ -63,7 +63,7 @@ function SchemaBuilder() {
     setSchema({ ...schema, sections: updatedSections });
   }
 
-  // 🔢 CURRENT INPUTS HANDLERS
+  // 🔢 SELECTED SECTION HANDLERS
   function handleRenameInput(e, index) {
     const updatedSections = [...schema.sections];
     updatedSections[selectedSectionIndex].inputs[index].label = e.target.value;
@@ -93,6 +93,104 @@ function SchemaBuilder() {
       setSelectedInputIndex(selectedInputIndex - 1);
     }
   }
+
+  // 🔢 INPUT CONFIGURATOR HANDLERS
+
+  //General
+  function handleEmptyDisplayTextChange(e) {
+    const updatedSchema = { ...schema };
+    updatedSchema.sections[selectedSectionIndex].inputs[
+      selectedInputIndex
+    ].emptyDisplayText = e.target.value;
+    setSchema(updatedSchema);
+  }
+
+  function handleFalseDisplayTextChange(e) {
+    const updatedSchema = { ...schema };
+    updatedSchema.sections[selectedSectionIndex].inputs[
+      selectedInputIndex
+    ].falseDisplayText = e.target.value;
+    setSchema(updatedSchema);
+  }
+
+  //Text and Number Input Options handler
+  function toggleTextNumberOption(option) {
+    const updatedSchema = { ...schema };
+    const input =
+      updatedSchema.sections[selectedSectionIndex].inputs[selectedInputIndex];
+    input[option] = !input[option];
+    setSchema(updatedSchema);
+  }
+
+  function handleMaxLengthChange(e) {
+    const updatedSchema = { ...schema };
+    updatedSchema.sections[selectedSectionIndex].inputs[
+      selectedInputIndex
+    ].maxLength = parseInt(e.target.value, 10);
+    setSchema(updatedSchema);
+  }
+
+  function handleMinValueChange(e) {
+    const updatedSchema = { ...schema };
+    updatedSchema.sections[selectedSectionIndex].inputs[
+      selectedInputIndex
+    ].minValue = parseFloat(e.target.value);
+    setSchema(updatedSchema);
+  }
+
+  function handleMaxValueChange(e) {
+    const updatedSchema = { ...schema };
+    updatedSchema.sections[selectedSectionIndex].inputs[
+      selectedInputIndex
+    ].maxValue = parseFloat(e.target.value);
+    setSchema(updatedSchema);
+  }
+
+  //Checkbox
+  function toggleCheckboxOption(option) {
+    const updatedSchema = { ...schema };
+    const input =
+      updatedSchema.sections[selectedSectionIndex].inputs[selectedInputIndex];
+    input[option] = !input[option];
+    setSchema(updatedSchema);
+  }
+
+  function handleNotesChange(e) {
+    const updatedSchema = { ...schema };
+    updatedSchema.sections[selectedSectionIndex].inputs[
+      selectedInputIndex
+    ].notes = e.target.value;
+    setSchema(updatedSchema);
+  }
+
+  //Dropdown
+function handleAddDropdownOption() {
+  const updatedSchema = { ...schema };
+  const dropdown = updatedSchema.sections[selectedSectionIndex].inputs[selectedInputIndex];
+
+  const newOption = {
+    id: Date.now(),
+    label: `Option ${dropdown.options.length + 1}`,
+  };
+
+  dropdown.options.push(newOption);
+  setSchema(updatedSchema);
+}
+
+function handleDropdownOptionRename(e, optionIndex) {
+  const updatedSchema = { ...schema };
+  updatedSchema.sections[selectedSectionIndex].inputs[selectedInputIndex].options[optionIndex].label = e.target.value;
+  setSchema(updatedSchema);
+}
+
+function handleDeleteDropdownOption(optionIndex) {
+  const updatedSchema = { ...schema };
+  const dropdown = updatedSchema.sections[selectedSectionIndex].inputs[selectedInputIndex];
+
+  dropdown.options.splice(optionIndex, 1);
+  setSchema(updatedSchema);
+}
+
 
   return (
     <div className="schema-builder-container">
@@ -159,10 +257,12 @@ function SchemaBuilder() {
             <h2>Add Input</h2>
           </div>
 
-          {['text', 'checkbox', 'dropdown', 'dropdownTable'].map((type) => (
+          {["text", "number", "checkbox", "dropdown", "hours"].map((type) => (
             <div className="add-input-toolbar" key={type}>
               <span className="add-input-toolbar-title">
-                {type === 'dropdownTable' ? 'Dropdown Table' : capitalizeFirstLetter(type)}
+                {type === "dropdownTable"
+                  ? "Dropdown Table"
+                  : capitalizeFirstLetter(type)}
               </span>
               <span
                 className="add-input-add-tool"
@@ -184,7 +284,7 @@ function SchemaBuilder() {
 
         {selectedSectionIndex === null ? (
           <div className="selected-section-content">
-              <div className="selected-section-toolbar">
+            <div className="selected-section-toolbar">
               <span className="selected-section-toolbar-title">
                 No Section Selected
               </span>
@@ -200,36 +300,40 @@ function SchemaBuilder() {
 
             <div className="selected-section-content">
               <ul className="selected-section-list">
-                {schema.sections[selectedSectionIndex].inputs.map((input, index) => (
-                  <li
-                    key={input.id}
-                    className={`selected-section-item ${
-                      selectedInputIndex === index ? 'selected-section-item-selected' : ''
-                    }`}
-                    onClick={() => setSelectedInputIndex(index)}
-                  >
-                    <div className="selected-section-item-content">
-                      <span className="selected-section-bullet">•</span>
-                      <input
-                        className="selected-section-label"
-                        type="text"
-                        value={input.label}
-                        maxLength={21}
-                        onChange={(e) => handleRenameInput(e, index)}
-                        onKeyDown={handleRenameInputKeyDown}
-                        onClick={(e) => e.stopPropagation()}
-                      />
-                    </div>
-
-                    <span
-                      className="selected-section-delete"
-                      onClick={(e) => handleDeleteInput(e, index)}
-                      title="Delete Input"
+                {schema.sections[selectedSectionIndex].inputs.map(
+                  (input, index) => (
+                    <li
+                      key={input.id}
+                      className={`selected-section-item ${
+                        selectedInputIndex === index
+                          ? "selected-section-item-selected"
+                          : ""
+                      }`}
+                      onClick={() => setSelectedInputIndex(index)}
                     >
-                      −
-                    </span>
-                  </li>
-                ))}
+                      <div className="selected-section-item-content">
+                        <span className="selected-section-bullet">•</span>
+                        <input
+                          className="selected-section-label"
+                          type="text"
+                          value={input.label}
+                          maxLength={21}
+                          onChange={(e) => handleRenameInput(e, index)}
+                          onKeyDown={handleRenameInputKeyDown}
+                          onClick={(e) => e.stopPropagation()}
+                        />
+                      </div>
+
+                      <span
+                        className="selected-section-delete"
+                        onClick={(e) => handleDeleteInput(e, index)}
+                        title="Delete Input"
+                      >
+                        −
+                      </span>
+                    </li>
+                  )
+                )}
               </ul>
             </div>
           </>
@@ -241,14 +345,439 @@ function SchemaBuilder() {
         <div className="section-header">
           <h2>Input Configurator</h2>
         </div>
-        <div className="section-content">
-          <p>Edit settings for the selected input.</p>
-          <ul className="input-configurator-list">
-            <li>Label</li>
-            <li>Input Type</li>
-            <li>Options (if dropdown)</li>
-            <li>Validation (required, min, max)</li>
-          </ul>
+
+        {/* Configurator Toolbar */}
+        {selectedInputIndex === null || selectedSectionIndex === null ? (
+          <div className="input-configurator-toolbar">
+            <span className="input-configurator-toolbar-title">
+              No Input Selected
+            </span>
+          </div>
+        ) : (
+          <div className="input-configurator-toolbar">
+            <span className="input-configurator-toolbar-title">
+              {
+                schema.sections[selectedSectionIndex].inputs[selectedInputIndex]
+                  .label
+              }
+            </span>
+          </div>
+        )}
+
+        <div className="input-configurator-content">
+          {selectedInputIndex !== null && selectedSectionIndex !== null && (
+            <>
+              {/* TEXT INPUT CONFIGURATION */}
+              {schema.sections[selectedSectionIndex].inputs[selectedInputIndex]
+                .type === "text" && (
+                <div className="input-configurator-group">
+                  {/* Required */}
+                  <label className="input-configurator-option">
+                    <input
+                      type="checkbox"
+                      checked={
+                        schema.sections[selectedSectionIndex].inputs[
+                          selectedInputIndex
+                        ].isRequired
+                      }
+                      onChange={() => toggleTextNumberOption("isRequired")}
+                    />
+                    Required Input (Validate in Add/Edit Location)
+                  </label>
+
+                  {/* Max Length */}
+                  <label className="input-configurator-option">
+                    Max Length:
+                    <input
+                      type="number"
+                      min={1}
+                      max={500}
+                      value={
+                        schema.sections[selectedSectionIndex].inputs[
+                          selectedInputIndex
+                        ].maxLength
+                      }
+                      onChange={handleMaxLengthChange}
+                    />
+                  </label>
+
+                  {/* Filter */}
+                  <label className="input-configurator-option">
+                    <input
+                      type="checkbox"
+                      checked={
+                        schema.sections[selectedSectionIndex].inputs[
+                          selectedInputIndex
+                        ].isFilter
+                      }
+                      onChange={() => toggleTextNumberOption("isFilter")}
+                    />
+                    Show as Filter Option
+                  </label>
+
+                  {/* Display */}
+                  <label className="input-configurator-option">
+                    <input
+                      type="checkbox"
+                      checked={
+                        schema.sections[selectedSectionIndex].inputs[
+                          selectedInputIndex
+                        ].isDisplayed
+                      }
+                      onChange={() => toggleTextNumberOption("isDisplayed")}
+                    />
+                    Display in Info Panel
+                  </label>
+
+                  {/* Display if Empty */}
+                  <label className="input-configurator-option">
+                    <input
+                      type="checkbox"
+                      checked={
+                        schema.sections[selectedSectionIndex].inputs[
+                          selectedInputIndex
+                        ].displayIfEmpty
+                      }
+                      onChange={() => toggleCheckboxOption("displayIfEmpty")}
+                    />
+                    Display in Info Panel if Empty
+                  </label>
+
+                  {/* Default Text if Empty */}
+                  <label className="input-configurator-notes">
+                    Text to Display if Empty:
+                    <input
+                      type="text"
+                      value={
+                        schema.sections[selectedSectionIndex].inputs[
+                          selectedInputIndex
+                        ].emptyDisplayText
+                      }
+                      onChange={handleEmptyDisplayTextChange}
+                      maxLength={40}
+                    />
+                  </label>
+                </div>
+              )}
+
+              {/* NUMBER INPUT CONFIGURATION */}
+              {schema.sections[selectedSectionIndex].inputs[selectedInputIndex]
+                .type === "number" && (
+                <div className="input-configurator-group">
+                  {/* Required */}
+                  <label className="input-configurator-option">
+                    <input
+                      type="checkbox"
+                      checked={
+                        schema.sections[selectedSectionIndex].inputs[
+                          selectedInputIndex
+                        ].isRequired
+                      }
+                      onChange={() => toggleTextNumberOption("isRequired")}
+                    />
+                    Required Input (Validate in Add/Edit Location)
+                  </label>
+
+                  {/* Min and Max Values */}
+                  <label className="input-configurator-option">
+                    Min Value:
+                    <input
+                      type="number"
+                      value={
+                        schema.sections[selectedSectionIndex].inputs[
+                          selectedInputIndex
+                        ].minValue ?? ""
+                      }
+                      onChange={handleMinValueChange}
+                    />
+                  </label>
+
+                  <label className="input-configurator-option">
+                    Max Value:
+                    <input
+                      type="number"
+                      value={
+                        schema.sections[selectedSectionIndex].inputs[
+                          selectedInputIndex
+                        ].maxValue ?? ""
+                      }
+                      onChange={handleMaxValueChange}
+                    />
+                  </label>
+
+                  {/* Max Length */}
+                  <label className="input-configurator-option">
+                    Max Length:
+                    <input
+                      type="number"
+                      min={1}
+                      max={50}
+                      value={
+                        schema.sections[selectedSectionIndex].inputs[
+                          selectedInputIndex
+                        ].maxLength
+                      }
+                      onChange={handleMaxLengthChange}
+                    />
+                  </label>
+
+                  {/* Filter */}
+                  <label className="input-configurator-option">
+                    <input
+                      type="checkbox"
+                      checked={
+                        schema.sections[selectedSectionIndex].inputs[
+                          selectedInputIndex
+                        ].isFilter
+                      }
+                      onChange={() => toggleTextNumberOption("isFilter")}
+                    />
+                    Show as Filter Option
+                  </label>
+
+                  {/* Display */}
+                  <label className="input-configurator-option">
+                    <input
+                      type="checkbox"
+                      checked={
+                        schema.sections[selectedSectionIndex].inputs[
+                          selectedInputIndex
+                        ].isDisplayed
+                      }
+                      onChange={() => toggleTextNumberOption("isDisplayed")}
+                    />
+                    Display in Info Panel
+                  </label>
+
+                  {/* Display if Empty */}
+                  <label className="input-configurator-option">
+                    <input
+                      type="checkbox"
+                      checked={
+                        schema.sections[selectedSectionIndex].inputs[
+                          selectedInputIndex
+                        ].displayIfEmpty
+                      }
+                      onChange={() => toggleCheckboxOption("displayIfEmpty")}
+                    />
+                    Display in Info Panel if Empty
+                  </label>
+
+                  {/* Default Text if Empty */}
+                  <label className="input-configurator-notes">
+                    Text to Display if Empty:
+                    <input
+                      type="text"
+                      value={
+                        schema.sections[selectedSectionIndex].inputs[
+                          selectedInputIndex
+                        ].emptyDisplayText
+                      }
+                      onChange={handleEmptyDisplayTextChange}
+                      maxLength={40}
+                    />
+                  </label>
+                </div>
+              )}
+
+              {/* CHECKBOX INPUT CONFIGURATION */}
+              {schema.sections[selectedSectionIndex].inputs[selectedInputIndex]
+                .type === "checkbox" && (
+                <div className="input-configurator-group">
+                  {/* Required */}
+                  <label className="input-configurator-option">
+                    <input
+                      type="checkbox"
+                      checked={
+                        schema.sections[selectedSectionIndex].inputs[
+                          selectedInputIndex
+                        ].isRequired
+                      }
+                      onChange={() => toggleCheckboxOption("isRequired")}
+                    />
+                    Required Input (Validate in Add/Edit Location)
+                  </label>
+
+                  {/* Filter Option */}
+                  <label className="input-configurator-option">
+                    <input
+                      type="checkbox"
+                      checked={
+                        schema.sections[selectedSectionIndex].inputs[
+                          selectedInputIndex
+                        ].isFilter
+                      }
+                      onChange={() => toggleCheckboxOption("isFilter")}
+                    />
+                    Show as Filter Option
+                  </label>
+
+                  {/* Display in Info Panel */}
+                  <label className="input-configurator-option">
+                    <input
+                      type="checkbox"
+                      checked={
+                        schema.sections[selectedSectionIndex].inputs[
+                          selectedInputIndex
+                        ].isDisplayed
+                      }
+                      onChange={() => toggleCheckboxOption("isDisplayed")}
+                    />
+                    Display in Info Panel
+                  </label>
+
+                  {/* Display When False */}
+                  <label className="input-configurator-option">
+                    <input
+                      type="checkbox"
+                      checked={
+                        schema.sections[selectedSectionIndex].inputs[
+                          selectedInputIndex
+                        ].displayWhenFalse
+                      }
+                      onChange={() => toggleCheckboxOption("displayWhenFalse")}
+                    />
+                    Display When False (Show in Info Panel even if Unchecked)
+                  </label>
+
+                  {/* Display When False */}
+                  <label className="input-configurator-option">
+                    <input
+                      type="checkbox"
+                      checked={
+                        schema.sections[selectedSectionIndex].inputs[
+                          selectedInputIndex
+                        ].displayWhenFalse
+                      }
+                      onChange={() => toggleCheckboxOption("displayWhenFalse")}
+                    />
+                    Display When False (Show in Info Panel even if Unchecked)
+                  </label>
+
+                  {/* Default Text if False */}
+                  <label className="input-configurator-notes">
+                    Text to Display if Unchecked:
+                    <input
+                      type="text"
+                      value={
+                        schema.sections[selectedSectionIndex].inputs[
+                          selectedInputIndex
+                        ].falseDisplayText
+                      }
+                      onChange={handleFalseDisplayTextChange}
+                      maxLength={40}
+                    />
+                  </label>
+
+                  {/* Scorable */}
+                  <label className="input-configurator-option">
+                    <input
+                      type="checkbox"
+                      checked={
+                        schema.sections[selectedSectionIndex].inputs[
+                          selectedInputIndex
+                        ].isScorable
+                      }
+                      onChange={() => toggleCheckboxOption("isScorable")}
+                    />
+                    Used in Edit Score Modal For Scoring
+                  </label>
+
+                  {/* Notes Field */}
+                  <label className="input-configurator-notes">
+                    Notes for Add Location Modal:
+                    <textarea
+                      value={
+                        schema.sections[selectedSectionIndex].inputs[
+                          selectedInputIndex
+                        ].notes
+                      }
+                      onChange={handleNotesChange}
+                      maxLength={50}
+                      rows={1}
+                    />
+                  </label>
+                </div>
+              )}
+{/* DROPDOWN INPUT CONFIGURATION */}
+{schema.sections[selectedSectionIndex].inputs[selectedInputIndex].type === "dropdown" && (
+  <div className="input-configurator-group">
+
+    {/* Required */}
+    <label className="input-configurator-option">
+      <input
+        type="checkbox"
+        checked={schema.sections[selectedSectionIndex].inputs[selectedInputIndex].isRequired}
+        onChange={() => toggleCheckboxOption("isRequired")}
+      />
+      Required (Validate in Add/Edit Location)
+    </label>
+
+    {/* Filter */}
+    <label className="input-configurator-option">
+      <input
+        type="checkbox"
+        checked={schema.sections[selectedSectionIndex].inputs[selectedInputIndex].isFilter}
+        onChange={() => toggleCheckboxOption("isFilter")}
+      />
+      Show as Filter Option in Filter Panel
+    </label>
+
+    {/* Display in Info Panel */}
+    <label className="input-configurator-option">
+      <input
+        type="checkbox"
+        checked={schema.sections[selectedSectionIndex].inputs[selectedInputIndex].isDisplayed}
+        onChange={() => toggleCheckboxOption("isDisplayed")}
+      />
+      Display in Info Panel
+    </label>
+
+    {/* Dropdown Options Header */}
+    <h3 className="input-configurator-subtitle">Dropdown Options</h3>
+
+    <ul className="input-configurator-dropdown-options">
+      {schema.sections[selectedSectionIndex].inputs[selectedInputIndex].options.map((option, idx) => (
+        <li key={option.id} className="input-configurator-dropdown-option-item">
+          <input
+            type="text"
+            value={option.label}
+            maxLength={21}
+            onChange={(e) => handleDropdownOptionRename(e, idx)}
+          />
+          <span
+            className="input-configurator-delete-option"
+            onClick={() => handleDeleteDropdownOption(idx)}
+            title="Delete Option"
+          >
+            &minus;
+          </span>
+        </li>
+      ))}
+    </ul>
+
+    {/* Add New Option Button */}
+    <button className="input-configurator-add-option-button" onClick={handleAddDropdownOption}>
+      Add Option ➕
+    </button>
+
+  </div>
+)}
+
+{/* HOURS INPUT CONFIGURATION */}
+{schema.sections[selectedSectionIndex].inputs[selectedInputIndex].type === "hours" && (
+  <div className="input-configurator-group">
+    <p className="input-configurator-hours-message">
+      This is a special input type that uses a table of dropdown inputs with weekdays as the rows, and open and close times for the headers.
+      This input type requires special handling within the program, so it has no configurable options. 
+      All logic, validation, and rendering for hours is handled elsewhere and no values are stored in project schema.
+    </p>
+  </div>
+)}
+
+
+            </>
+          )}
         </div>
       </div>
 

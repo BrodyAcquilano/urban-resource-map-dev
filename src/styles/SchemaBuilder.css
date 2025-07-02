@@ -54,6 +54,7 @@
   background-color: #ffffff;
 }
 
+
 /* ───────────────────────────────────────────── */
 /* 🛠️  MODAL STYLES                               */
 /* ───────────────────────────────────────────── */
@@ -360,6 +361,133 @@
 
 .selected-section-delete:hover {
   color: darkred;
+}
+
+/* ───────────────────────────────────────────── */
+/* ⚙️  INPUT CONFIGURATOR TOOLBAR                */
+/* ───────────────────────────────────────────── */
+
+.input-configurator-toolbar {
+  background-color: #3f4442;
+  color: white;
+  padding: 0.3rem 0.5rem;
+  border-bottom: 2px solid rgb(48, 48, 48);
+  font-size: 1rem;
+  font-weight: 300;
+  text-align: center;
+  height: 1.5rem;
+  font-family: monospace;
+}
+
+.input-configurator-toolbar-title {
+  margin: 0;
+}
+
+.input-configurator-content {
+  flex: 1 1 auto;
+  overflow-y: auto;
+  padding: 1rem;
+  box-sizing: border-box;
+  background-color: #ffffff;
+}
+
+/* 🔄 General Configurator Group for All Input Types */
+.input-configurator-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 1rem;
+}
+
+/* 🔲 Checkbox/Option Styling */
+.input-configurator-option {
+  font-family: monospace;
+  font-size: 0.9rem;
+}
+
+/* 📝 Notes Field Styling */
+.input-configurator-notes {
+  display: flex;
+  flex-direction: column;
+  font-family: monospace;
+  font-size: 0.9rem;
+}
+
+.input-configurator-notes textarea {
+  margin-top: 0.3rem;
+  padding: 0.4rem;
+  font-family: monospace;
+  font-size: 0.9rem;
+  resize: vertical;
+}
+
+/* ───────────────────────────────────────────── */
+/* 🎛️  INPUT CONFIGURATOR: DROPDOWN OPTIONS       */
+/* ───────────────────────────────────────────── */
+
+.input-configurator-subtitle {
+  font-family: monospace;
+  font-size: 0.9rem;
+  margin: 0.5rem 0;
+  font-weight: bold;
+}
+
+.input-configurator-dropdown-options {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 1rem 0;
+}
+
+.input-configurator-dropdown-option-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.input-configurator-dropdown-option-item input {
+  flex: 1;
+  padding: 0.4rem;
+  font-family: monospace;
+  font-size: 0.8rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.input-configurator-delete-option {
+  color: red;
+  margin-left: 0.5rem;
+  cursor: pointer;
+  user-select: none;
+  font-size: 1.3rem;
+  font-weight: bold;
+}
+
+.input-configurator-delete-option:hover {
+  color: darkred;
+}
+
+.input-configurator-add-option-button {
+  background-color: #302e2e;
+  color: white;
+  border: 1px solid #070707;
+  border-radius: 6px;
+  padding: 0.4rem 1rem;
+  cursor: pointer;
+  font-family: monospace;
+  font-size: 0.9rem;
+}
+
+.input-configurator-add-option-button:hover {
+  background-color: #070707;
+}
+
+.input-configurator-hours-message {
+  font-family: monospace;
+  font-size: 0.9rem;
+  background-color: #f7f7f7;
+  padding: 0.8rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
 }
 
 
