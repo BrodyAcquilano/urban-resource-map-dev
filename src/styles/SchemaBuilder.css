@@ -543,6 +543,15 @@
   z-index: 1000;
 }
 
+.footer-content-wrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 80%;
+  max-width: 1000px;
+}
+
+
 .schema-builder-footer-toolbar button {
   background-color: #ccc;
   color: black;
@@ -551,7 +560,7 @@
   padding: 0.4rem 1rem;
   cursor: pointer;
   transition: background-color 0.2s ease;
-  font-family:monospace;
+  font-family: monospace;
 }
 
 .schema-builder-footer-toolbar button:hover {
