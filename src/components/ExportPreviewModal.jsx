@@ -1,4 +1,6 @@
-import React, { useRef, useEffect, useState } from "react";
+// src/components/ExportPreviewModal.jsx
+
+import React, { useRef, useEffect } from "react";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
 import "../styles/modals.css";
@@ -90,9 +92,9 @@ function ExportPreviewModal({
   };
 
   const visibleMarkers = filteredMarkers.filter((marker) => {
-    if (!window.mapForExport?.getBounds) return true; // fallback: show all if map not ready
-    const lat = parseFloat(marker.latitude);
-    const lng = parseFloat(marker.longitude);
+    if (!window.mapForExport?.getBounds) return true;
+    const lat = parseFloat(marker.sections[0].inputs[0].value);
+    const lng = parseFloat(marker.sections[0].inputs[1].value);
     return window.mapForExport.getBounds().contains([lat, lng]);
   });
 
@@ -122,31 +124,12 @@ function ExportPreviewModal({
             <div className="export-section-filters">
               <h4>Applied Filters:</h4>
               <ul className="filter-list">
-                {selectedFilters.map((item, idx) => {
-                  if (item.type === "day")
-                    return <li key={idx}>Day: {item.label}</li>;
-                  if (item.type === "time")
-                    return <li key={idx}>Time: {item.label}</li>;
-                  if (item.type === "accessibility")
-                    return <li key={idx}>♿ Wheelchair Accessible</li>;
-                  if (item.type === "category-header")
-                    return (
-                      <li
-                        key={idx}
-                        style={{ fontWeight: "bold", listStyleType: "none" }}
-                      >
-                        {item.label}:
-                      </li>
-                    );
-                  if (item.type === "category-item")
-                    return (
-                      <li key={idx} style={{ marginLeft: "1.5em" }}>
-                        {" "}
-                        {item.label}
-                      </li>
-                    );
-                  return null;
-                })}
+                {selectedFilters.map((item, idx) => (
+                  <li key={idx}>
+                    {item.label}
+                    {item.value ? `: ${item.value}` : ""}
+                  </li>
+                ))}
               </ul>
             </div>
           )}
@@ -157,8 +140,10 @@ function ExportPreviewModal({
               <ul>
                 {visibleMarkers.map((marker) => (
                   <li key={marker._id || marker.id}>
-                    {marker.name} ({Number(marker.latitude).toFixed(4)},{" "}
-                    {Number(marker.longitude).toFixed(4)})
+                    Latitude:{" "}
+                    {Number(marker.sections[0].inputs[0].value).toFixed(4)},
+                    Longitude:{" "}
+                    {Number(marker.sections[0].inputs[1].value).toFixed(4)}
                   </li>
                 ))}
               </ul>
@@ -175,16 +160,18 @@ function ExportPreviewModal({
             <div className="export-section">
               <h4>Selected Location Details:</h4>
               <p>
-                <strong>{selectedLocation.name}</strong>
+                Latitude:{" "}
+                {Number(selectedLocation.sections[0].inputs[0].value).toFixed(
+                  4
+                )}
+                , Longitude:{" "}
+                {Number(selectedLocation.sections[0].inputs[1].value).toFixed(
+                  4
+                )}
               </p>
-              <p>
-                Lat: {Number(selectedLocation.latitude).toFixed(4)}, Lng:{" "}
-                {Number(selectedLocation.longitude).toFixed(4)}
-              </p>
-              {selectedLocation.address && <p>{selectedLocation.address}</p>}
-              {selectedLocation.phone && <p>{selectedLocation.phone}</p>}
             </div>
           )}
+
           {mapImage && (
             <div className="export-section">
               <h4>Map Preview:</h4>

@@ -23,49 +23,33 @@ router.post("/", async (req, res) => {
   const { mongoURI, collectionName } = req.query;
 
   if (!mongoURI || !collectionName) {
-    return res.status(400).json({ error: "Missing mongoURI or collection name." });
+    return res
+      .status(400)
+      .json({ error: "Missing mongoURI or collection name." });
   }
 
   const client = await getMongoClient(mongoURI);
   const dbName = getDatabaseName(mongoURI);
 
   if (!dbName) {
-    return res.status(400).json({ error: "Invalid MongoDB URI format (no database specified)." });
+    return res
+      .status(400)
+      .json({ error: "Invalid MongoDB URI format (no database specified)." });
   }
 
   const db = client.db(dbName);
 
-  const {
-    name,
-    latitude,
-    longitude,
-    address,
-    website,
-    phone,
-    wheelchairAccessible,
-    isLocationOpen,
-    openHours,
-    categories,
-    scores,
-  } = req.body;
+  const { location } = req.body;
 
-  if (!name || !latitude || !longitude) {
-    return res.status(400).json({ error: "Missing required fields" });
+  if (!location) {
+    return res
+      .status(400)
+      .json({ error: "Missing location object in request body." });
   }
 
   try {
     const result = await db.collection(collectionName).insertOne({
-      name,
-      latitude: parseFloat(latitude),
-      longitude: parseFloat(longitude),
-      address: address || "",
-      website: website || "",
-      phone: phone || "",
-      wheelchairAccessible: !!wheelchairAccessible,
-      isLocationOpen: isLocationOpen || {},
-      openHours: openHours || {},
-      categories: categories || {},
-      scores: scores || {},
+      location,
       createdAt: new Date(),
     });
 
@@ -81,14 +65,18 @@ router.get("/", async (req, res) => {
   const { mongoURI, collectionName } = req.query;
 
   if (!mongoURI || !collectionName) {
-    return res.status(400).json({ error: "Missing mongoURI or collection name." });
+    return res
+      .status(400)
+      .json({ error: "Missing mongoURI or collection name." });
   }
 
   const client = await getMongoClient(mongoURI);
   const dbName = getDatabaseName(mongoURI);
 
   if (!dbName) {
-    return res.status(400).json({ error: "Invalid MongoDB URI format (no database specified)." });
+    return res
+      .status(400)
+      .json({ error: "Invalid MongoDB URI format (no database specified)." });
   }
 
   const db = client.db(dbName);
@@ -108,14 +96,18 @@ router.put("/:id", async (req, res) => {
   const { id } = req.params;
 
   if (!mongoURI || !collectionName) {
-    return res.status(400).json({ error: "Missing mongoURI or collection name." });
+    return res
+      .status(400)
+      .json({ error: "Missing mongoURI or collection name." });
   }
 
   const client = await getMongoClient(mongoURI);
   const dbName = getDatabaseName(mongoURI);
 
   if (!dbName) {
-    return res.status(400).json({ error: "Invalid MongoDB URI format (no database specified)." });
+    return res
+      .status(400)
+      .json({ error: "Invalid MongoDB URI format (no database specified)." });
   }
 
   const db = client.db(dbName);
@@ -138,14 +130,18 @@ router.delete("/:id", async (req, res) => {
   const { id } = req.params;
 
   if (!mongoURI || !collectionName) {
-    return res.status(400).json({ error: "Missing mongoURI or collection name." });
+    return res
+      .status(400)
+      .json({ error: "Missing mongoURI or collection name." });
   }
 
   const client = await getMongoClient(mongoURI);
   const dbName = getDatabaseName(mongoURI);
 
   if (!dbName) {
-    return res.status(400).json({ error: "Invalid MongoDB URI format (no database specified)." });
+    return res
+      .status(400)
+      .json({ error: "Invalid MongoDB URI format (no database specified)." });
   }
 
   const db = client.db(dbName);
@@ -167,4 +163,3 @@ router.delete("/:id", async (req, res) => {
 });
 
 export default router;
-

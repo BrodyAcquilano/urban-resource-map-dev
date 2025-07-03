@@ -1,33 +1,19 @@
 import React from "react";
 
+
+
+
 // ─────────────────────────────────────────────
 // Rendering Helpers (Updated for Dynamic Schema)
 // ─────────────────────────────────────────────
 
-// Used in: InfoPanel.jsx to display only checked items by dynamic category.
-export const renderCheckedItemsBySchema = (marker, categories) => {
-  return categories.map((category) => {
-    // Correct: Check inside the correct category
-    const checkedItems = category.items.filter(
-      (item) => marker.categories?.[category.categoryName]?.[item.label]
-    );
 
-    return (
-      <div className="section" key={category.categoryName}>
-        <h3>{category.categoryName}</h3>
-        {checkedItems.length ? (
-          <ul>
-            {checkedItems.map((item) => (
-              <li key={item.label}>{item.label}</li>
-            ))}
-          </ul>
-        ) : (
-          <p>No {category.categoryName.toLowerCase()} listed</p>
-        )}
-      </div>
-    );
-  });
-};
+
+
+
+
+
+
 
 // Used in: FilterPanel.jsx and EditLocation.jsx for rendering dynamic categories.
 export function renderCheckboxGroupBySchema(title, items, values, onChange) {
@@ -75,3 +61,5 @@ export function renderCheckboxGroupWithNotesBySchema(
     </div>
   );
 }
+
+

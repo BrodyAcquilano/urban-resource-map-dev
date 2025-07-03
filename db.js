@@ -5,7 +5,7 @@ import { MongoClient } from "mongodb";
 // In-memory cache to store clients by URI
 const mongoClientCache = {};
 
-// Optional: Default URI (your current community database)
+// Optional: Default URI 
 const DEFAULT_URI = process.env.MONGO_URI;
 
 export async function getMongoClient(uri) {

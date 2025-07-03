@@ -4,7 +4,6 @@ import { useEffect, useRef } from "react";
 import L from "leaflet";
 import { useMap } from "react-leaflet";
 
-// Optional: Same icon as in MapPanel
 const customIcon = new L.Icon({
   iconUrl: "https://unpkg.com/leaflet@1.9.3/dist/images/marker-icon.png",
   iconSize: [25, 41],
@@ -14,18 +13,18 @@ const customIcon = new L.Icon({
   shadowSize: [41, 41],
 });
 
-function OffscreenMap({ tileUrl, filteredMarkers ,center, zoom}) {
+function OffscreenMap({ tileUrl, filteredMarkers, center, zoom }) {
   const mapRef = useRef(null);
 
   function SyncView({ center, zoom }) {
-  const map = useMap();
+    const map = useMap();
 
-  useEffect(() => {
-    map.setView(center, zoom);
-  }, [center, zoom, map]);
+    useEffect(() => {
+      map.setView(center, zoom);
+    }, [center, zoom, map]);
 
-  return null;
-}
+    return null;
+  }
 
   useEffect(() => {
     const timeout = setTimeout(() => {
@@ -47,28 +46,33 @@ function OffscreenMap({ tileUrl, filteredMarkers ,center, zoom}) {
         overflow: "hidden",
       }}
     >
-<MapContainer
-  scrollWheelZoom={false}
-  zoomControl={false}         // 👈 Hide zoom buttons
-  style={{ height: "300px", width: "500px" }}
-  ref={mapRef}
-  center={center}
-  zoom={zoom}
->
-  <SyncView center={center} zoom={zoom} />
-  <TileLayer
-    url={tileUrl}
-    attribution="&copy; OpenStreetMap contributors"
-    crossOrigin="anonymous"
-  />
-  {filteredMarkers.map((marker) => (
-    <Marker
-      key={marker._id}
-      position={[parseFloat(marker.latitude), parseFloat(marker.longitude)]}
-      icon={customIcon}
-    />
-  ))}
-</MapContainer>
+      <MapContainer
+        scrollWheelZoom={false}
+        zoomControl={false}
+        style={{ height: "300px", width: "500px" }}
+        ref={mapRef}
+        center={center}
+        zoom={zoom}
+      >
+        <SyncView center={center} zoom={zoom} />
+        <TileLayer
+          url={tileUrl}
+          attribution="&copy; OpenStreetMap contributors"
+          crossOrigin="anonymous"
+        />
+        {filteredMarkers.map((marker) => {
+          const latitude = parseFloat(marker.sections[0].inputs[0].value);
+          const longitude = parseFloat(marker.sections[0].inputs[1].value);
+
+          return (
+            <Marker
+              key={marker._id}
+              position={[latitude, longitude]}
+              icon={customIcon}
+            />
+          );
+        })}
+      </MapContainer>
     </div>
   );
 }

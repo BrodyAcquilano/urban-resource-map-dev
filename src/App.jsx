@@ -97,7 +97,7 @@ function App() {
             mongoURI,
           },
         });
-        setMarkers(res.data);
+        setMarkers(res.data.map(doc => ({ ...doc.location, _id: doc._id })));
       } catch (err) {
         console.error("Failed to fetch markers:", err);
       } finally {

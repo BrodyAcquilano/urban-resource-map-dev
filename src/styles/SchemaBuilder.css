@@ -28,9 +28,7 @@
   flex-direction: column;
 }
 
-.schema-column:last-child {
-  border-right: none;
-}
+
 
 .section-header {
   background-color: #3f4442;

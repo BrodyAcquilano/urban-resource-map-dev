@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import "../styles/SchemaBuilder.css";
+
 import {
   defaultSchema,
   generateNewSection,
@@ -768,15 +769,15 @@ function SchemaBuilder() {
                       }
                       onChange={handleDisplayStyleChange}
                     >
-                      <option value="List">List</option>
-                      <option value="Table">Table</option>
+                      <option value="Single">List</option>
+                      <option value="List">Table</option>
                     </select>
                   </label>
 
                   {/* Formatting Note */}
                   <p className="input-configurator-message">
                     If the section contains only checkboxes with notes, you can
-                    optionally display them in a table format in
+                    optionally display them with notes in
                     AddLocationModal
                   </p>
                 </div>
@@ -871,6 +872,36 @@ function SchemaBuilder() {
               {schema.sections[selectedSectionIndex].inputs[selectedInputIndex]
                 .type === "hours" && (
                 <div className="input-configurator-group">
+
+{/* Filter */}
+                  <label className="input-configurator-option">
+                    <input
+                      type="checkbox"
+                      checked={
+                        schema.sections[selectedSectionIndex].inputs[
+                          selectedInputIndex
+                        ].isFilter
+                      }
+                      onChange={() => toggleTextNumberOption("isFilter")}
+                    />
+                    Show as Filter Option
+                  </label>
+
+                  {/* Display */}
+                  <label className="input-configurator-option">
+                    <input
+                      type="checkbox"
+                      checked={
+                        schema.sections[selectedSectionIndex].inputs[
+                          selectedInputIndex
+                        ].isDisplayed
+                      }
+                      onChange={() => toggleTextNumberOption("isDisplayed")}
+                    />
+                    Display in Info Panel
+                  </label>
+
+
                   <p className="input-configurator-message">
                     This is a special input type that uses a table of dropdown
                     inputs with weekdays as the rows, and open and close times

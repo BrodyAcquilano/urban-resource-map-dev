@@ -78,7 +78,7 @@ export const generateNewInput = (type) => {
     baseInput.isScorable = false;
     baseInput.score = 3;
     baseInput.notes = '';
-    baseInput.displayStyle="List";
+    baseInput.displayStyle="Single";
   }
 
   if (type === 'dropdown') {

@@ -3,9 +3,7 @@ import {
   MapContainer,
   TileLayer,
   Marker,
-  Popup,
   ZoomControl,
-  GeoJSON,
   useMapEvents,
 } from "react-leaflet";
 import L from "leaflet";
@@ -82,23 +80,25 @@ function MapPanel({
           crossOrigin="anonymous"
         />
 
-        {filteredMarkers.map((marker) => (
-          <Marker
-            key={marker._id}
-            position={[parseFloat(marker.latitude), parseFloat(marker.longitude)]}
-            icon={customIcon}
-            eventHandlers={{
-              click: () => setSelectedLocation(marker),
-            }}
-          >
-            <Popup>
-              <strong>{marker.name}</strong>
-              <br />
-              {marker.address || "No address"}
-            </Popup>
-          </Marker>
-        ))}
+        {filteredMarkers.map((marker) => {
+          const latitude = parseFloat(marker.sections[0].inputs[0].value);
+          const longitude = parseFloat(marker.sections[0].inputs[1].value);
 
+          return (
+            <Marker
+              key={marker._id}
+              position={[latitude, longitude]}
+              icon={customIcon}
+              eventHandlers={{
+                click: () => setSelectedLocation(marker),
+              }}
+            >
+                   <Popup>
+              <strong>Selected Location</strong>
+            </Popup>
+            </Marker>
+          );
+        })}
 
         {heatMap && heatMap.pixels && heatMap.bounds && (
           <HeatMapLayer pixels={heatMap.pixels} bounds={heatMap.bounds} />

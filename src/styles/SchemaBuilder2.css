@@ -1,132 +1,606 @@
 /* ───────────────────────────────────────────── */
-/* 🎨 Schema Builder Page Styles - Glassmorphism  */
+/* 📦 GLOBAL LAYOUT                              */
 /* ───────────────────────────────────────────── */
 
-/* Page Background */
 .schema-builder-container {
-  display: flex;
-  gap: 2rem;
-  padding: 2rem;
-  min-height: 80vh;
-  background-image: url('/marita-kavelashvili-ugnrXk1129g-unsplash.jpg');
+  display: grid;
+  grid-template-columns: 300px 1fr 1fr;
+  height: calc(100vh - 100px);
+  background-color: #f0f4f8;
+  overflow: hidden;
+   background-image: url('../../public/marita-kavelashvili-ugnrXk1129g-unsplash.jpg');
   background-size: cover;
   background-position: center;
   background-attachment: fixed;
-  align-items: stretch; /* ✅ All columns same height */
 }
 
-/* Column Panels */
-.schema-column {
-  flex: 1;
-  border-radius: 20px;
-  padding: 1rem;
-  background-color: rgba(54, 164, 109, 0.2);
-  border: 2px solid rgb(25, 80, 59);
-  backdrop-filter: blur(10px);
-  box-shadow: 0 0 8px rgba(0, 0, 0, 1);
-  color: rgb(59, 71, 63);
-  box-sizing: border-box;
-  min-height: 100%;
-}
-
-/* Left Column: Invisible Container */
 .schema-column-left {
-  max-width: 300px;
-  background-color: transparent;
-  border: none;
-  box-shadow: none;
-  backdrop-filter: none; /* ✅ No blur on the container */
-  padding: 0;
   display: flex;
   flex-direction: column;
-  gap: 1.5rem; /* Optional: add vertical space between panels */
+  border: 5px solid rgb(16, 58, 22);
+   border-radius:20px;
+  overflow: hidden;
+   background-color: rgba(54, 164, 109, 0.05);
+  backdrop-filter: blur(5px);
+  margin:20px;
+}
+
+.schema-column {
+  border: 2px solid rgb(255, 255, 255);
+  border-radius:20px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+      background-color: rgba(54, 164, 109, 0.05);
+  backdrop-filter: blur(5px);
+margin:20px;
+}
+
+
+
+.section-header {
+  background-color: #0c4428;
+  color: white;
+  padding: 0px;
+  border-bottom: 2px solid  rgb(255, 255, 255);
+  margin: 0;
+  font-size: 0.8rem;
+  font-family:monospace;
+  font-weight: 300;
+  text-align: center;
+  box-sizing: border-box;
+  flex: 0 0 auto;
+}
+
+.section-content {
+  flex: 1 1 auto;
+  overflow-y: auto;
+  padding: 1rem;
+  box-sizing: border-box;
+
+     background-color: transparent;
  
 }
 
-/* Sections Manager and Add Input Containers */
-.sections-manager,
-.add-input-container {
-  border: 1px solid rgb(25, 80, 59);
-  border-radius: 12px;
-  padding: 1rem;
-  background-color: rgba(54, 164, 109, 0.4);
-  backdrop-filter: blur(10px);
-  box-shadow: 0 0 8px rgba(0, 0, 0, 1);
-  color: white;
-}
 
-/* Section Headers */
-.sections-manager h2,
-.add-input-container h2,
-.schema-column-center h2,
-.schema-column-right h2 {
-  background-color: #36a46d;
-  color: white;
-  padding: 0.5rem;
-  border-radius: 6px;
-  margin-bottom: 1rem;
-  font-size: 1.2rem;
-  text-align: center;
-}
+/* ───────────────────────────────────────────── */
+/* 🛠️  MODAL STYLES                               */
+/* ───────────────────────────────────────────── */
 
-/* Buttons */
-button {
-  padding: 6px 16px;
-  font-size: 0.9rem;
-  background-color: #36a46d;
-  color: white;
-  border: 1px solid #1b5c3f;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: background-color 0.2s ease;
-  margin: 0.3rem 0.3rem 0.3rem 0;
-}
 
-button:hover {
-  background-color: #2b8258;
-}
 
-/* Schema Preview Modal */
 .schema-preview-modal {
   position: fixed;
   top: 0;
-  bottom: 0;
   left: 0;
-  right: 0;
-  width: 52vw;
-  max-width: 90vw;
-  padding: 2vh 2vw;
+  width: 100%;
+  height: 100%;
   background-color: rgba(0, 0, 0, 0.5);
-  overflow-y: auto;
-  overflow-x: hidden;
-  z-index: 2000;
   display: flex;
-  align-items: flex-start;
   justify-content: center;
-  backdrop-filter: blur(70px);
+  align-items: center;
+  z-index: 2000;
+  overflow-y:auto;
 }
 
 .modal-content {
-  width: 50vw;
-  max-width: 100%;
-  font-family: sans-serif;
-  background-color: rgba(54, 164, 109, 0.4);
-  margin: 2vh 2vw;
-  padding: 2vh 2vw;
-  border: 2px solid rgb(25, 80, 59);
-  backdrop-filter: blur(10px);
+  background-color: white;
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  max-width: 600px;
+  width: 90%;
+}
+
+.schema-preview-block {
+  background-color: #f7f7f7;
+  padding: 1rem;
+  max-height: 400px;
+  overflow-y: auto;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-family: monospace;
+  font-size: 0.8rem;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  margin-bottom: 1rem;
+}
+
+.copy-schema-button {
+  background-color: #302e2e;
   color: white;
-  box-shadow: 0 0 8px rgba(0, 0, 0, 1);
-  box-sizing: border-box;
-  border-radius: 20px;
-  position: relative;
+  border: 1px solid #070707;
+  border-radius: 6px;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  margin-right: 0.5rem;
+  transition: background-color 0.2s ease;
+}
+
+.copy-schema-button:hover {
+  background-color: #070707;
+}
+
+.close-modal-button {
+  background-color: #302e2e;
+  color: white;
+  border: 1px solid #070707;
+  border-radius: 6px;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  margin-top: 1rem;
+  transition: background-color 0.2s ease;
+}
+
+.close-modal-button:hover {
+  background-color: #070707;
+}
+
+/* ───────────────────────────────────────────── */
+/* 📋 SECTIONS MANAGER                           */
+/* ───────────────────────────────────────────── */
+
+.sections-manager {
+  flex: 1;
+  border-bottom: 2px solid  rgb(255, 255, 255);
   display: flex;
   flex-direction: column;
+  overflow: hidden;
+  background-color: transparent;
+ 
+
 }
 
-/* List Styling */
-ul {
-  padding-left: 1.2rem;
+/* Toolbar Header */
+.sections-manager-toolbar {
+  background-color:  #0c4428;;
+  color: white;
+  padding: 0.3rem 0.5rem;
+  border-bottom: 2px solid rgb(48, 48, 48);
+  font-size: 1rem;
+  font-weight: 300;
+  text-align: left;
+  font-family: monospace;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height:1.5rem;
 }
 
+.sections-manager-toolbar-title {
+  margin: 0;
+}
+
+.sections-manager-add-tool {
+  cursor: pointer;
+  user-select: none;
+  font-size: 1rem;
+}
+
+.section-manager-content {
+  flex: 1 1 auto;
+  overflow-y: auto;
+  padding: 0px;
+  box-sizing: border-box;
+  background-color: #ffffff;
+    background-color:transparent;
+ 
+}
+
+.sections-manager-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.sections-manager-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #ddd; /* Default box color */
+  color: black;
+  border-bottom: 2px solid rgb(48, 48, 48);
+  font-size: 0.8rem;
+  padding: 0.3rem 0.5rem;
+  cursor: pointer;
+  user-select: none;
+}
+
+.sections-manager-item-selected {
+  background-color:#aaa3a3; /* Light green when selected */
+}
+
+.sections-manager-item-content {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+}
+
+.sections-manager-bullet {
+  margin-right: 0.5rem;
+  color: #333;
+  font-weight: bold;
+  font-size: 1rem;
+}
+
+.sections-manager-name {
+  margin-right: 0.5rem;
+  cursor: text;
+  display: inline-block;
+  max-width: 150px;
+  min-width: 60px;
+  border: none;
+  background: transparent;
+  font-family: monospace;
+  font-size: 0.8rem;
+}
+
+.sections-manager-name:focus {
+  outline: none;
+}
+
+
+/* Sections Manager Delete Button */
+.sections-manager-delete {
+  color: red;
+  margin-left: 0.5rem;
+  cursor: pointer;
+  user-select: none;
+  font-weight: bold;
+  font-size: 1.3rem; 
+  transition: color 0.2s ease;
+}
+
+.sections-manager-delete:hover {
+  color: darkred;
+}
+
+.sections-manager-item:hover {
+  background-color: #aaa3a3;
+}
+
+
+/* ───────────────────────────────────────────── */
+/* ➕ ADD INPUT PANEL                             */
+/* ───────────────────────────────────────────── */
+
+.add-input-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background-color: #ffffff;
+  height: 1.5rem;
+  background-color:transparent;
+
+}
+
+.add-input-toolbar {
+  background-color:   #ddd;
+  color: black;
+  padding: 0.3rem 0.5rem;
+  border-bottom: 2px solid rgb(48, 48, 48);
+  font-size: 0.8rem;
+  font-weight: 300;
+  font-family: monospace;
+  text-align: left;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height:1.5rem;
+}
+
+.add-input-toolbar-title {
+  margin: 0;
+}
+
+.add-input-add-tool {
+  cursor: pointer;
+  user-select: none;
+  font-size:1rem;
+}
+
+.add-input-toolbar:hover {
+  background-color: #aaa3a3;
+}
+
+
+/* ───────────────────────────────────────────── */
+/* 🎯 SELECTED SECTION STYLING                     */
+/* ───────────────────────────────────────────── */
+
+.selected-section-toolbar {
+  background-color: #0c4428;;
+  color: white;
+  padding: 0.3rem 0.5rem;
+  border-bottom: 2px solid rgb(48, 48, 48);
+  font-size: 1rem;
+  font-weight: 300;
+  text-align: center;
+  height:1.5rem;
+   font-family: monospace;
+}
+
+.selected-section-toolbar-title {
+  margin: 0;
+}
+
+.selected-section-content {
+  flex: 1 1 auto;
+  overflow-y: auto;
+  padding: 0;
+  box-sizing: border-box;
+  background-color: #ffffff;
+  background-color:transparent;
+
+}
+
+
+.selected-section-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+   height: 1.5rem;
+}
+
+.selected-section-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #ddd;
+  color: black;
+  border-bottom: 2px solid rgb(48, 48, 48);
+  font-size: 0.8rem;
+  padding: 0.3rem 0.5rem;
+  cursor: pointer;
+  user-select: none;
+ 
+}
+
+.selected-section-item-selected {
+  background-color: #aaa3a3;
+}
+
+.selected-section-item:hover {
+  background-color: #aaa3a3;
+}
+
+.selected-section-item-content {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+}
+
+.selected-section-bullet {
+  margin-right: 0.5rem;
+  color: #333;
+  font-weight: bold;
+  font-size: 1rem;
+}
+
+.selected-section-label {
+  margin-right: 0.5rem;
+  cursor: text;
+  display: inline-block;
+  max-width: 150px;
+  min-width: 60px;
+  border: none;
+  background: transparent;
+  font-family: monospace;
+  font-size: 0.8rem;
+}
+
+.selected-section-label:focus {
+  outline: none;
+}
+
+
+/* Selected Section Delete Button */
+.selected-section-delete {
+  color: red;
+  margin-left: 0.5rem;
+  cursor: pointer;
+  user-select: none;
+  font-weight: bold;
+  font-size: 1.3rem; 
+ 
+  transition: color 0.2s ease;
+}
+
+.selected-section-delete:hover {
+  color: darkred;
+}
+
+/* ───────────────────────────────────────────── */
+/* ⚙️  INPUT CONFIGURATOR TOOLBAR                */
+/* ───────────────────────────────────────────── */
+
+.input-configurator-toolbar {
+  background-color: #0c4428;
+  color: white;
+  padding: 0.3rem 0.5rem;
+  border-bottom: 2px solid rgb(48, 48, 48);
+  font-size: 1rem;
+  font-weight: 300;
+  text-align: center;
+  height: 1.5rem;
+  font-family: monospace;
+}
+
+.input-configurator-toolbar-title {
+  margin: 0;
+}
+
+.input-configurator-content {
+  flex: 1 1 auto;
+  overflow-y: auto;
+  padding: 1rem;
+  box-sizing: border-box;
+  background-color: #ffffff;
+  background-color:transparent;
+  
+}
+
+/* 🔄 General Configurator Group for All Input Types */
+.input-configurator-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 1rem;
+}
+
+/* 🔲 Checkbox/Option Styling */
+.input-configurator-option {
+  font-family: monospace;
+  font-size: 0.9rem;
+}
+
+
+
+/* 📝 Notes Field Styling */
+.input-configurator-notes {
+  display: flex;
+  flex-direction: column;
+  font-family: monospace;
+  font-size: 0.9rem;
+}
+
+.input-configurator-notes textarea {
+  margin-top: 0.3rem;
+  padding: 0.4rem;
+  font-family: monospace;
+  font-size: 0.9rem;
+  resize: vertical;
+}
+
+/* ───────────────────────────────────────────── */
+/* 🎛️  INPUT CONFIGURATOR: DROPDOWN OPTIONS       */
+/* ───────────────────────────────────────────── */
+
+.input-configurator-subtitle {
+  font-family: monospace;
+  font-size: 0.9rem;
+  margin: 0.5rem 0;
+  font-weight: bold;
+}
+
+.input-configurator-dropdown-options {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 1rem 0;
+}
+
+.input-configurator-dropdown-option-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.input-configurator-dropdown-option-item input {
+  flex: 1;
+  padding: 0.4rem;
+  font-family: monospace;
+  font-size: 0.8rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.input-configurator-delete-option {
+  color: red;
+  margin-left: 0.5rem;
+  cursor: pointer;
+  user-select: none;
+  font-size: 1.3rem;
+  font-weight: bold;
+}
+
+.input-configurator-delete-option:hover {
+  color: darkred;
+}
+
+.input-configurator-add-option-button {
+  background-color: #302e2e;
+  color: white;
+  border: 1px solid #070707;
+  border-radius: 6px;
+  padding: 0.4rem 1rem;
+  cursor: pointer;
+  font-family: monospace;
+  font-size: 0.9rem;
+}
+
+.input-configurator-add-option-button:hover {
+  background-color: #070707;
+}
+
+.input-configurator-message {
+  font-family: monospace;
+  font-size: 0.9rem;
+  background-color: #f7f7f7;
+  padding: 0.8rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+
+/* ───────────────────────────────────────────── */
+/* 🦶 FOOTER TOOLBAR                             */
+/* ───────────────────────────────────────────── */
+
+.schema-builder-footer-toolbar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 40px;
+  background-color: #0c4428;
+  
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.footer-content-wrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 80%;
+  max-width: 1000px;
+}
+
+
+.schema-builder-footer-toolbar button {
+  background-color: #ccc;
+  color: black;
+  border: 1px solid #070707;
+  border-radius: 6px;
+  padding: 0.4rem 1rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  font-family: monospace;
+}
+
+.schema-builder-footer-toolbar button:hover {
+  background-color: #aaa3a3;
+}
+
+.footer-input-group {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.footer-input-group label {
+  color: white;
+  font-family: monospace;
+  font-size: 0.9rem;
+}
+
+.footer-input-group input {
+  margin-left: 0.5rem;
+  padding: 0.3rem;
+  font-family: monospace;
+  font-size: 0.9rem;
+}
 
