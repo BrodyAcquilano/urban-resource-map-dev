@@ -33,7 +33,7 @@ function FilterPanel({
       schemaSection.inputs.forEach((schemaInput) => {
         if (schemaInput.isFilter) {
           if (schemaInput.type === "number") {
-            initialState[schemaInput.id] = { minValue: "", maxValue: "" };
+            initialState[schemaInput.id] = { min: "", max: "" };
           } else if (schemaInput.type === "hours") {
             initialState[schemaInput.id] = { day: "Any", time: "Any" };
           } else if (schemaInput.type === "dropdown") {
@@ -50,7 +50,7 @@ function FilterPanel({
   }, [currentSchema]);
 
   useEffect(() => {
-    if (!currentSchema) return;
+    if (!currentSchema || Object.keys(filterState).length === 0) return;
 
     const matchesFilter = (marker) => {
       for (
@@ -86,8 +86,8 @@ function FilterPanel({
           }
 
           if (schemaInput.type === "number") {
-            const min = parseFloat(filterValue.minValue) || -Infinity;
-            const max = parseFloat(filterValue.maxValue) || Infinity;
+            const min = parseFloat(filterValue.min) || -Infinity;
+            const max = parseFloat(filterValue.max) || Infinity;
             const markerNumber = parseFloat(markerInput.value);
             if (
               markerInput.value !== "" &&
