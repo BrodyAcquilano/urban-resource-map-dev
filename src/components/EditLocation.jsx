@@ -6,6 +6,7 @@ import axios from "axios";
 import {
   renderDynamicFormPage,
   validateFormData,
+  initializeFormData,
 } from "../utils/EditLocationHelpers.jsx";
 
 function EditLocation({
@@ -16,15 +17,37 @@ function EditLocation({
   currentSchema,
   currentCollection,
 }) {
-
   const [formData, setFormData] = useState({});
+  const [skipInitialization, setSkipInitialization] = useState(false);
 
-useEffect(() => {
-  if (selectedLocation) {
-    setFormData(selectedLocation);
+  useEffect(() => {
+  if (skipInitialization) {
+    setSkipInitialization(false);
+    return; 
   }
-}, [selectedLocation]);
 
+  if (selectedLocation && currentSchema) {
+    const initializedForm = initializeFormData(currentSchema);
+
+    currentSchema.sections.forEach((schemaSection, sectionIndex) => {
+      schemaSection.inputs.forEach((schemaInput, inputIndex) => {
+        const locationValue = selectedLocation.sections?.[sectionIndex]?.inputs?.[inputIndex];
+        if (!locationValue) return;
+
+        const formInput = initializedForm.sections[sectionIndex].inputs[inputIndex];
+
+        if (schemaInput.type === "hours") {
+          formInput.isLocationOpen = locationValue.isLocationOpen || formInput.isLocationOpen;
+          formInput.openHours = locationValue.openHours || formInput.openHours;
+        } else {
+          formInput.value = locationValue.value;
+        }
+      });
+    });
+
+    setFormData(initializedForm);
+  }
+}, [selectedLocation, currentSchema]);
   const BASE_URL = import.meta.env.VITE_API_URL;
 
   const handleEditSubmit = async () => {
@@ -39,16 +62,18 @@ useEffect(() => {
         { location: formData },
         { params: { collectionName: currentCollection, mongoURI } }
       );
+      
 
       const response = await axios.get(`${BASE_URL}/api/locations`, {
         params: { collectionName: currentCollection, mongoURI },
       });
-      setMarkers(response.data);
+      setMarkers(response.data.map(doc => ({ ...doc.location, _id: doc._id })));
 
       const updated = response.data.find(
         (loc) => loc._id === selectedLocation._id
       );
       if (updated) {
+        setSkipInitialization(true);
         setSelectedLocation(updated);
       }
       alert("Location updated!");
@@ -72,7 +97,7 @@ useEffect(() => {
       const response = await axios.get(`${BASE_URL}/api/locations`, {
         params: { collectionName: currentCollection, mongoURI },
       });
-      setMarkers(response.data);
+     setMarkers(response.data.map(doc => ({ ...doc.location, _id: doc._id })));
       setSelectedLocation(null);
       alert("Location deleted.");
     } catch (error) {
@@ -99,8 +124,7 @@ useEffect(() => {
       </div>
 
       {currentSchema.sections.map((schemaSection, sectionIndex) => (
-        <div key={schemaSection.id} className="section">
-          <h3>{schemaSection.name}</h3>
+        <div key={schemaSection.id}>
           {renderDynamicFormPage({
             section: schemaSection,
             sectionIndex,
@@ -121,3 +145,4 @@ useEffect(() => {
 }
 
 export default EditLocation;
+

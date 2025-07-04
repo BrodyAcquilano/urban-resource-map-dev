@@ -1,4 +1,49 @@
-// src/utils/AddLocationModalHelpers.jsx
+export function initializeFormData(schema) {
+  const formData = { sections: [] };
+
+  for (const schemaSection of schema.sections) {
+    const formDataSection = {
+      id: schemaSection.id,
+      name: schemaSection.name,
+      inputs: [],
+    };
+
+    for (const schemaInput of schemaSection.inputs) {
+      let inputObject = {
+        id: schemaInput.id,
+        label: schemaInput.label,
+      };
+
+      if (schemaInput.type === "text" || schemaInput.type === "number") {
+        inputObject.value = "";
+      }
+
+      if (schemaInput.type === "checkbox") {
+        inputObject.value = false;
+      }
+
+      if (schemaInput.type === "dropdown") {
+        inputObject.value = schemaInput.options?.[0]?.label || "";
+      }
+
+      if (schemaInput.type === "hours") {
+        inputObject.isLocationOpen = Object.fromEntries(
+          daysOfWeek.map((day) => [day, false])
+        );
+        inputObject.openHours = Object.fromEntries(
+          daysOfWeek.map((day) => [day, { open: "", close: "" }])
+        );
+      }
+
+      formDataSection.inputs.push(inputObject);
+    }
+
+    formData.sections.push(formDataSection);
+  }
+
+  return formData;
+}
+
 
 export function renderDynamicFormPage({
   section,
@@ -6,7 +51,14 @@ export function renderDynamicFormPage({
   setFormData,
   sectionIndex,
 }) {
-  if (!section) return null;
+   if (
+    !section ||
+    !formData ||
+    !formData.sections ||
+    !formData.sections[sectionIndex] ||
+    !formData.sections[sectionIndex].inputs
+  )
+    return null;
 
   return (
     <div>
