@@ -124,7 +124,7 @@ function EditLocation({
       </div>
 
       {currentSchema.sections.map((schemaSection, sectionIndex) => (
-        <div key={schemaSection.id}>
+        <div key={schemaSection.id} className="section">
           {renderDynamicFormPage({
             section: schemaSection,
             sectionIndex,
