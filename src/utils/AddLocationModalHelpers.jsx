@@ -1,15 +1,6 @@
 // src/utils/AddLocationModalHelpers.jsx
 
-// ────────────────
-// Rendering
-// ────────────────
-
-export function renderDynamicFormPage({
-  section,
-  formData,
-  setFormData,
-  sectionIndex,
-}) {
+export function renderDynamicFormPage({ section, formData, setFormData, sectionIndex }) {
   if (!section) return null;
 
   const allCheckboxes = section.inputs.every((input) => input.type === "checkbox");
@@ -33,7 +24,6 @@ export function renderDynamicFormPage({
                     newFormData.sections[sectionIndex].inputs[inputIndex] = {
                       ...newFormData.sections[sectionIndex].inputs[inputIndex],
                       value: checked,
-                      score: input.isScoreable ? (checked ? 3 : 0) : undefined,
                     };
                     return newFormData;
                   });
@@ -53,7 +43,7 @@ export function renderDynamicFormPage({
       {section.inputs.map((input, inputIndex) => {
         const inputValue = formData.sections[sectionIndex].inputs[inputIndex].value;
 
-        if (input.type === "text" || input.type === "number") {
+        if (input.type === "text") {
           return (
             <div key={input.id} className="form-group">
               <label>{input.label}:</label>
@@ -73,12 +63,61 @@ export function renderDynamicFormPage({
           );
         }
 
+        if (input.type === "number") {
+          return (
+            <div key={input.id} className="form-group">
+              <label>{input.label}:</label>
+              <input
+                type={input.type}
+                value={inputValue || ""}
+                onChange={(e) => {
+                  let newValue = e.target.value;
+
+                  if (newValue.length > (input.maxLength || 20)) {
+                    return;
+                  }
+
+                  setFormData((prev) => {
+                    const newFormData = { ...prev };
+                    newFormData.sections[sectionIndex].inputs[inputIndex].value = newValue;
+                    return newFormData;
+                  });
+                }}
+                onBlur={() => {
+                  setFormData((prev) => {
+                    const newFormData = { ...prev };
+                    let value = newFormData.sections[sectionIndex].inputs[inputIndex].value;
+
+                    if (isNaN(Number(value))) {
+                      value = "";
+                    } else {
+                      let numericValue = Number(value);
+
+                      if (typeof input.minValue === "number" && numericValue < input.minValue) {
+                        numericValue = input.minValue;
+                      }
+                      if (typeof input.maxValue === "number" && numericValue > input.maxValue) {
+                        numericValue = input.maxValue;
+                      }
+
+                      value = numericValue;
+                    }
+
+                    newFormData.sections[sectionIndex].inputs[inputIndex].value = value;
+                    return newFormData;
+                  });
+                }}
+              />
+            </div>
+          );
+        }
+
         if (input.type === "dropdown") {
           return (
             <div key={input.id} className="form-group">
               <label>{input.label}:</label>
               <select
-                value={inputValue || ""}
+                value={inputValue || input.options[0]?.label || ""}
                 onChange={(e) =>
                   setFormData((prev) => {
                     const newFormData = { ...prev };
@@ -87,7 +126,6 @@ export function renderDynamicFormPage({
                   })
                 }
               >
-                <option value="">Select an option</option>
                 {input.options.map((opt) => (
                   <option key={opt.id} value={opt.label}>
                     {opt.label}
@@ -113,7 +151,6 @@ export function renderDynamicFormPage({
                       newFormData.sections[sectionIndex].inputs[inputIndex] = {
                         ...newFormData.sections[sectionIndex].inputs[inputIndex],
                         value: checked,
-                        score: input.isScoreable ? (checked ? 3 : 0) : undefined,
                       };
                       return newFormData;
                     });
@@ -238,16 +275,7 @@ function renderHoursInput({ input, formData, setFormData, sectionIndex, inputInd
   );
 }
 
-
-export const daysOfWeek = [
-  "Monday",
-  "Tuesday",
-  "Wednesday",
-  "Thursday",
-  "Friday",
-  "Saturday",
-  "Sunday",
-];
+export const daysOfWeek = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
 
 export const timeOptionsAMPM = Array.from({ length: 48 }, (_, i) => {
   const hour = Math.floor(i / 2);
@@ -262,69 +290,60 @@ export const timeOptionsAMPM = Array.from({ length: 48 }, (_, i) => {
 // ────────────────
 
 export function initializeFormData(schema) {
-  const sections = [];
+  const formData = { sections: [] };
 
-  schema.sections.forEach((section) => {
-    const sectionData = {
-      id: section.id,
-      name: section.name,
+  for (const schemaSection of schema.sections) {
+    const formDataSection = {
+      id: schemaSection.id,
+      name: schemaSection.name,
       inputs: [],
     };
 
-    section.inputs.forEach((input) => {
-      if (input.type === "text" || input.type === "number") {
-        sectionData.inputs.push({
-          id: input.id,
-          label: input.label,
-          value: "",
-        });
+    for (const schemaInput of schemaSection.inputs) {
+      let inputObject = {
+        id: schemaInput.id,
+        label: schemaInput.label,
+      };
+
+      if (schemaInput.type === "text" || schemaInput.type === "number") {
+        inputObject.value = "";
       }
 
-      if (input.type === "checkbox") {
-        sectionData.inputs.push({
-          id: input.id,
-          label: input.label,
-          value: false,
-          ...(input.isScoreable && { score: 0 }),
-        });
+      if (schemaInput.type === "checkbox") {
+        inputObject.value = false;
       }
 
-      if (input.type === "dropdown") {
-        sectionData.inputs.push({
-          id: input.id,
-          label: input.label,
-          value: input.options?.[0]?.label || "",
-        });
+      if (schemaInput.type === "dropdown") {
+        inputObject.value = schemaInput.options?.[0]?.label || "";
       }
 
-    if (input.type === "hours") {
-  sectionData.inputs.push({
-    id: input.id,
-    label: input.label,
-    isLocationOpen: Object.fromEntries(
-      daysOfWeek.map((day) => [day, false])
-    ),
-    openHours: Object.fromEntries(
-      daysOfWeek.map((day) => [day, { open: "", close: "" }])
-    ),
-  });
+      if (schemaInput.type === "hours") {
+        inputObject.isLocationOpen = Object.fromEntries(
+          daysOfWeek.map((day) => [day, false])
+        );
+        inputObject.openHours = Object.fromEntries(
+          daysOfWeek.map((day) => [day, { open: "", close: "" }])
+        );
+      }
+
+      formDataSection.inputs.push(inputObject);
+    }
+
+    formData.sections.push(formDataSection);
+  }
+
+  return formData;
 }
-    });
 
-    sections.push(sectionData);
-  });
-
-  return { sections };
-}
 
 // ────────────────
 // Validation Functions
 // ────────────────
 
-export function validateFormData(schema, formData) {
+export function validateFormData(schema, formSections) {
   for (let sectionIndex = 0; sectionIndex < schema.sections.length; sectionIndex++) {
     const section = schema.sections[sectionIndex];
-    const sectionData = formData.sections[sectionIndex];
+    const sectionData = formSections[sectionIndex];
 
     if (!sectionData || !sectionData.inputs) {
       console.error(`Section ${section.name} is missing in form data.`);
@@ -333,27 +352,19 @@ export function validateFormData(schema, formData) {
 
     for (let inputIndex = 0; inputIndex < section.inputs.length; inputIndex++) {
       const input = section.inputs[inputIndex];
-      const value = sectionData.inputs[inputIndex];
+      const value = sectionData.inputs[inputIndex].value;
 
-      if (!input.isRequired) continue;
+      if (input.type === "text" || input.type === "number") {
+        if (input.isRequired && (value === "" || value === null || value === undefined)) {
+          return false;
+        }
 
-      if (input.type === "text" && isEmptyText(value)) {
-        return false;
+        if (input.type === "number") {
+          if (value !== "" && !isValidNumber(value, input)) {
+            return false;
+          }
+        }
       }
-
-      if (input.type === "number" && !isValidNumber(value, input)) {
-        return false;
-      }
-
-      if (input.type === "dropdown" && isEmptyDropdown(value)) {
-        return false;
-      }
-
-      if (input.type === "checkbox" && !isCheckboxChecked(value)) {
-        return false;
-      }
-
-      // Skipping hours input validation for now
     }
   }
 
@@ -364,28 +375,15 @@ export function validateFormData(schema, formData) {
 // Individual Field Validators
 // ────────────────
 
-function isEmptyText(value) {
-  return typeof value !== "string" || value.trim() === "";
-}
-
 function isValidNumber(value, input) {
   const num = parseFloat(value);
   if (isNaN(num)) return false;
 
-  const min = input.minValue !== undefined ? input.minValue : -Infinity;
-  const max = input.maxValue !== undefined ? input.maxValue : Infinity;
+  const min = typeof input.minValue === "number" ? input.minValue : -Infinity;
+  const max = typeof input.maxValue === "number" ? input.maxValue : Infinity;
 
   return num >= min && num <= max;
 }
-
-function isEmptyDropdown(value) {
-  return value === "";
-}
-
-function isCheckboxChecked(value) {
-  return value?.value === true;
-}
-
 
 export function validateHasOpenDay(isLocationOpen = {}) {
   return Object.values(isLocationOpen).some((v) => v === true);
@@ -409,7 +407,7 @@ export function validateOpenCloseTimes(openHours, isLocationOpen) {
   };
 
   for (const day of daysOfWeek) {
-    if (!isLocationOpen[day]) continue; // Skip closed days
+    if (!isLocationOpen[day]) continue;
 
     const open = openHours[day]?.open || "";
     const close = openHours[day]?.close || "";

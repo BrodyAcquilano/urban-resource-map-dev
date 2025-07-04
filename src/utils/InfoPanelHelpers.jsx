@@ -64,7 +64,7 @@ function renderIndividualInput(schemaInput, markerInput) {
     }
   }
 
-  if (schemaInput.type === "text" || schemaInput.type === "number" || schemaInput.type === "dropdown") {
+  if (schemaInput.type === "text" || schemaInput.type === "number") {
     if (markerInput.value === "" && !schemaInput.displayIfEmpty) return null;
 
     return (
@@ -74,6 +74,18 @@ function renderIndividualInput(schemaInput, markerInput) {
       </div>
     );
   }
+
+   if (schemaInput.type === "dropdown") {
+    if (markerInput.value === "") return null;
+
+    return (
+      <div key={schemaInput.id} className="form-group">
+        <label>{schemaInput.label}:</label>
+        <p>{markerInput.value }</p>
+      </div>
+    );
+  }
+
 
   if (schemaInput.type === "hours") {
     return renderHoursInput(schemaInput, markerInput);

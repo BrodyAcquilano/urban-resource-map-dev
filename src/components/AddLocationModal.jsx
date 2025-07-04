@@ -34,39 +34,30 @@ function AddLocationModal({
   const BASE_URL = import.meta.env.VITE_API_URL;
 
   const handleSubmit = async () => {
-    if (!validateFormData(currentSchema, formData)) {
-      window.alert("Form is missing required fields or contains invalid entries.");
-      return;
-    }
+    if (!validateFormData(currentSchema, formData.sections)) {
+  window.alert("Form is missing required fields or contains invalid entries.");
+  return;
+}
 
-    const locationData = {
-      sections: formData.sections,
-    };
+try {
+  const res = await axios.post(`${BASE_URL}/api/locations`, formData, {
+    params: { collectionName: currentCollection, mongoURI: mongoURI },
+  });
 
-    if (formData.hasHours) {
-      locationData.isLocationOpen = formData.isLocationOpen;
-      locationData.openHours = formData.openHours;
-    }
+  const newMarker = { _id: res.data.id, ...formData };
+  setMarkers((prev) => [...prev, newMarker]);
 
-    try {
-      const res = await axios.post(`${BASE_URL}/api/locations`, locationData, {
-        params: { collectionName: currentCollection, mongoURI: mongoURI },
-      });
-
-      const newMarker = { _id: res.data.id, ...locationData };
-      setMarkers((prev) => [...prev, newMarker]);
-
-      resetForm();
-      setPage(1);
-      onClose();
-      alert("Location added!");
-    } catch (err) {
-      console.error("Submit failed:", err);
-      window.alert("Failed to save location.");
-    }
+  resetForm();
+  setPage(1);
+  onClose();
+  alert("Location added!");
+} catch (err) {
+  console.error("Submit failed:", err.response?.data || err.message || err);
+  window.alert("Failed to save location.");
+}
   };
 
-  if (!isOpen || !currentSchema) return null;
+  if (!isOpen || !currentSchema || !formData.sections || formData.sections.length === 0) return null;
 
   const totalPages = currentSchema.sections.length;
   const currentSection = currentSchema.sections[page - 1];

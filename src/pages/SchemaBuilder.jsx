@@ -644,19 +644,7 @@ function SchemaBuilder() {
               {schema.sections[selectedSectionIndex].inputs[selectedInputIndex]
                 .type === "checkbox" && (
                 <div className="input-configurator-group">
-                  {/* Required */}
-                  <label className="input-configurator-option">
-                    <input
-                      type="checkbox"
-                      checked={
-                        schema.sections[selectedSectionIndex].inputs[
-                          selectedInputIndex
-                        ].isRequired
-                      }
-                      onChange={() => toggleCheckboxOption("isRequired")}
-                    />
-                    Required Input (Validate in Add/Edit Location)
-                  </label>
+                
 
                   {/* Filter Option */}
                   <label className="input-configurator-option">
@@ -729,20 +717,6 @@ function SchemaBuilder() {
                     />
                   </label>
 
-                  {/* Scorable */}
-                  <label className="input-configurator-option">
-                    <input
-                      type="checkbox"
-                      checked={
-                        schema.sections[selectedSectionIndex].inputs[
-                          selectedInputIndex
-                        ].isScorable
-                      }
-                      onChange={() => toggleCheckboxOption("isScorable")}
-                    />
-                    Used in Edit Score Modal For Scoring
-                  </label>
-
                   {/* Notes Field */}
                   <label className="input-configurator-notes">
                     Notes for Add Location Modal:
@@ -786,19 +760,7 @@ function SchemaBuilder() {
               {schema.sections[selectedSectionIndex].inputs[selectedInputIndex]
                 .type === "dropdown" && (
                 <div className="input-configurator-group">
-                  {/* Required */}
-                  <label className="input-configurator-option">
-                    <input
-                      type="checkbox"
-                      checked={
-                        schema.sections[selectedSectionIndex].inputs[
-                          selectedInputIndex
-                        ].isRequired
-                      }
-                      onChange={() => toggleCheckboxOption("isRequired")}
-                    />
-                    Required (Validate in Add/Edit Location)
-                  </label>
+                 
 
                   {/* Filter */}
                   <label className="input-configurator-option">
