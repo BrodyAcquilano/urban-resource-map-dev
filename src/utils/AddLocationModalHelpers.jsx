@@ -1,47 +1,19 @@
 // src/utils/AddLocationModalHelpers.jsx
 
-export function renderDynamicFormPage({ section, formData, setFormData, sectionIndex }) {
+export function renderDynamicFormPage({
+  section,
+  formData,
+  setFormData,
+  sectionIndex,
+}) {
   if (!section) return null;
-
-  const allCheckboxes = section.inputs.every((input) => input.type === "checkbox");
-  const allDisplayAsList = section.inputs.every((input) => input.displayStyle === "List");
-
-  if (allCheckboxes && allDisplayAsList) {
-    return (
-      <div>
-        <h3>{section.name}</h3>
-        {section.inputs.map((input, inputIndex) => (
-          <div key={input.id} className="inline-checkbox-row">
-            <label className="label-container">{input.label}</label>
-            <div className="checkbox-container">
-              <input
-                type="checkbox"
-                checked={formData.sections[sectionIndex].inputs[inputIndex].value || false}
-                onChange={(e) => {
-                  const checked = e.target.checked;
-                  setFormData((prev) => {
-                    const newFormData = { ...prev };
-                    newFormData.sections[sectionIndex].inputs[inputIndex] = {
-                      ...newFormData.sections[sectionIndex].inputs[inputIndex],
-                      value: checked,
-                    };
-                    return newFormData;
-                  });
-                }}
-              />
-            </div>
-            <div className="notes-cell">{input.note || ""}</div>
-          </div>
-        ))}
-      </div>
-    );
-  }
 
   return (
     <div>
       <h3>{section.name}</h3>
       {section.inputs.map((input, inputIndex) => {
-        const inputValue = formData.sections[sectionIndex].inputs[inputIndex].value;
+        const inputValue =
+          formData.sections[sectionIndex].inputs[inputIndex].value;
 
         if (input.type === "text") {
           return (
@@ -54,7 +26,9 @@ export function renderDynamicFormPage({ section, formData, setFormData, sectionI
                 onChange={(e) =>
                   setFormData((prev) => {
                     const newFormData = { ...prev };
-                    newFormData.sections[sectionIndex].inputs[inputIndex].value = e.target.value;
+                    newFormData.sections[sectionIndex].inputs[
+                      inputIndex
+                    ].value = e.target.value;
                     return newFormData;
                   })
                 }
@@ -79,31 +53,43 @@ export function renderDynamicFormPage({ section, formData, setFormData, sectionI
 
                   setFormData((prev) => {
                     const newFormData = { ...prev };
-                    newFormData.sections[sectionIndex].inputs[inputIndex].value = newValue;
+                    newFormData.sections[sectionIndex].inputs[
+                      inputIndex
+                    ].value = newValue;
                     return newFormData;
                   });
                 }}
                 onBlur={() => {
                   setFormData((prev) => {
                     const newFormData = { ...prev };
-                    let value = newFormData.sections[sectionIndex].inputs[inputIndex].value;
+                    let value =
+                      newFormData.sections[sectionIndex].inputs[inputIndex]
+                        .value;
 
                     if (isNaN(Number(value))) {
                       value = "";
                     } else {
                       let numericValue = Number(value);
 
-                      if (typeof input.minValue === "number" && numericValue < input.minValue) {
+                      if (
+                        typeof input.minValue === "number" &&
+                        numericValue < input.minValue
+                      ) {
                         numericValue = input.minValue;
                       }
-                      if (typeof input.maxValue === "number" && numericValue > input.maxValue) {
+                      if (
+                        typeof input.maxValue === "number" &&
+                        numericValue > input.maxValue
+                      ) {
                         numericValue = input.maxValue;
                       }
 
                       value = numericValue;
                     }
 
-                    newFormData.sections[sectionIndex].inputs[inputIndex].value = value;
+                    newFormData.sections[sectionIndex].inputs[
+                      inputIndex
+                    ].value = value;
                     return newFormData;
                   });
                 }}
@@ -121,7 +107,9 @@ export function renderDynamicFormPage({ section, formData, setFormData, sectionI
                 onChange={(e) =>
                   setFormData((prev) => {
                     const newFormData = { ...prev };
-                    newFormData.sections[sectionIndex].inputs[inputIndex].value = e.target.value;
+                    newFormData.sections[sectionIndex].inputs[
+                      inputIndex
+                    ].value = e.target.value;
                     return newFormData;
                   })
                 }
@@ -149,7 +137,9 @@ export function renderDynamicFormPage({ section, formData, setFormData, sectionI
                     setFormData((prev) => {
                       const newFormData = { ...prev };
                       newFormData.sections[sectionIndex].inputs[inputIndex] = {
-                        ...newFormData.sections[sectionIndex].inputs[inputIndex],
+                        ...newFormData.sections[sectionIndex].inputs[
+                          inputIndex
+                        ],
                         value: checked,
                       };
                       return newFormData;
@@ -157,6 +147,11 @@ export function renderDynamicFormPage({ section, formData, setFormData, sectionI
                   }}
                 />
               </div>
+
+              {/* Only display notes if they exist */}
+              {input.note && input.note.trim() !== "" && (
+                <div className="notes-cell">{input.note}</div>
+              )}
             </div>
           );
         }
@@ -177,11 +172,17 @@ export function renderDynamicFormPage({ section, formData, setFormData, sectionI
   );
 }
 
-function renderHoursInput({ input, formData, setFormData, sectionIndex, inputIndex }) {
+function renderHoursInput({
+  input,
+  formData,
+  setFormData,
+  sectionIndex,
+  inputIndex,
+}) {
   const hoursData = formData.sections[sectionIndex].inputs[inputIndex];
 
   return (
-    <div key={input.id}>
+    <div key={input.id} >
       <h3>{input.label}:</h3>
       <table>
         <thead>
@@ -204,15 +205,21 @@ function renderHoursInput({ input, formData, setFormData, sectionIndex, inputInd
                     const checked = e.target.checked;
                     setFormData((prev) => {
                       const newFormData = { ...prev };
-                      newFormData.sections[sectionIndex].inputs[inputIndex].isLocationOpen[day] = checked;
+                      newFormData.sections[sectionIndex].inputs[
+                        inputIndex
+                      ].isLocationOpen[day] = checked;
 
                       if (checked) {
-                        newFormData.sections[sectionIndex].inputs[inputIndex].openHours[day] = {
+                        newFormData.sections[sectionIndex].inputs[
+                          inputIndex
+                        ].openHours[day] = {
                           open: "9:00 a.m.",
                           close: "5:00 p.m.",
                         };
                       } else {
-                        newFormData.sections[sectionIndex].inputs[inputIndex].openHours[day] = {
+                        newFormData.sections[sectionIndex].inputs[
+                          inputIndex
+                        ].openHours[day] = {
                           open: "",
                           close: "",
                         };
@@ -231,7 +238,9 @@ function renderHoursInput({ input, formData, setFormData, sectionIndex, inputInd
                       onChange={(e) => {
                         setFormData((prev) => {
                           const newFormData = { ...prev };
-                          newFormData.sections[sectionIndex].inputs[inputIndex].openHours[day].open = e.target.value;
+                          newFormData.sections[sectionIndex].inputs[
+                            inputIndex
+                          ].openHours[day].open = e.target.value;
                           return newFormData;
                         });
                       }}
@@ -249,7 +258,9 @@ function renderHoursInput({ input, formData, setFormData, sectionIndex, inputInd
                       onChange={(e) => {
                         setFormData((prev) => {
                           const newFormData = { ...prev };
-                          newFormData.sections[sectionIndex].inputs[inputIndex].openHours[day].close = e.target.value;
+                          newFormData.sections[sectionIndex].inputs[
+                            inputIndex
+                          ].openHours[day].close = e.target.value;
                           return newFormData;
                         });
                       }}
@@ -275,7 +286,15 @@ function renderHoursInput({ input, formData, setFormData, sectionIndex, inputInd
   );
 }
 
-export const daysOfWeek = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
+export const daysOfWeek = [
+  "Monday",
+  "Tuesday",
+  "Wednesday",
+  "Thursday",
+  "Friday",
+  "Saturday",
+  "Sunday",
+];
 
 export const timeOptionsAMPM = Array.from({ length: 48 }, (_, i) => {
   const hour = Math.floor(i / 2);
@@ -335,13 +354,16 @@ export function initializeFormData(schema) {
   return formData;
 }
 
-
 // ────────────────
 // Validation Functions
 // ────────────────
 
 export function validateFormData(schema, formSections) {
-  for (let sectionIndex = 0; sectionIndex < schema.sections.length; sectionIndex++) {
+  for (
+    let sectionIndex = 0;
+    sectionIndex < schema.sections.length;
+    sectionIndex++
+  ) {
     const section = schema.sections[sectionIndex];
     const sectionData = formSections[sectionIndex];
 
@@ -355,7 +377,10 @@ export function validateFormData(schema, formSections) {
       const value = sectionData.inputs[inputIndex].value;
 
       if (input.type === "text" || input.type === "number") {
-        if (input.isRequired && (value === "" || value === null || value === undefined)) {
+        if (
+          input.isRequired &&
+          (value === "" || value === null || value === undefined)
+        ) {
           return false;
         }
 

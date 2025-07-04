@@ -53,18 +53,19 @@ export const generateNewInput = (type) => {
     id: Date.now(),
     label: `${capitalizeFirstLetter(type)}`,
     type,
-    isRequired: false,
     isFilter: false,
     isDisplayed: true,
   };
 
   if (type === 'text') {
+    baseInput.isRequired= false,
     baseInput.maxLength = 150;
     baseInput.displayIfEmpty = false;
     baseInput.emptyDisplayText = '';
   }
 
   if (type === 'number') {
+    baseInput.isRequired= false,
     baseInput.minValue = null;
     baseInput.maxValue = null;
     baseInput.maxLength = 20;
@@ -75,10 +76,10 @@ export const generateNewInput = (type) => {
   if (type === 'checkbox') {
     baseInput.displayWhenFalse = false;
     baseInput.falseDisplayText = '';
+    baseInput.trueDisplayText = '';
     baseInput.isScorable = false;
-    baseInput.score = 3;
     baseInput.notes = '';
-    baseInput.displayStyle="Single";
+
   }
 
   if (type === 'dropdown') {
@@ -86,7 +87,7 @@ export const generateNewInput = (type) => {
   }
 
   if (type === 'hours') {
-    baseInput.isHours = true;
+     baseInput.isRequired= false;
   }
 
   return baseInput;

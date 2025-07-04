@@ -116,13 +116,7 @@ function SchemaBuilder() {
     setSchema(updatedSchema);
   }
 
-  function handleFalseDisplayTextChange(e) {
-    const updatedSchema = { ...schema };
-    updatedSchema.sections[selectedSectionIndex].inputs[
-      selectedInputIndex
-    ].falseDisplayText = e.target.value;
-    setSchema(updatedSchema);
-  }
+ 
 
   //Text and Number Input Options handler
   function toggleTextNumberOption(option) {
@@ -174,13 +168,21 @@ function SchemaBuilder() {
     setSchema(updatedSchema);
   }
 
-  function handleDisplayStyleChange(e) {
+   function handleFalseDisplayTextChange(e) {
     const updatedSchema = { ...schema };
     updatedSchema.sections[selectedSectionIndex].inputs[
       selectedInputIndex
-    ].displayStyle = e.target.value;
+    ].falseDisplayText = e.target.value;
     setSchema(updatedSchema);
   }
+
+  function handleTrueDisplayTextChange(e) {
+  const updatedSchema = { ...schema };
+  updatedSchema.sections[selectedSectionIndex].inputs[
+    selectedInputIndex
+  ].trueDisplayText = e.target.value;
+  setSchema(updatedSchema);
+}
 
   //Dropdown
   function handleAddDropdownOption() {
@@ -241,6 +243,7 @@ function SchemaBuilder() {
               ➕
             </span>
           </div>
+
 
           <div className="section-manager-content">
             <ul className="sections-manager-list">
@@ -644,8 +647,6 @@ function SchemaBuilder() {
               {schema.sections[selectedSectionIndex].inputs[selectedInputIndex]
                 .type === "checkbox" && (
                 <div className="input-configurator-group">
-                
-
                   {/* Filter Option */}
                   <label className="input-configurator-option">
                     <input
@@ -688,19 +689,6 @@ function SchemaBuilder() {
                     Display When False (Show in Info Panel even if Unchecked)
                   </label>
 
-                  {/* Display When False */}
-                  <label className="input-configurator-option">
-                    <input
-                      type="checkbox"
-                      checked={
-                        schema.sections[selectedSectionIndex].inputs[
-                          selectedInputIndex
-                        ].displayWhenFalse
-                      }
-                      onChange={() => toggleCheckboxOption("displayWhenFalse")}
-                    />
-                    Display When False (Show in Info Panel even if Unchecked)
-                  </label>
 
                   {/* Default Text if False */}
                   <label className="input-configurator-notes">
@@ -713,6 +701,21 @@ function SchemaBuilder() {
                         ].falseDisplayText
                       }
                       onChange={handleFalseDisplayTextChange}
+                      maxLength={40}
+                    />
+                  </label>
+
+                  {/* Default Text if Checked */}
+                  <label className="input-configurator-notes">
+                    Text to Display if Checked:
+                    <input
+                      type="text"
+                      value={
+                        schema.sections[selectedSectionIndex].inputs[
+                          selectedInputIndex
+                        ].trueDisplayText || "" // Optional field
+                      }
+                      onChange={handleTrueDisplayTextChange}
                       maxLength={40}
                     />
                   </label>
@@ -731,37 +734,12 @@ function SchemaBuilder() {
                       rows={1}
                     />
                   </label>
-
-                  {/* Display Style */}
-                  <label className="input-configurator-option">
-                    Display Style (List or Table):
-                    <select
-                      value={
-                        schema.sections[selectedSectionIndex].inputs[
-                          selectedInputIndex
-                        ].displayStyle
-                      }
-                      onChange={handleDisplayStyleChange}
-                    >
-                      <option value="Single">List</option>
-                      <option value="List">Table</option>
-                    </select>
-                  </label>
-
-                  {/* Formatting Note */}
-                  <p className="input-configurator-message">
-                    If the section contains only checkboxes with notes, you can
-                    optionally display them with notes in
-                    AddLocationModal
-                  </p>
                 </div>
               )}
               {/* DROPDOWN INPUT CONFIGURATION */}
               {schema.sections[selectedSectionIndex].inputs[selectedInputIndex]
                 .type === "dropdown" && (
                 <div className="input-configurator-group">
-                 
-
                   {/* Filter */}
                   <label className="input-configurator-option">
                     <input
@@ -834,8 +812,7 @@ function SchemaBuilder() {
               {schema.sections[selectedSectionIndex].inputs[selectedInputIndex]
                 .type === "hours" && (
                 <div className="input-configurator-group">
-
-{/* Filter */}
+                  {/* Filter */}
                   <label className="input-configurator-option">
                     <input
                       type="checkbox"
@@ -863,14 +840,10 @@ function SchemaBuilder() {
                     Display in Info Panel
                   </label>
 
-
                   <p className="input-configurator-message">
                     This is a special input type that uses a table of dropdown
                     inputs with weekdays as the rows, and open and close times
-                    for the headers. This input type requires special handling
-                    within the program, so it has no configurable options. All
-                    logic, validation, and rendering for hours is handled
-                    elsewhere and no values are stored in project schema.
+                    for the headers. 
                   </p>
                 </div>
               )}
@@ -913,45 +886,45 @@ function SchemaBuilder() {
         </div>
       )}
 
-   {/* Footer Toolbar */}
-<div className="schema-builder-footer-toolbar">
-  <div className="footer-content-wrapper">
-    <div className="footer-input-group">
-      <label>
-        Project Name:
-        <input
-          type="text"
-          value={schema.projectName}
-          onChange={(e) =>
-            handleFooterInputChange("projectName", e.target.value)
-          }
-          maxLength={50}
-        />
-      </label>
+      {/* Footer Toolbar */}
+      <div className="schema-builder-footer-toolbar">
+        <div className="footer-content-wrapper">
+          <div className="footer-input-group">
+            <label>
+              Project Name:
+              <input
+                type="text"
+                value={schema.projectName}
+                onChange={(e) =>
+                  handleFooterInputChange("projectName", e.target.value)
+                }
+                maxLength={50}
+              />
+            </label>
 
-      <label>
-        Collection Name:
-        <input
-          type="text"
-          value={schema.collectionName}
-          onChange={(e) =>
-            handleFooterInputChange("collectionName", e.target.value)
-          }
-          maxLength={50}
-        />
-      </label>
+            <label>
+              Collection Name:
+              <input
+                type="text"
+                value={schema.collectionName}
+                onChange={(e) =>
+                  handleFooterInputChange("collectionName", e.target.value)
+                }
+                maxLength={50}
+              />
+            </label>
+          </div>
+
+          <button
+            className="preview-schema-button"
+            onClick={() => setIsSchemaPreviewOpen(true)}
+            title="Preview Full Schema"
+          >
+            Preview Schema
+          </button>
+        </div>
+      </div>
     </div>
-
-    <button
-      className="preview-schema-button"
-      onClick={() => setIsSchemaPreviewOpen(true)}
-      title="Preview Full Schema"
-    >
-      Preview Schema
-    </button>
-  </div>
-</div>
-</div>
   );
 }
 

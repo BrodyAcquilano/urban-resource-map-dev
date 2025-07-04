@@ -40,7 +40,7 @@ function AddLocationModal({
 }
 
 try {
-  const res = await axios.post(`${BASE_URL}/api/locations`, formData, {
+  const res = await axios.post(`${BASE_URL}/api/locations`, { location: formData }, {
     params: { collectionName: currentCollection, mongoURI: mongoURI },
   });
 
@@ -55,6 +55,7 @@ try {
   console.error("Submit failed:", err.response?.data || err.message || err);
   window.alert("Failed to save location.");
 }
+
   };
 
   if (!isOpen || !currentSchema || !formData.sections || formData.sections.length === 0) return null;

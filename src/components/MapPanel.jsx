@@ -5,6 +5,7 @@ import {
   Marker,
   ZoomControl,
   useMapEvents,
+  Popup,
 } from "react-leaflet";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
