@@ -77,7 +77,6 @@ export const generateNewInput = (type) => {
     baseInput.displayWhenFalse = false;
     baseInput.falseDisplayText = '';
     baseInput.trueDisplayText = '';
-    baseInput.isScorable = false;
     baseInput.notes = '';
 
   }
