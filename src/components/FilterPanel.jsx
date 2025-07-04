@@ -19,6 +19,7 @@ function FilterPanel({
   markers,
   setFilteredMarkers,
   setSelectedFilters,
+  selectedLocation,
   setSelectedLocation,
 }) {
   const [filterState, setFilterState] = useState({});
@@ -32,7 +33,7 @@ function FilterPanel({
       schemaSection.inputs.forEach((schemaInput) => {
         if (schemaInput.isFilter) {
           if (schemaInput.type === "number") {
-            initialState[schemaInput.id] = { min: "", max: "" };
+            initialState[schemaInput.id] = { minValue: "", maxValue: "" };
           } else if (schemaInput.type === "hours") {
             initialState[schemaInput.id] = { day: "Any", time: "Any" };
           } else if (schemaInput.type === "dropdown") {
@@ -85,8 +86,8 @@ function FilterPanel({
           }
 
           if (schemaInput.type === "number") {
-            const min = parseFloat(filterValue.min) || -Infinity;
-            const max = parseFloat(filterValue.max) || Infinity;
+            const min = parseFloat(filterValue.minValue) || -Infinity;
+            const max = parseFloat(filterValue.maxValue) || Infinity;
             const markerNumber = parseFloat(markerInput.value);
             if (
               markerInput.value !== "" &&
@@ -128,8 +129,10 @@ function FilterPanel({
       setSelectedLocation(null);
     }
 
-    const updatedFilters = buildSelectedFilters(currentSchema, filterState);
+   
+  const updatedFilters = buildSelectedFilters(currentSchema, filterState);
     setSelectedFilters(updatedFilters);
+    
   }, [
     markers,
     filterState,

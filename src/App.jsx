@@ -25,7 +25,7 @@ import OffscreenMap from "./components/OffscreenMap.jsx";
 import Home from "./pages/Home.jsx";
 import Editor from "./pages/Editor.jsx";
 import Export from "./pages/Export.jsx";
-import Analysis from "./pages/Analysis.jsx";
+//import Analysis from "./pages/Analysis.jsx";
 import SchemaBuilder from "./pages/SchemaBuilder.jsx"; 
 
 // ─────────────────────────────────────────────
@@ -163,6 +163,7 @@ function App() {
             markers={markers}
             setFilteredMarkers={setFilteredMarkers}
             setSelectedFilters={setSelectedFilters}
+            selectedLocation={selectedLocation}
             setSelectedLocation={setSelectedLocation}
           />
         </div>
@@ -217,6 +218,7 @@ function App() {
               />
             }
           />
+          {/*
           <Route
             path="/analysis"
             element={
@@ -231,7 +233,7 @@ function App() {
                 currentCollection={currentCollection}
               />
             }
-          />
+          />*/}
           <Route path="/schema-builder" element={<SchemaBuilder mongoURI={mongoURI} />} />
         </Routes>
       </div>

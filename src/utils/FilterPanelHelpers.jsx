@@ -43,18 +43,18 @@ function renderInputFilter(schemaInput, filterValue, setFilterValue) {
           <label>{schemaInput.label} (Min):</label>
           <input
             type="number"
-            value={filterValue?.min || ""}
+            value={filterValue?.minValue || ""}
             onChange={(e) =>
-              setFilterValue({ ...filterValue, min: e.target.value })
+              setFilterValue({ ...filterValue, minValue: e.target.value })
             }
             placeholder="Min"
           />
           <label>{schemaInput.label} (Max):</label>
           <input
             type="number"
-            value={filterValue?.max || ""}
+            value={filterValue?.maxValue || ""}
             onChange={(e) =>
-              setFilterValue({ ...filterValue, max: e.target.value })
+              setFilterValue({ ...filterValue, maxValue: e.target.value })
             }
             placeholder="Max"
           />
@@ -214,11 +214,11 @@ export function buildSelectedFilters(currentSchema, filterState) {
 
       if (
         schemaInput.type === "number" &&
-        (filterValue.min !== "" || filterValue.max !== "")
+        (filterValue.minValue !== "" || filterValue.maxValue !== "")
       ) {
         updatedFilters.push({
           label: schemaInput.label,
-          value: `${filterValue.min || "-∞"} to ${filterValue.max || "∞"}`,
+          value: `${filterValue.minValue || "-∞"} to ${filterValue.maxValue || "∞"}`,
         });
       }
 
