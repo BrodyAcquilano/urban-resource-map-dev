@@ -1,7 +1,7 @@
 // src/pages/Editor.jsx
 
 import React, { useState } from "react";
-//import EditLocation from "../components/EditLocation.jsx";
+import EditLocation from "../components/EditLocation.jsx";
 import AddLocationModal from "../components/AddLocationModal.jsx";
 import '../styles/pages.css';
 
@@ -14,13 +14,12 @@ function Editor({
   currentCollection,
 }) {
   const [isAddModalOpen, setAddModalOpen] = useState(false);
-  //const [showEditLocation, setShowEditLocation] = useState(false);
+  const [showEditLocation, setShowEditLocation] = useState(false);
 
   return (
     <>
     
       {/* Editor Panel Toggle + Panel */}
-      {/*
       <button
         className={`side-toggle toggle ${showEditLocation ? "" : "collapsed-toggle"}`}
         onClick={() => setShowEditLocation(!showEditLocation)}
@@ -37,7 +36,7 @@ function Editor({
           currentSchema={currentSchema}
           currentCollection={currentCollection}
         />
-      </div>*/}
+      </div>
 
       {/* Centered Add Button */}
       <button

@@ -86,9 +86,16 @@ function FilterPanel({
           }
 
           if (schemaInput.type === "number") {
-            const min = parseFloat(filterValue.min) || -Infinity;
-            const max = parseFloat(filterValue.max) || Infinity;
+            const min =
+              filterValue.min !== "" && filterValue.min != null
+                ? parseFloat(filterValue.min)
+                : -Infinity;
+            const max =
+              filterValue.max !== "" && filterValue.max != null
+                ? parseFloat(filterValue.max)
+                : Infinity;
             const markerNumber = parseFloat(markerInput.value);
+
             if (
               markerInput.value !== "" &&
               (markerNumber < min || markerNumber > max)
@@ -129,10 +136,8 @@ function FilterPanel({
       setSelectedLocation(null);
     }
 
-   
-  const updatedFilters = buildSelectedFilters(currentSchema, filterState);
+    const updatedFilters = buildSelectedFilters(currentSchema, filterState);
     setSelectedFilters(updatedFilters);
-    
   }, [
     markers,
     filterState,
