@@ -127,7 +127,6 @@ export function renderDynamicFormPage({
         if (input.type === "checkbox") {
           return (
             <div key={input.id} className="inline-checkbox-row">
-              <label className="label-container">{input.label}</label>
               <div className="checkbox-container">
                 <input
                   type="checkbox"
@@ -146,11 +145,12 @@ export function renderDynamicFormPage({
                     });
                   }}
                 />
+               <label className="label-container">{input.label}</label>
               </div>
 
               {/* Only display notes if they exist */}
-              {input.note && input.note.trim() !== "" && (
-                <div className="notes-cell">{input.note}</div>
+              {input.notes && input.notes.trim() !== "" && (
+                <div className="notes-cell">{input.notes}</div>
               )}
             </div>
           );

@@ -153,7 +153,7 @@
   background-color: rgba(93, 129, 117, 1);
   color: white;
   font-size: 0.7rem;
-   max-height: 200px;
+  max-height: 200px;
   overflow-y: auto;
 }
 
@@ -214,13 +214,12 @@
   display: flex;
   align-items: center;
   width: 100%;
-  gap: 20px;
 }
 
 /*Used in: AddLocationModal.jsx,*/
 .modal .label-container {
   display:flex;
-  min-width: 200px;
+  min-width: 300px;
   font-size: 0.9rem;
   color: white;
   align-items: center;
@@ -233,17 +232,14 @@
    transform: translateY(1px);
 }
 
-/*Used in: AddLocationModal.jsx,*/
-.modal input[type="checkbox"] {
-  transform: translateY(2px); 
-}
 
 /*Used in: AddLocationModal.jsx,*/
 .modal .notes-cell {
-  flex-grow: 1;
   font-size: 0.8rem;
   color: #ccc;
   font-style: italic;
+    display: flex;
+  align-items: center;
 }
 
 /*──────────────────────────────────────────────*/

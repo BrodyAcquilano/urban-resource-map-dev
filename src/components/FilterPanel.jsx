@@ -17,40 +17,55 @@ function FilterPanel({
   tileStyle,
   setTileStyle,
   markers,
+  markersReady,
+  setMarkersReady,
   setFilteredMarkers,
   setSelectedFilters,
   selectedLocation,
   setSelectedLocation,
 }) {
   const [filterState, setFilterState] = useState({});
+  const [filterStateReady, setFilterStateReady] = useState(false);
+
+  //Get the new project schema from the database and set the collection.
+  const handleSchemaChange = async (selectedProjectName) => {
+  setFilterStateReady(false);
+  setMarkersReady(false);
+  const fetchedSchema = await fetchSchemaByProjectName(mongoURI, selectedProjectName);
+  setCurrentSchema(fetchedSchema);
+  setCurrentCollection(fetchedSchema.collectionName);
+  setSelectedLocation(null);
+};
 
   // Reset filter state when schema changes
-  useEffect(() => {
-    if (!currentSchema) return;
+ useEffect(() => {
+  if (!currentSchema) return;
 
-    const initialState = {};
-    currentSchema.sections.forEach((schemaSection) => {
-      schemaSection.inputs.forEach((schemaInput) => {
-        if (schemaInput.isFilter) {
-          if (schemaInput.type === "number") {
-            initialState[schemaInput.id] = { min: "", max: "" };
-          } else if (schemaInput.type === "hours") {
-            initialState[schemaInput.id] = { day: "Any", time: "Any" };
-          } else if (schemaInput.type === "dropdown") {
-            initialState[schemaInput.id] = "Any";
-          } else if (schemaInput.type === "checkbox") {
-            initialState[schemaInput.id] = false;
-          } else {
-            initialState[schemaInput.id] = "";
-          }
+  const initialState = {};
+  currentSchema.sections.forEach((schemaSection) => {
+    schemaSection.inputs.forEach((schemaInput) => {
+      if (schemaInput.isFilter) {
+        if (schemaInput.type === "number") {
+          initialState[schemaInput.id] = { min: "", max: "" };
+        } else if (schemaInput.type === "hours") {
+          initialState[schemaInput.id] = { day: "Any", time: "Any" };
+        } else if (schemaInput.type === "dropdown") {
+          initialState[schemaInput.id] = "Any";
+        } else if (schemaInput.type === "checkbox") {
+          initialState[schemaInput.id] = false;
+        } else {
+          initialState[schemaInput.id] = "";
         }
-      });
+      }
     });
-    setFilterState(initialState);
-  }, [currentSchema]);
+  });
+  setFilterState(initialState);
+  setFilterStateReady(true); 
+}, [currentSchema]);
 
+//Filter Markers, and generate a list of active filters.
   useEffect(() => {
-    if (!currentSchema || Object.keys(filterState).length === 0) return;
+    if (!currentSchema ||  !markersReady || !filterStateReady || Object.keys(filterState).length === 0) return;
 
     const matchesFilter = (marker) => {
       for (
@@ -140,6 +155,7 @@ function FilterPanel({
     setSelectedFilters(updatedFilters);
   }, [
     markers,
+    markersReady,
     filterState,
     currentSchema,
     setFilteredMarkers,
@@ -158,19 +174,10 @@ function FilterPanel({
         {/* Project Selector */}
         <div className="form-group">
           <label>Select Project:</label>
-          <select
-            value={currentSchema?.projectName || ""}
-            onChange={async (e) => {
-              const selectedProjectName = e.target.value;
-              const fetchedSchema = await fetchSchemaByProjectName(
-                mongoURI,
-                selectedProjectName
-              );
-              setCurrentSchema(fetchedSchema);
-              setCurrentCollection(fetchedSchema.collectionName);
-              setSelectedLocation(null);
-            }}
-          >
+         <select
+  value={currentSchema?.projectName || ""}
+  onChange={(e) => handleSchemaChange(e.target.value)}
+>
             {schemas.map((schema) => (
               <option key={schema.projectName} value={schema.projectName}>
                 {schema.projectName}

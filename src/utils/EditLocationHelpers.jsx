@@ -179,7 +179,6 @@ export function renderDynamicFormPage({
 if (input.type === "checkbox") {
   return (
     <div key={input.id} className="inline-checkbox-row">
-      <label className="label-container">{input.label}</label>
       <div className="checkbox-container">
         <input
           type="checkbox"
@@ -197,6 +196,7 @@ if (input.type === "checkbox") {
           }}
         />
       </div>
+       <label className="label-container">{input.label}</label>
     </div>
   );
 }

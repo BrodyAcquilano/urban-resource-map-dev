@@ -64,7 +64,6 @@ function renderInputFilter(schemaInput, filterValue, setFilterValue) {
     case "checkbox":
       return (
         <div key={schemaInput.id} className="inline-checkbox-row">
-          <label className="label-container">{schemaInput.label}</label>
           <div className="checkbox-container">
             <input
               type="checkbox"
@@ -72,6 +71,7 @@ function renderInputFilter(schemaInput, filterValue, setFilterValue) {
               onChange={(e) => setFilterValue(e.target.checked)}
             />
           </div>
+          <label className="label-container">{schemaInput.label}</label>
         </div>
       );
 

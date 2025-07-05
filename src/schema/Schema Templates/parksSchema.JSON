@@ -1,0 +1,361 @@
+{
+  "_id": {
+    "$oid": "686856548069ffb486648123"
+  },
+  "id": {
+    "$numberLong": "1751667359247"
+  },
+  "projectName": "Parks",
+  "collectionName": "parks",
+  "sections": [
+    {
+      "id": {
+        "$numberLong": "1751667359247"
+      },
+      "name": "Location Details",
+      "isCore": true,
+      "inputs": [
+        {
+          "id": {
+            "$numberLong": "1751667359248"
+          },
+          "label": "Latitude",
+          "type": "number",
+          "isRequired": true,
+          "isFilter": true,
+          "isDisplayed": true,
+          "minValue": -90,
+          "maxValue": 90,
+          "maxLength": 20,
+          "displayIfEmpty": false,
+          "emptyDisplayText": ""
+        },
+        {
+          "id": {
+            "$numberLong": "1751667359249"
+          },
+          "label": "Longitude",
+          "type": "number",
+          "isRequired": true,
+          "isFilter": true,
+          "isDisplayed": true,
+          "minValue": -180,
+          "maxValue": 180,
+          "maxLength": 20,
+          "displayIfEmpty": false,
+          "emptyDisplayText": ""
+        },
+        {
+          "id": {
+            "$numberLong": "1751667664673"
+          },
+          "label": "Park Name",
+          "type": "text",
+          "isFilter": true,
+          "isDisplayed": true,
+          "isRequired": true,
+          "maxLength": 150,
+          "displayIfEmpty": false,
+          "emptyDisplayText": ""
+        },
+        {
+          "id": {
+            "$numberLong": "1751667673645"
+          },
+          "label": "Address",
+          "type": "text",
+          "isFilter": false,
+          "isDisplayed": true,
+          "isRequired": false,
+          "maxLength": 150,
+          "displayIfEmpty": true,
+          "emptyDisplayText": "No Address Listed"
+        }
+      ]
+    },
+    {
+      "id": {
+        "$numberLong": "1751667691341"
+      },
+      "name": "Contact Information",
+      "isCore": false,
+      "inputs": [
+        {
+          "id": {
+            "$numberLong": "1751667902486"
+          },
+          "label": "Phone",
+          "type": "text",
+          "isFilter": false,
+          "isDisplayed": true,
+          "isRequired": false,
+          "maxLength": 14,
+          "displayIfEmpty": true,
+          "emptyDisplayText": "No Phone Number Listed"
+        },
+        {
+          "id": {
+            "$numberLong": "1751667903126"
+          },
+          "label": "Website",
+          "type": "text",
+          "isFilter": false,
+          "isDisplayed": true,
+          "isRequired": false,
+          "maxLength": 150,
+          "displayIfEmpty": true,
+          "emptyDisplayText": "No Website Listed"
+        },
+        {
+          "id": {
+            "$numberLong": "1751668147188"
+          },
+          "label": "Hours",
+          "type": "hours",
+          "isFilter": true,
+          "isDisplayed": true,
+          "isRequired": false
+        }
+      ]
+    },
+     {
+      "id": {
+        "$numberLong": "1751667750000"
+      },
+      "name": "Classifications",
+      "isCore": false,
+      "inputs": [
+    {
+      "id": { "$numberLong": "1751668205021" },
+      "label": "Park Jurisdiction",
+      "type": "dropdown",
+      "isFilter": true,
+      "isDisplayed": true,
+      "options": [
+        { "id": { "$numberLong": "1751668400000" }, "label": "Municipal Park" },
+        { "id": { "$numberLong": "1751668400001" }, "label": "Regional Park" },
+        { "id": { "$numberLong": "1751668400002" }, "label": "Provincial Park" },
+        { "id": { "$numberLong": "1751668400003" }, "label": "Federal Park" }
+      ]
+    },
+    {
+      "id": { "$numberLong": "1751668205022" },
+      "label": "Park Type",
+      "type": "dropdown",
+      "isFilter": true,
+      "isDisplayed": true,
+      "options": [
+        { "id": { "$numberLong": "1751668400004" }, "label": "Cultivated Park" },
+        { "id": { "$numberLong": "1751668400005" }, "label": "Natural Area" },
+        { "id": { "$numberLong": "1751668400006" }, "label": "Mixed Use" }
+      ]
+    },
+    {
+      "id": { "$numberLong": "1751668205023" },
+      "label": "Access Type",
+      "type": "dropdown",
+      "isFilter": true,
+      "isDisplayed": true,
+      "options": [
+        { "id": { "$numberLong": "1751668400007" }, "label": "Free" },
+        { "id": { "$numberLong": "1751668400008" }, "label": "Paid" }
+      ]
+    }
+  ]
+    },
+    {
+      "id": {
+        "$numberLong": "1751667833902"
+      },
+      "name": "Statistics",
+      "isCore": false,
+      "inputs":[
+   {
+    "id": { "$numberLong": "1751668300000" },
+    "label": "Total Area (km²)",
+    "type": "number",
+    "isFilter": true,
+    "isDisplayed": true,
+    "isRequired": false,
+    "minValue": 0,
+    "maxValue": null,
+    "maxLength": 15,
+    "displayIfEmpty": true,
+    "emptyDisplayText": "No Data Available"
+  },
+  {
+    "id": { "$numberLong": "1751668300001" },
+    "label": "Number of Trees",
+    "type": "dropdown",
+    "isFilter": true,
+    "isDisplayed": true,
+    "options": [
+      { "id": { "$numberLong": "1751668400009" }, "label": "No data Available" },
+      { "id": { "$numberLong": "1751668400010" }, "label": "0" },
+      { "id": { "$numberLong": "1751668400011" }, "label": "1-10" },
+      { "id": { "$numberLong": "1751668400012" }, "label": "10-100" },
+      { "id": { "$numberLong": "1751668400013" }, "label": "100-1000" },
+      { "id": { "$numberLong": "1751668400014" }, "label": "1000+" }
+    ]
+  },
+  {
+    "id": { "$numberLong": "1751668300002" },
+    "label": "Total Length of Trails (km)",
+    "type": "dropdown",
+    "isFilter": true,
+    "isDisplayed": true,
+    "options": [
+      { "id": { "$numberLong": "1751668400015" }, "label": "No data Available" },
+      { "id": { "$numberLong": "1751668400016" }, "label": "0" },
+      { "id": { "$numberLong": "1751668400017" }, "label": "1-2" },
+      { "id": { "$numberLong": "1751668400018" }, "label": "3-5" },
+      { "id": { "$numberLong": "1751668400019" }, "label": "6-10" },
+      { "id": { "$numberLong": "1751668400020" }, "label": "10-20" },
+      { "id": { "$numberLong": "1751668400021" }, "label": "20+" }
+    ]
+  },
+  {
+    "id": { "$numberLong": "1751668300003" },
+    "label": "Number of Parking Spaces",
+    "type": "dropdown",
+    "isFilter": true,
+    "isDisplayed": true,
+    "options": [
+      { "id": { "$numberLong": "1751668400022" }, "label": "No data Available" },
+      { "id": { "$numberLong": "1751668400023" }, "label": "0" },
+      { "id": { "$numberLong": "1751668400024" }, "label": "1-10" },
+      { "id": { "$numberLong": "1751668400025" }, "label": "11-25" },
+      { "id": { "$numberLong": "1751668400026" }, "label": "26-50" },
+      { "id": { "$numberLong": "1751668400027" }, "label": "51-100" },
+      { "id": { "$numberLong": "1751668400028" }, "label": "100+" }
+    ]
+  },
+  {
+    "id": { "$numberLong": "1751668300004" },
+    "label": "Number of Sports Fields",
+    "type": "dropdown",
+    "isFilter": true,
+    "isDisplayed": true,
+    "options": [
+      { "id": { "$numberLong": "1751668400029" }, "label": "No data Available" },
+      { "id": { "$numberLong": "1751668400030" }, "label": "0" },
+      { "id": { "$numberLong": "1751668400031" }, "label": "1-2" },
+      { "id": { "$numberLong": "1751668400032" }, "label": "3-5" },
+      { "id": { "$numberLong": "1751668400033" }, "label": "6-10" },
+      { "id": { "$numberLong": "1751668400034" }, "label": "10+" }
+    ]
+  },
+  {
+    "id": { "$numberLong": "1751668300005" },
+    "label": "Estimated Mammal Species Count",
+    "type": "dropdown",
+    "isFilter": true,
+    "isDisplayed": true,
+    "options": [
+      { "id": { "$numberLong": "1751668400035" }, "label": "No data Available" },
+      { "id": { "$numberLong": "1751668400036" }, "label": "0-20" },
+      { "id": { "$numberLong": "1751668400037" }, "label": "20-50" },
+      { "id": { "$numberLong": "1751668400038" }, "label": "50-100" },
+      { "id": { "$numberLong": "1751668400039" }, "label": "100+" }
+    ]
+  },
+  {
+    "id": { "$numberLong": "1751668300006" },
+    "label": "Estimated Bird Species Count",
+    "type": "dropdown",
+    "isFilter": true,
+    "isDisplayed": true,
+    "options": [
+      { "id": { "$numberLong": "1751668400040" }, "label": "No data Available" },
+      { "id": { "$numberLong": "1751668400041" }, "label": "0-20" },
+      { "id": { "$numberLong": "1751668400042" }, "label": "20-50" },
+      { "id": { "$numberLong": "1751668400043" }, "label": "50-100" },
+      { "id": { "$numberLong": "1751668400044" }, "label": "100-200" },
+      { "id": { "$numberLong": "1751668400045" }, "label": "200+" }
+    ]
+  },
+  {
+    "id": { "$numberLong": "1751668300007" },
+    "label": "Estimated Reptile/Amphibian Species Count",
+    "type": "dropdown",
+    "isFilter": true,
+    "isDisplayed": true,
+    "options": [
+      { "id": { "$numberLong": "1751668400046" }, "label": "No data Available" },
+      { "id": { "$numberLong": "1751668400047" }, "label": "0-20" },
+      { "id": { "$numberLong": "1751668400048" }, "label": "20-50" },
+      { "id": { "$numberLong": "1751668400049" }, "label": "50-100" },
+      { "id": { "$numberLong": "1751668400050" }, "label": "100-200" },
+      { "id": { "$numberLong": "1751668400051" }, "label": "200+" }
+    ]
+  },
+  {
+    "id": { "$numberLong": "1751668300008" },
+    "label": "Estimated Plant Species Count",
+    "type": "dropdown",
+    "isFilter": true,
+    "isDisplayed": true,
+    "options": [
+      { "id": { "$numberLong": "1751668400052" }, "label": "No data Available" },
+      { "id": { "$numberLong": "1751668400053" }, "label": "0-50" },
+      { "id": { "$numberLong": "1751668400054" }, "label": "50-200" },
+      { "id": { "$numberLong": "1751668400055" }, "label": "200-500" },
+      { "id": { "$numberLong": "1751668400056" }, "label": "500-1000" },
+      { "id": { "$numberLong": "1751668400057" }, "label": "1000+" }
+    ]
+  }
+]
+    },
+   {
+    "id": { "$numberLong": "1751668206000" },
+    "name": "General Essentials",
+    "isCore": false,
+    "inputs": [
+      { "id": { "$numberLong": "1751668205000" }, "label": "Washrooms", "type": "checkbox", "isFilter": true, "isDisplayed": true, "displayWhenFalse": false, "falseDisplayText": "", "trueDisplayText": "Washrooms Available.", "notes": "Public washrooms available." },
+      { "id": { "$numberLong": "1751668205001" }, "label": "Water Fountains", "type": "checkbox", "isFilter": true, "isDisplayed": true, "displayWhenFalse": false, "falseDisplayText": "", "trueDisplayText": "Water Fountains Available.", "notes": "Drinking fountains available." },
+      { "id": { "$numberLong": "1751668205002" }, "label": "Lighting", "type": "checkbox", "isFilter": true, "isDisplayed": true, "displayWhenFalse": false, "falseDisplayText": "", "trueDisplayText": "Lighting Available.", "notes": "Park is lit at night for safety." },
+      { "id": { "$numberLong": "1751668205003" }, "label": "Shade Areas", "type": "checkbox", "isFilter": true, "isDisplayed": true, "displayWhenFalse": false, "falseDisplayText": "", "trueDisplayText": "Shade Areas Available.", "notes": "Significant tree cover or built shade." },
+      { "id": { "$numberLong": "1751668205004" }, "label": "Benches", "type": "checkbox", "isFilter": true, "isDisplayed": true, "displayWhenFalse": false, "falseDisplayText": "", "trueDisplayText": "Benches Available.", "notes": "Benches located throughout the park." },
+      { "id": { "$numberLong": "1751668205005" }, "label": "Covered Shelters", "type": "checkbox", "isFilter": true, "isDisplayed": true, "displayWhenFalse": false, "falseDisplayText": "", "trueDisplayText": "Covered Shelters Available.", "notes": "Covered areas for seating or gatherings." }
+    ]
+  },
+  {
+    "id": { "$numberLong": "1751668207000" },
+    "name": "Natural Features",
+    "isCore": false,
+    "inputs": [
+      { "id": { "$numberLong": "1751668205006" }, "label": "Walking Trails", "type": "checkbox", "isFilter": true, "isDisplayed": true, "displayWhenFalse": false, "falseDisplayText": "", "trueDisplayText": "Walking Trails Available.", "notes": "Designated walking or hiking paths." },
+      { "id": { "$numberLong": "1751668205007" }, "label": "Water Body", "type": "checkbox", "isFilter": true, "isDisplayed": true, "displayWhenFalse": false, "falseDisplayText": "", "trueDisplayText": "Water Body Available.", "notes": "Pond, lake, or river within the park." },
+      { "id": { "$numberLong": "1751668205008" }, "label": "Bird Watching Spots", "type": "checkbox", "isFilter": true, "isDisplayed": true, "displayWhenFalse": false, "falseDisplayText": "", "trueDisplayText": "Bird Watching Spots Available.", "notes": "Designated bird watching locations." },
+      { "id": { "$numberLong": "1751668205009" }, "label": "Beach", "type": "checkbox", "isFilter": true, "isDisplayed": true, "displayWhenFalse": false, "falseDisplayText": "", "trueDisplayText": "Beach Available.", "notes": "Swimming or recreational beach available." },
+      { "id": { "$numberLong": "1751668205010" }, "label": "Fishing", "type": "checkbox", "isFilter": true, "isDisplayed": true, "displayWhenFalse": false, "falseDisplayText": "", "trueDisplayText": "Fishing Available.", "notes": "Fishing areas or designated fishing spots available." },
+      { "id": { "$numberLong": "1751668205011" }, "label": "Camping", "type": "checkbox", "isFilter": true, "isDisplayed": true, "displayWhenFalse": false, "falseDisplayText": "", "trueDisplayText": "Camping Available.", "notes": "Camping sites or areas available within the park." }
+    ]
+  },
+  {
+    "id": { "$numberLong": "1751668208000" },
+    "name": "Activity Features",
+    "isCore": false,
+    "inputs": [
+      { "id": { "$numberLong": "1751668205012" }, "label": "Playground", "type": "checkbox", "isFilter": true, "isDisplayed": true, "displayWhenFalse": false, "falseDisplayText": "", "trueDisplayText": "Playground Available.", "notes": "Playground equipment for children." },
+      { "id": { "$numberLong": "1751668205013" }, "label": "Skatepark", "type": "checkbox", "isFilter": true, "isDisplayed": true, "displayWhenFalse": false, "falseDisplayText": "", "trueDisplayText": "Skatepark Available.", "notes": "Skateboarding area present." },
+      { "id": { "$numberLong": "1751668205014" }, "label": "Splash Pad", "type": "checkbox", "isFilter": true, "isDisplayed": true, "displayWhenFalse": false, "falseDisplayText": "", "trueDisplayText": "Splash Pad Available.", "notes": "Water play area for children." },
+      { "id": { "$numberLong": "1751668205015" }, "label": "Pool", "type": "checkbox", "isFilter": true, "isDisplayed": true, "displayWhenFalse": false, "falseDisplayText": "", "trueDisplayText": "Pool Available.", "notes": "Public swimming pool available." },
+      { "id": { "$numberLong": "1751668205016" }, "label": "Sports Fields", "type": "checkbox", "isFilter": true, "isDisplayed": true, "displayWhenFalse": false, "falseDisplayText": "", "trueDisplayText": "Sports Fields Available.", "notes": "Sports fields (soccer, baseball, etc.)." },
+      { "id": { "$numberLong": "1751668205017" }, "label": "Basketball Court", "type": "checkbox", "isFilter": true, "isDisplayed": true, "displayWhenFalse": false, "falseDisplayText": "", "trueDisplayText": "Basketball Court Available.", "notes": "Basketball courts available for public use." },
+      { "id": { "$numberLong": "1751668205018" }, "label": "Picnic Tables", "type": "checkbox", "isFilter": true, "isDisplayed": true, "displayWhenFalse": false, "falseDisplayText": "", "trueDisplayText": "Picnic Tables Available.", "notes": "Picnic areas with tables." },
+      { "id": { "$numberLong": "1751668205019" }, "label": "BBQ / Fire Pits", "type": "checkbox", "isFilter": true, "isDisplayed": true, "displayWhenFalse": false, "falseDisplayText": "", "trueDisplayText": "BBQ / Fire Pits Available.", "notes": "BBQ grills or fire pits available for use." },
+      { "id": { "$numberLong": "1751668205020" }, "label": "Stage / Performance Area", "type": "checkbox", "isFilter": true, "isDisplayed": true, "displayWhenFalse": false, "falseDisplayText": "", "trueDisplayText": "Stage / Performance Area Available.", "notes": "Outdoor stage or amphitheater available." }
+    ]
+  },
+  {
+    "id": { "$numberLong": "1751668209000" },
+    "name": "Aesthetic Features",
+    "isCore": false,
+    "inputs": [
+      { "id": { "$numberLong": "1751668205021" }, "label": "Garden", "type": "checkbox", "isFilter": true, "isDisplayed": true, "displayWhenFalse": false, "falseDisplayText": "", "trueDisplayText": "Garden Available.", "notes": "Decorative gardens maintained by gardeners." },
+      { "id": { "$numberLong": "1751668205022" }, "label": "Public Art", "type": "checkbox", "isFilter": true, "isDisplayed": true, "displayWhenFalse": false, "falseDisplayText": "", "trueDisplayText": "Public Art Available.", "notes": "Sculptures, murals, or artistic displays." }
+    ]
+  }
+  ]
+}

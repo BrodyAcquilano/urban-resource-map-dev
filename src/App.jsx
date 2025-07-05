@@ -51,6 +51,7 @@ function App() {
   const [schemas, setSchemas] = useState([]);
   const [currentSchema, setCurrentSchema] = useState(null);
   const [currentCollection, setCurrentCollection] = useState("");
+  const [markersReady, setMarkersReady] = useState(false);
   const [selectedFilters, setSelectedFilters] = useState([]);
   const [markers, setMarkers] = useState([]);
   const [filteredMarkers, setFilteredMarkers] = useState([]);
@@ -60,6 +61,7 @@ function App() {
   const [mapCenter, setMapCenter] = useState([43.4516, -80.4925]);
   const [mapZoom, setMapZoom] = useState(13);
   const [heatMap, setHeatMap] = useState([]);
+
 
   const location = useLocation();
   const isSchemaBuilderPage = location.pathname === "/schema-builder";
@@ -90,6 +92,7 @@ function App() {
 
     const fetchMarkers = async () => {
       setIsLoading(true);
+      setMarkersReady(false); 
       try {
         const res = await axios.get(`${BASE_URL}/api/locations`, {
           params: {
@@ -98,6 +101,7 @@ function App() {
           },
         });
         setMarkers(res.data.map(doc => ({ ...doc.location, _id: doc._id })));
+        setMarkersReady(true);
       } catch (err) {
         console.error("Failed to fetch markers:", err);
       } finally {
@@ -161,6 +165,8 @@ function App() {
             tileStyle={tileStyle}
             setTileStyle={setTileStyle}
             markers={markers}
+            markerReady={markersReady}
+            setMarkersReady={setMarkersReady}
             setFilteredMarkers={setFilteredMarkers}
             setSelectedFilters={setSelectedFilters}
             selectedLocation={selectedLocation}
